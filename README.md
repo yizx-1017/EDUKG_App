@@ -1,1 +1,1 @@
-# EDUKG_App
+# GKUDE_App
