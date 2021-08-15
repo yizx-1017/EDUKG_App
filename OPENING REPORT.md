@@ -1,6 +1,6 @@
-<div style="text-align:center;font-size:2em;font-weight:bold">EDUKG App 开题报告</div>
+<h1 align="center">EDUKG App 开题报告</h1>
 
-<div style="text-align:center;font-family:楷体;font-size:1em">王星淇 谢芷钰 弋紫轩</div>
+<h5 align="center">EDUKG develop group</h5>
 
 ## 概述
 
