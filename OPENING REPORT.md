@@ -56,9 +56,9 @@ EDUKG App项目基于基础教育知识图谱（EDUKG），利用知识图谱海
 
 <table>
     <tr>
-        <td>开发周数</td>
-        <td>时间节点</td>
-        <td>计划完成任务</td>
+        <th>开发周数</th>
+        <th>时间节点</th>
+        <th>计划完成任务</th>
     </tr>
     <tr>
         <td >Week 1 (8.9 - 8.15)</td>
