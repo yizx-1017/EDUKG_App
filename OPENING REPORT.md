@@ -96,5 +96,4 @@ EDUKG App项目基于基础教育知识图谱（EDUKG），利用知识图谱海
 </table>
 
 ## 初步UI设计
-
-TBC
+![初步UI设计](https://user-images.githubusercontent.com/60711941/129750232-5b2009bd-3030-4476-a05a-40bc9cc31f9f.jpg)
