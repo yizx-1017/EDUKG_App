@@ -50,7 +50,7 @@ EDUKG App项目基于基础教育知识图谱（EDUKG），利用知识图谱海
 
 ## 应用框架
 * 客户端基于java语言安卓框架开发，使用Material Design组件美化；
-* 服务端基于java语言的Spring Boot框架开发，使用MySQL数据库，通过JPA建立映射，使用Flyway管理数据库版本与迁移。
+* 服务端基于java语言的Spring Boot框架开发，使用MySQL数据库，通过JPA建立映射，并实现数据表自动创建更新。
 
 ## 工作计划
 
