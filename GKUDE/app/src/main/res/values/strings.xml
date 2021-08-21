@@ -9,4 +9,9 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">首页</string>
+    <string name="title_entity_link">实体链接</string>
+    <string name="title_chat">知识问答</string>
+    <string name="title_user">我</string>
 </resources>
