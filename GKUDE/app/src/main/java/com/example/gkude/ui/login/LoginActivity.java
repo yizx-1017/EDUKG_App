@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.gkude.R;
 import com.example.gkude.ui.login.LoginViewModel;
 import com.example.gkude.ui.login.LoginViewModelFactory;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -122,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
+        setContentView(R.layout.homepage);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
