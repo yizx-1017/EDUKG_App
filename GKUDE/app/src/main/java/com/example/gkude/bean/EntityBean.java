@@ -4,8 +4,13 @@ import com.google.gson.Gson;
 import com.orm.SugarRecord;
 
 import com.orm.dsl.Ignore;
+
+import org.javatuples.Triplet;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //描述、属性、关系及关联试题
@@ -13,16 +18,24 @@ public class EntityBean extends SugarRecord implements Serializable{
     private String url;
     private String label;
     private String category;
+    private String description;
     private String course;
     private boolean visited;
     // relation (关系)
     private String relations;
+    @Ignore
+    private List<Triplet<String, Boolean, EntityBean>> _relations;
+    // 关系名称；True:Forward(当前entity作为主语),False:Backward(作为宾语)；另一个entity
+
     // property (属性)
     private String properties;
     @Ignore
     private Map<String, String> _properties;
+
     // problem (关联试题)
     private String problems;
+    @Ignore
+    private List<ProblemBean> _problems;
 
     public String getUrl() {
         return url;
@@ -35,6 +48,12 @@ public class EntityBean extends SugarRecord implements Serializable{
     }
     public void setCategory(String category) {
         this.category = category;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
     public String getLabel() {
         return label;
@@ -54,7 +73,37 @@ public class EntityBean extends SugarRecord implements Serializable{
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
+    public List<Triplet<String, Boolean, EntityBean>> getRelations() {
+        // TODO: to be tested.
+        _relations = new ArrayList<Triplet<String, Boolean, EntityBean>>();
+        Gson gson = new Gson();
+        ArrayList<Triplet<String, Boolean, Integer>> raw_relations =
+                new ArrayList<Triplet<String, Boolean, Integer>>();
+        raw_relations = gson.fromJson(this.relations, raw_relations.getClass());
+        for(Triplet<String, Boolean, Integer> rel: raw_relations) {
+            _relations.add(new Triplet<String, Boolean, EntityBean>(rel.getValue0(), rel.getValue1(), EntityBean.findById(EntityBean.class, rel.getValue2())));
+        }
+        return _relations;
+    }
+    public void setRelations(String relations) {
+        this.relations = relations;
+    }
+    public List<ProblemBean> getProblems() {
+        // TODO: to be tested.
+        Gson gson = new Gson();
+        _problems = new ArrayList<ProblemBean>();
+        ArrayList<Integer> problem_ids = new ArrayList<Integer>();
+        problem_ids = gson.fromJson(this.problems, problem_ids.getClass());
+        for(Integer problem_id: problem_ids) {
+            _problems.add(ProblemBean.findById(ProblemBean.class, problem_id));
+        }
+        return _problems;
+    }
+    public void setProblems(String problems) {
+        this.problems = problems;
+    }
     public Map<String, String> getProperties() {
+        // TODO: to be tested.
         Gson gson = new Gson();
         _properties = new HashMap<String, String>();
         _properties = gson.fromJson(this.properties, _properties.getClass());
