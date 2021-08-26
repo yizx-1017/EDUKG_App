@@ -12,6 +12,7 @@ import java.util.Map;
 public class EntityBean extends SugarRecord implements Serializable{
     private String url;
     private String label;
+    private String course;
     private boolean visited;
     // relation (关系)
     private String relations;
@@ -33,6 +34,12 @@ public class EntityBean extends SugarRecord implements Serializable{
     }
     public void setLabel(String label) {
         this.label = label;
+    }
+    public String getCourse() {
+        return course;
+    }
+    public void setCourse(String course) {
+        this.course = course;
     }
     public boolean getVisited() {
         return visited;
