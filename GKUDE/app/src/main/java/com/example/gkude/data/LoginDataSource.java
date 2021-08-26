@@ -6,10 +6,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.logging.XMLFormatter;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,14 +23,34 @@ import okhttp3.Response;
  */
 public class LoginDataSource {
 
+//    public String post_to_edukg() {
+//        OkHttpClient client = new OkHttpClient();
+//        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName").newBuilder();
+//        urlBuilder.addQueryParameter("name","李白");
+//        urlBuilder.addQueryParameter("id","9c9fe7c2-4e78-4acf-84e6-3a110541db41");
+//        urlBuilder.addQueryParameter("course", "chinese");
+//
+//        Request request = new Request.Builder()
+//                .url(urlBuilder.build())
+//                .get()
+//                .build();
+//        System.out.println("I got here.... request");
+//        try (Response response = client.newCall(request).execute()) {
+//            return response.body().string();
+//        }
+//        catch(Exception e) {
+//            e.printStackTrace();
+//            System.out.println("The wrong message is>>>");
+//            System.out.println(e.getMessage());
+//            return e.getMessage();
+//        }
+//    }
+
     public String post_login(String username,String password){
-        System.out.println("I got here....");
         OkHttpClient client = new OkHttpClient();
-        System.out.println("I got here....");
         RequestBody formBody = new FormBody.Builder().add(
                 "username", username).add(
                         "password", password).build();
-        System.out.println("I got here....");
         Request request = new Request.Builder()
                 .url("http://10.0.2.2:8080/api/signup")
                 .post(formBody)
@@ -57,6 +79,8 @@ public class LoginDataSource {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
+//                    String test_string = post_to_edukg();
+//                    System.out.println(test_string);
                     String result = post_login(username, password);
                     try {
                         JSONObject jsonObject = new JSONObject(result);
