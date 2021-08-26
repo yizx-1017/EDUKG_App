@@ -9,6 +9,11 @@ public class ProblemBean extends SugarRecord implements Serializable {
     private String qBody;
     private String qAnswer;
 
+//    public ProblemBean() {
+//        qID = 0;
+//        qBody = ""; qAnswer = "";
+//        System.out.println("init problem bean!!!");
+//    }
     public Integer getqID() {
         return qID;
     }

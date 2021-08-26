@@ -2,6 +2,8 @@ package com.example.gkude;
 
 import android.os.Bundle;
 
+import com.example.gkude.bean.EntityBean;
+import com.example.gkude.bean.ProblemBean;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,14 +13,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.gkude.databinding.ActivityHomeBinding;
+import com.orm.SugarContext;
 
 public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
