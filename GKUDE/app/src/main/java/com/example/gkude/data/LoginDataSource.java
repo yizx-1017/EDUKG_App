@@ -55,7 +55,7 @@ public class LoginDataSource {
                 "username", username).add(
                         "password", password).build();
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8080/api/signup")
+                .url("http://10.0.2.2:8080/api/login")
                 .post(formBody)
                 .build();
         System.out.println("I got here.... request");
