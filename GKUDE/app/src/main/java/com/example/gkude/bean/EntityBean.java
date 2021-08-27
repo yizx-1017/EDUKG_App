@@ -1,6 +1,7 @@
 package com.example.gkude.bean;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orm.SugarRecord;
 
 import com.orm.dsl.Ignore;
@@ -8,6 +9,8 @@ import com.orm.dsl.Ignore;
 import org.javatuples.Triplet;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +40,6 @@ public class EntityBean extends SugarRecord implements Serializable{
     private String problems;
     @Ignore
     private List<ProblemBean> _problems;
-
-//    public EntityBean() {
-//        url = label = category = description = "";
-//        course = "chinese"; visited = false;
-//        relations = properties = problems = "";
-//        _relations = null; _problems = null; _properties = null;
-//    }
 
     public String getUrl() {
         return url;
@@ -82,17 +78,14 @@ public class EntityBean extends SugarRecord implements Serializable{
         this.visited = visited;
     }
     public List<RelationBean> getRelations() {
-        // TODO: to be tested.
+        // TODO: to be tested. Done.
         System.out.println("I got here getRelations");
-        _relations = new ArrayList<RelationBean>();
         Gson gson = new Gson();
-        System.out.println("raw_relations constructed");
-        _relations = gson.fromJson(this.relations, _relations.getClass());
-        System.out.println("raw_relations tranformed");
-//        for(RelationBean rel: _relations) {
-//
-//        }
-        System.out.println("_relations constructed");
+        System.out.println(this.relations);
+        Type relationBeanType = new TypeToken<ArrayList<RelationBean>>(){}.getType();
+        _relations = gson.fromJson(this.relations, relationBeanType);
+        System.out.println(_relations);
+        System.out.println(gson.toJson(_relations));
         return _relations;
     }
     public void setRelations(String relations) {
@@ -101,12 +94,8 @@ public class EntityBean extends SugarRecord implements Serializable{
     public List<ProblemBean> getProblems() {
         // TODO: to be tested.
         Gson gson = new Gson();
-        _problems = new ArrayList<ProblemBean>();
-        ArrayList<Integer> problem_ids = new ArrayList<Integer>();
-        problem_ids = gson.fromJson(this.problems, problem_ids.getClass());
-        for(Integer problem_id: problem_ids) {
-            _problems.add(ProblemBean.findById(ProblemBean.class, problem_id));
-        }
+        Type problemBeanType = new TypeToken<ArrayList<ProblemBean>>(){}.getType();
+        _problems = gson.fromJson(this.problems, problemBeanType);
         return _problems;
     }
     public void setProblems(String problems) {
@@ -115,8 +104,8 @@ public class EntityBean extends SugarRecord implements Serializable{
     public Map<String, String> getProperties() {
         // TODO: to be tested.
         Gson gson = new Gson();
-        _properties = new HashMap<String, String>();
-        _properties = gson.fromJson(this.properties, _properties.getClass());
+        Type propertiesType = new TypeToken<Map<String, String>>(){}.getType();
+        _properties = gson.fromJson(this.properties, propertiesType);
         return _properties;
     }
     public void setProperties(String properties) {

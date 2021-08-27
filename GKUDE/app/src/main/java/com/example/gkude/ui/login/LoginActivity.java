@@ -27,28 +27,29 @@ import com.example.gkude.HomeActivity;
 import com.example.gkude.R;
 import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.ProblemBean;
+import com.example.gkude.bean.RelationBean;
 import com.example.gkude.ui.login.LoginViewModel;
 import com.example.gkude.ui.login.LoginViewModelFactory;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.orm.SugarContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
 
     public void test_create_entitybean() {
-
         System.out.println("I got here test create entitybean");
-        ProblemBean problemBean = new ProblemBean();
-        System.out.println("problem Bean constructed.");
-        problemBean.save();
-        System.out.println("Problem Bean saved.");
+        RelationBean relationBean = new RelationBean("互斥", true, 1);
+        RelationBean relationBean2 = new RelationBean("rel", false, 2);
+        List<RelationBean> relationBeanList = new ArrayList<RelationBean>();
+        relationBeanList.add(relationBean); relationBeanList.add(relationBean2);
         EntityBean entityBean = new EntityBean();
-        System.out.println("I got here test create aaaaaaa");
         entityBean.setDescription("清华是世界一流大学");
-        System.out.println("I got here test create tsinghua");
         entityBean.save();
-        System.out.println("I got here test create save");
         System.out.println(entityBean.getId());
         System.out.println(EntityBean.count(EntityBean.class));
         EntityBean entityBean1 = new EntityBean();
@@ -56,8 +57,10 @@ public class LoginActivity extends AppCompatActivity {
         entityBean1.save();
         System.out.println(entityBean1.getDescription());
         System.out.println(EntityBean.count(EntityBean.class));
-        entityBean1.setRelations("[{\"name\":\"互斥\", \"forward\":true, \"id\":1)]"); // todo: check id 0 or 1
-        System.out.println(entityBean.getRelations());
+        Gson gson = new Gson();
+        entityBean1.setRelations(gson.toJson(relationBeanList));
+        entityBean1.save();
+        System.out.println(entityBean1.getRelations());
         System.out.println(EntityBean.listAll(EntityBean.class));
     }
 
@@ -65,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SugarContext.terminate();
         SugarContext.init(this); // TODO: where to delete
 
         test_create_entitybean();
@@ -110,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
-                finish();
+                if(loginResult.getSuccess() != null) finish();
             }
         });
 
