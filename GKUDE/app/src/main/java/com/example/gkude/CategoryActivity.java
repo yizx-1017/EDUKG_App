@@ -45,7 +45,7 @@ public class CategoryActivity extends AppCompatActivity {
         //1. 标签页：toolbar --> button (set and back to)
         //2. 四个栏：只有首页为content_main 其他的都不需要tool bar
         Toolbar toolbar = findViewById(R.id.entity_toolbar);
-        System.out.println(getSupportActionBar().toString());
+//        System.out.println(getSupportActionBar().toString());
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
