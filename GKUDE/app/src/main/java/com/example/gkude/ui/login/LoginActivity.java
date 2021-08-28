@@ -23,15 +23,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gkude.Fetch;
 import com.example.gkude.HomeActivity;
 import com.example.gkude.R;
 import com.example.gkude.bean.EntityBean;
-import com.example.gkude.bean.ProblemBean;
 import com.example.gkude.bean.RelationBean;
-import com.example.gkude.ui.login.LoginViewModel;
-import com.example.gkude.ui.login.LoginViewModelFactory;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.orm.SugarContext;
 
@@ -44,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void test_create_entitybean() {
         System.out.println("I got here test create entitybean");
-        RelationBean relationBean = new RelationBean("互斥", true, 1);
-        RelationBean relationBean2 = new RelationBean("rel", false, 2);
+        RelationBean relationBean = new RelationBean();
+        RelationBean relationBean2 = new RelationBean();
         List<RelationBean> relationBeanList = new ArrayList<RelationBean>();
         relationBeanList.add(relationBean); relationBeanList.add(relationBean2);
         EntityBean entityBean = new EntityBean();
@@ -59,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println(entityBean1.getDescription());
         System.out.println(EntityBean.count(EntityBean.class));
         Gson gson = new Gson();
-        entityBean1.setRelations(gson.toJson(relationBeanList));
+        entityBean1.setRelationStore(gson.toJson(relationBeanList));
         entityBean1.save();
         System.out.println(entityBean1.getRelations());
         System.out.println(EntityBean.listAll(EntityBean.class));

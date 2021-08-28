@@ -87,7 +87,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
 
     @Override
     public void onEntitySelected(EntityBean entity) {
-        if(!entity.getVisited()){
+        if(!entity.isVisited()){
             entity.save();
         }
         // Go to the detailed page
