@@ -29,20 +29,12 @@ import com.orm.SugarContext;
 
 public class HomeActivity extends AppCompatActivity {
     public static final int SUBJECTS = 111, CATEGORY = 13;
-    private TabViewModel tabViewModel;
-//    private ActivityHomeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        binding = ActivityHomeBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
-        setContentView(R.layout.activity_main);
-
-        tabViewModel = new ViewModelProvider(this).get(TabViewModel.class);
+        setContentView(R.layout. content_main);
         initNavView();
-//        initSearchbar();
     }
 
     private void initNavView() {
@@ -54,63 +46,7 @@ public class HomeActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_user)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.e("MainActivity", ""+requestCode);
-        switch (requestCode){
-            case SUBJECTS:{
-                Log.e("MainActivity", "news back");
-                // refresh
-                startActivity(new Intent(this, HomeActivity.class));
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case CATEGORY:{
-                Log.e("MainActivity", "cat back");
-                List<String> cat = data.getStringArrayListExtra("category");
-                tabViewModel = new ViewModelProvider(this).get(TabViewModel.class);
-                tabViewModel.setCategory(data.getStringArrayListExtra("category"));
-                tabViewModel.setDelCategory(data.getStringArrayListExtra("delCategory"));
-                for (String s: cat){
-                    Log.e("MainActivity", s);
-                }
-                break;
-            }
-            default:
-                Log.e("MainActivity", "default");
-        }
-    }
-    private void initSearchbar() {
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
-        final SearchView mSearchView = findViewById(R.id.search_view);
-        mSearchView.findViewById(R.id.search_plate).setBackground(null);
-        mSearchView.findViewById(R.id.submit_area).setBackground(null);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                // submit query text & go to next page
-                Log.e("HomeActivity", "TextSubmit : " + s);
-                mSearchView.setIconified(true);
-                Intent intent = new Intent(HomeActivity.this, EntitySearchedActivity.class);
-                intent.putExtra("keyword", s);
-                startActivityForResult(intent, SUBJECTS);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-
     }
 
 }

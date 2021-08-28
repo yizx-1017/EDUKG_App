@@ -12,10 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GKUDE">
-        <activity
-            android:name=".HomeActivity"
-            android:exported="true"
-            android:label="@string/title_activity_home" />
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="123456">
@@ -25,6 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".HomeActivity" />
         <activity android:name=".CategoryActivity" />
         <meta-data
             android:name="DATABASE"

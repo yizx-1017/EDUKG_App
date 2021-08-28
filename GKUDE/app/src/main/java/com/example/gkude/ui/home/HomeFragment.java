@@ -38,6 +38,7 @@ import java.util.Objects;
 public class HomeFragment extends Fragment {
     public static final int SUBJECTS = 111, CATEGORY = 13;
     private TabViewModel tabViewModel;
+
     private HomePagerAdapter homePagerAdapter;
 
     private void initView(View view){
@@ -58,7 +59,6 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 intent.putExtra("category", new ArrayList<>(Objects.requireNonNull(tabViewModel.getCategory().getValue())));
                 intent.putExtra("delCategory",  new ArrayList<>(Objects.requireNonNull(tabViewModel.getDelCategory().getValue())));
-//                startActivityForResult(intent, HomeActivity.CATEGORY);
                 startActivity(intent);
             }
         });
@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
                 mSearchView.setIconified(true);
                 Intent intent = new Intent(getActivity(), EntitySearchedActivity.class);
                 intent.putExtra("keyword", s);
-                startActivityForResult(intent, SUBJECTS);
+                startActivity(intent);
                 return true;
             }
 

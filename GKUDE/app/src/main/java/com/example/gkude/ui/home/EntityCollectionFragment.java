@@ -138,6 +138,6 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         intent.putExtra("properties", (Parcelable) entity.getProperties());
         intent.putExtra("relations", (Parcelable) entity.getRelations());
         intent.putExtra("problems", (Parcelable) entity.getProblems());
-        startActivityForResult(intent, HomeActivity.SUBJECTS);
+        startActivity(intent);
     }
 }
