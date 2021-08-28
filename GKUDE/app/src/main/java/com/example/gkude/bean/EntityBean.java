@@ -1,14 +1,11 @@
 package com.example.gkude.bean;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
 import com.orm.SugarRecord;
 
 import com.orm.dsl.Ignore;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import lombok.Getter;

@@ -61,7 +61,7 @@ public class Fetch {
         }
     }
 
-    public List<EntityBean> fetchInstanceList(@NonNull String searchKey,@NonNull String course) {
+    public List<EntityBean> fetchInstanceList(@NonNull String course,@NonNull String searchKey) {
         String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/instanceList?course=%s&searchKey=%s&id=%s",course,searchKey,id);
         Request request = new Request.Builder().url(url).get().build();
         System.out.println("I got here.... request");
@@ -83,7 +83,7 @@ public class Fetch {
                 for (int i=0; i<list.size(); i++) {
                     list.get(i).setCourse(course);
                 }
-                return edukgResponse.getData();
+                return list;
             }
             return null;
         } catch (IOException e) {
@@ -101,8 +101,7 @@ public class Fetch {
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-               String json = response.body().string();
-                System.out.println(json);
+                String json = Objects.requireNonNull(response.body()).string();
                 Type type = new TypeToken<EdukgResponse<EntityBean>>(){}.getType();
                 EdukgResponse<EntityBean> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {

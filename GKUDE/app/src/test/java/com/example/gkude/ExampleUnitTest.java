@@ -29,7 +29,7 @@ public class ExampleUnitTest extends SugarApp {
     public void fetchFunctionTest() {
         Fetch fetch = new Fetch();
         System.out.println(fetch.getId());
-        List<EntityBean> list = fetch.fetchInstanceList("李白", CourseType.CHINESE.getCourseType());
+        List<EntityBean> list = fetch.fetchInstanceList(CourseType.CHINESE.getCourseType(),"李白");
         EntityBean entityBean = list.get(0);
         System.out.println(entityBean.getLabel());
         System.out.println(entityBean.getPropertyStore());
