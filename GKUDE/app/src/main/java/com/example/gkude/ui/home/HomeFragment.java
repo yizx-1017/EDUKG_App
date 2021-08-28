@@ -91,9 +91,14 @@ public class HomeFragment extends Fragment {
 
     private void initSearchbar(View view) {
         Toolbar mToolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        System.out.println("aaaaa");
+        System.out.println(mToolbar);
+        System.out.println("bbbbb");
 
+        System.out.println(view.findViewById(R.id.search_view));
         final SearchView mSearchView = view.findViewById(R.id.search_view);
+        System.out.println("ccccc");
         mSearchView.findViewById(R.id.search_plate).setBackground(null);
         mSearchView.findViewById(R.id.submit_area).setBackground(null);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
