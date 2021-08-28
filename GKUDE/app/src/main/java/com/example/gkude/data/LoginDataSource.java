@@ -71,52 +71,54 @@ public class LoginDataSource {
     }
 
     public Result<LoggedInUser> login(String username, String password) {
-
-        try {
-            // TODO: handle loggedInUser authentication
-            // TODO: send to backend the username and password, check if valid
-            System.out.println(username);
-            System.out.println(password);
-            final boolean[] result_from_backend = {false};
-            final String[] userID = new String[1];
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-//                    String test_string = post_to_edukg();
-//                    System.out.println(test_string);
-                    String result = post_login(username, password);
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        int status = jsonObject.getInt("status");
-                        if(status == 200) {
-                            result_from_backend[0] = true;
-                            userID[0] = jsonObject.getString("data");
-                        }
-                        System.out.println(status);
-                        System.out.println(userID[0]);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println(result);
-                }
-            });
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            userID[0],
-                            username);
-            if(result_from_backend[0])
-                return new Result.Success<>(fakeUser);
-            else // TODO: change exception and description
-                return new Result.Error(new IOException("Error logging in"));
-        } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
-        }
+        System.out.println(username);
+        System.out.println(password);
+        LoggedInUser fakeUser = new LoggedInUser("0",username);
+        return new Result.Success<>(fakeUser);
+//        try {
+//            // TODO: handle loggedInUser authentication
+//            // TODO: send to backend the username and password, check if valid
+//
+//            final boolean[] result_from_backend = {false};
+//            final String[] userID = new String[1];
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+////                    String test_string = post_to_edukg();
+////                    System.out.println(test_string);
+//                    String result = post_login(username, password);
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(result);
+//                        int status = jsonObject.getInt("status");
+//                        if(status == 200) {
+//                            result_from_backend[0] = true;
+//                            userID[0] = jsonObject.getString("data");
+//                        }
+//                        System.out.println(status);
+//                        System.out.println(userID[0]);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    System.out.println(result);
+//                }
+//            });
+//            thread.start();
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            LoggedInUser fakeUser =
+//                    new LoggedInUser(
+//                            userID[0],
+//                            username);
+//            if(result_from_backend[0])
+//                return new Result.Success<>(fakeUser);
+//            else // TODO: change exception and description
+//                return new Result.Error(new IOException("Error logging in"));
+//        } catch (Exception e) {
+//            return new Result.Error(new IOException("Error logging in", e));
+//        }
     }
 
     public void logout() {

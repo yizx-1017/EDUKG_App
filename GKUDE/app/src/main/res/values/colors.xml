@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="tool_bar">#0EB6CC</color>>
+    <color name="colorPrimary">#03A9F4</color>
+    <color name="colorPrimaryDark">#2196F3</color>
+    <color name="colorAccent">@android:color/holo_orange_light</color>
+    <color name="catArrangeHintColor">#696969</color>
+    <color name="catArrangeTextBgColor">#AAE8E8E8</color>
+    <color name="catArrangeDelTextBgColor">#ffffff</color>
+    <color name="clickedNews">@android:color/darker_gray</color>
+    <color name="clickedNews2">@android:color/tab_indicator_text</color>
 </resources>
