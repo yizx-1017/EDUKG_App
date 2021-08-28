@@ -4,27 +4,14 @@ import com.orm.SugarRecord;
 
 import java.io.Serializable;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ProblemBean extends SugarRecord implements Serializable {
     private Integer qID;
     private String qBody;
     private String qAnswer;
-
-    public Integer getqID() {
-        return qID;
-    }
-    public void setqID(Integer qID) {
-        this.qID = qID;
-    }
-    public String getqBody() {
-        return qBody;
-    }
-    public void setqBody(String qBody) {
-        this.qBody = qBody;
-    }
-    public String getqAnswer() {
-        return qAnswer;
-    }
-    public void setqAnswer(String qAnswer) {
-        this.qAnswer = qAnswer;
-    }
 }

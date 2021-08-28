@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gkude.EntityViewActivity;
-import com.example.gkude.HomeActivity;
 import com.example.gkude.R;
 import com.example.gkude.adapter.EntityCollectionAdapter;
 import com.example.gkude.bean.EntityBean;
@@ -127,7 +126,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
 
     @Override
     public void onEntitySelected(EntityBean entity) {
-        if(!entity.getVisited()){
+        if(!entity.isVisited()){
             entity.save();
         }
 
