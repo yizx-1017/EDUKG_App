@@ -24,6 +24,7 @@ public class EntityBean extends SugarRecord implements Serializable{
     private String category;
     private String description;
     private String course;
+    @Ignore
     private boolean visited;
     // relation (关系)
     private String relations;

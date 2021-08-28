@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
             }
         });
         //init Search Bar
-        //initSearchbar(view);
+        initSearchbar(view);
     }
 
     @Override

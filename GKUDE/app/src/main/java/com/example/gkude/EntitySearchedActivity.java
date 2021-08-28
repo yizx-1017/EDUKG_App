@@ -31,6 +31,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_searched);
         keyword = getIntent().getStringExtra("keyword");
+        // TODO(zhiyuxie): add filters and sorting parameters
         initToolbar();
         initRecyclerView();
         initObserver();
@@ -81,22 +82,23 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
-        // TODO(zixuanyi): Manage.getEntity
-//        Manager.getEntity(observer, keyword);
+        // TODO(zhiyuxie): Manage.getEntity
+//        Manager.getEntityList(observer, keyword);
     }
 
     @Override
     public void onEntitySelected(EntityBean entity) {
         if(!entity.getVisited()){
+            entity.setVisited(true); // TODO(zhiyuxie): check if this logic is needed
             entity.save();
         }
         // Go to the detailed page
         Intent intent = new Intent(this, EntityViewActivity.class);
-        intent.putExtra("label", entity.getLabel());
-        intent.putExtra("description", entity.getDescription());
-        intent.putExtra("properties", (Parcelable) entity.getProperties());
-        intent.putExtra("relations", (Parcelable) entity.getRelations());
-        intent.putExtra("problems", (Parcelable) entity.getProblems());
+//        intent.putExtra("label", entity.getLabel());
+//        intent.putExtra("description", entity.getDescription());
+//        intent.putExtra("properties", (Parcelable) entity.getProperties());
+//        intent.putExtra("relations", (Parcelable) entity.getRelations());
+//        intent.putExtra("problems", (Parcelable) entity.getProblems());
         startActivity(intent);
     }
 

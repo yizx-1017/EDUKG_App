@@ -69,10 +69,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SugarContext.terminate();
-        SugarContext.init(this); // TODO: where to delete
+        SugarContext.init(this); // TODO(zhiyuxie): where to delete
 
-        test_create_entitybean();
+        test_create_entitybean();  //TODO(zhiyuxie): delete test
 
         setContentView(R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())

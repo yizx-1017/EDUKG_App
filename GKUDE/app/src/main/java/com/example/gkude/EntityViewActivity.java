@@ -31,14 +31,12 @@ public class EntityViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_view);
-
-        label = getIntent().getStringExtra("label");
-        description = getIntent().getStringExtra("description");
-        properties = getIntent().getParcelableExtra("properties");
-        relations = getIntent().getParcelableExtra("relations");
-        problems = getIntent().getParcelableExtra("problems");
-
-
+        // TODO(zhiyuxie): shouldn't pass string like this here. Create an observer and call Manager.getEntity()
+//        label = getIntent().getStringExtra("label");
+//        description = getIntent().getStringExtra("description");
+//        properties = getIntent().getParcelableExtra("properties");
+//        relations = getIntent().getParcelableExtra("relations");
+//        problems = getIntent().getParcelableExtra("problems");
         initToolbar();
         initView();
         initRecyclerView();

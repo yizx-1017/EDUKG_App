@@ -25,30 +25,6 @@ import okhttp3.Response;
  */
 public class LoginDataSource {
 
-//    public String post_to_edukg() {
-//        OkHttpClient client = new OkHttpClient();
-//        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName").newBuilder();
-//        urlBuilder.addQueryParameter("name","李白");
-//        urlBuilder.addQueryParameter("id","9c9fe7c2-4e78-4acf-84e6-3a110541db41");
-//        urlBuilder.addQueryParameter("course", "chinese");
-//
-//        Request request = new Request.Builder()
-//                .url(urlBuilder.build())
-//                .get()
-//                .build();
-//        System.out.println("I got here.... request");
-//        try (Response response = client.newCall(request).execute()) {
-//            return response.body().string();
-//        }
-//        catch(Exception e) {
-//            e.printStackTrace();
-//            System.out.println("The wrong message is>>>");
-//            System.out.println(e.getMessage());
-//            return e.getMessage();
-//        }
-//    }
-
-
     public String post_login(String username,String password){
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder().add(

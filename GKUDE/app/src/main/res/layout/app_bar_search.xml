@@ -15,8 +15,34 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/app_name"
+            app:title="搜索"
             app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="筛选"
+                android:layout_marginLeft="50dp">
+            </TextView>
+
+            <Spinner android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:id="@+id/spin_filter"
+                android:entries="@array/filters"
+                android:spinnerMode="dialog">
+            </Spinner>
+
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="排序"
+                android:layout_marginLeft="50dp">
+            </TextView>
+
+            <Spinner android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:id="@+id/spin_sorter"
+                android:entries="@array/sorters"
+                android:spinnerMode="dialog">
+            </Spinner>
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_view"
