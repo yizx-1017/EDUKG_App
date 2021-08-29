@@ -84,7 +84,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         };
         // TODO: check
 //        System.out.println("aaaaa");
-//        Manager.searchEntity("chinese", keyword, observer);
+        Manager.searchEntity("chinese", keyword, observer);
     }
 
     @Override

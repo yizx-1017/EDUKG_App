@@ -6,19 +6,19 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import com.example.gkude.server.LoginRepository;
+import com.example.gkude.server.UserRepository;
 import com.example.gkude.server.Result;
 import com.example.gkude.server.model.User;
 import com.example.gkude.R;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private final UserRepository userRepository;
 
-    LoginViewModel(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
+    LoginViewModel(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -31,11 +31,11 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        Result result = loginRepository.login(username, password);
+        Result<User> result = userRepository.login(username, password);
 
-        if (result instanceof Result.Success) {
-            User data = ((Result.Success<User>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        if (result.getStatus().equals(200)) {
+            User data = result.getData();
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getUsername())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }

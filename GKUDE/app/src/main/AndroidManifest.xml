@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".HomeActivity" android:exported="false"/>
         <activity android:name=".CategoryActivity" android:exported="false"/>
+        <activity android:name=".EntitySearchedActivity" android:exported="false"/>
+        <activity android:name=".EntityViewActivity" android:exported="false"/>
         <meta-data
             android:name="DATABASE"
             android:value="entity.db" />

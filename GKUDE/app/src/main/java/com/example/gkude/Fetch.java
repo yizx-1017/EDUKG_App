@@ -32,14 +32,16 @@ import okhttp3.Response;
 public class Fetch {
     private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new Gson();
-    private String id;
+    private static String id = null;
 
     Fetch() {
-        this.id = fetchId();
+        if (id == null) {
+            id = fetchId();
+        }
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public String fetchId() {
@@ -73,7 +75,7 @@ public class Fetch {
                 Type type = new TypeToken<EdukgResponse<List<EntityBean>>>(){}.getType();
                 EdukgResponse<List<EntityBean>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
-                    this.id = fetchId();
+                    id = fetchId();
                     url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/instanceList?course=%s&searchKey=%s&id=%s",course,searchKey,id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
@@ -106,7 +108,7 @@ public class Fetch {
                 Type type = new TypeToken<EdukgResponse<EntityBean>>(){}.getType();
                 EdukgResponse<EntityBean> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
-                    this.id = fetchId();
+                    id = fetchId();
                     url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName?course=%s&name=%s&id=%s",entityBean.getCourse(),entityBean.getLabel(),id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
@@ -149,7 +151,7 @@ public class Fetch {
                 Type type = new TypeToken<EdukgResponse<List<ResultBean>>>(){}.getType();
                 EdukgResponse<List<ResultBean>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
-                    this.id = fetchId();
+                    id = fetchId();
                     formBody = new FormBody.Builder().add("course", course)
                             .add("inputQuestion", inputQuestion).add("id", id).build();
                     request = new Request.Builder().url(url)
@@ -185,7 +187,7 @@ public class Fetch {
                 Type type = new TypeToken<EdukgResponse<LinkInstanceResponse>>(){}.getType();
                 EdukgResponse<LinkInstanceResponse> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
-                    this.id = fetchId();
+                    id = fetchId();
                     formBody = new FormBody.Builder().add("course", course)
                             .add("context", context).add("id", id).build();
                     request = new Request.Builder().url(url)
@@ -217,7 +219,7 @@ public class Fetch {
                 Type type = new TypeToken<EdukgResponse<List<ProblemBean>>>(){}.getType();
                 EdukgResponse<List<ProblemBean>> edukgResponse = gson.fromJson(json,type);
                 if (edukgResponse.getCode().equals("-1")) {
-                    this.id = fetchId();
+                    id = fetchId();
                     url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getUri(), id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
@@ -252,7 +254,7 @@ public class Fetch {
                 Type type = new TypeToken<EdukgResponse<List<ResultBean>>>(){}.getType();
                 EdukgResponse<List<ResultBean>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
-                    this.id = fetchId();
+                    id = fetchId();
                     formBody = new FormBody.Builder().add("course", course)
                             .add("subjectName", subjectName).add("id", id).build();
                     request = new Request.Builder().url(url)
