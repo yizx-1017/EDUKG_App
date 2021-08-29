@@ -1,5 +1,7 @@
 package com.example.gkude.bean;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -15,4 +17,14 @@ public class PropertyBean implements Serializable {
     private String predicate;
     private String predicateLabel;
     private String object;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return '{' +
+                "\"predicate\": \"" + predicate + '\"' +
+                ", \"predicateLabel\": \"" + predicateLabel + '\"' +
+                ", \"object\": \"" + object + '\"' +
+                '}';
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.gkude.bean;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -24,4 +26,19 @@ public class RelationBean implements Serializable {
     String relationName;
     @SerializedName("predicate")
     String relationUri;
+
+    @NonNull
+    @Override
+    public String toString() {
+        String entity;
+        if (subjectName != null) {
+            entity = "\"subject_label\": \"" + subjectName + '\"' + ", \"subject\": \"" + entityUri + '\"';
+        } else {
+            entity =  "\"object_label\": \"" + objectName + '\"' + ", \"object\": \"" + entityUri + '\"';
+        }
+        return '{' + entity +
+                ", \"predicate_label\": \"" + relationName + '\"' +
+                ", \"predicate\": \"" + relationUri + '\"' +
+                '}';
+    }
 }

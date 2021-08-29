@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 import com.example.gkude.bean.CourseType;
 import com.example.gkude.bean.EntityBean;
+import com.example.gkude.bean.RecognitionBean;
 import com.example.gkude.bean.RelationBean;
 import com.google.gson.Gson;
 import com.orm.SugarApp;
@@ -32,11 +33,14 @@ public class ExampleUnitTest extends SugarApp {
         List<EntityBean> list = fetch.fetchInstanceList(CourseType.CHINESE.getCourseType(),"李白");
         EntityBean entityBean = list.get(0);
         System.out.println(entityBean.getLabel());
-        System.out.println(entityBean.getPropertyStore());
         fetch.fetchInfoByInstanceName(entityBean);
         System.out.println(entityBean.getUri());
-        System.out.println(entityBean.getPropertyStore());
-        System.out.println(entityBean.getProperties().size());
+        System.out.println(entityBean.getRelationStore());
+        System.out.println(entityBean.getRelationsFromStore());
+        List<RecognitionBean> recognitionBeans = fetch.fetchLinkInstance(CourseType.CHINESE.getCourseType(), "李白是一个伟大的诗人，杜甫也是一个伟大的诗人");
+        for(RecognitionBean bean: recognitionBeans) {
+            System.out.println(bean.getEntity());
+        }
     }
 
     @Test

@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,9 +145,10 @@ public class Fetch {
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                List<ResultBean> result = new ArrayList<>();
-                JSONObject root = new JSONObject(Objects.requireNonNull(response.body()).string());
-                if (root.getString("code").equals("-1")) {
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<EdukgResponse<List<ResultBean>>>(){}.getType();
+                EdukgResponse<List<ResultBean>> edukgResponse = gson.fromJson(json, type);
+                if (edukgResponse.getCode().equals("-1")) {
                     this.id = fetchId();
                     formBody = new FormBody.Builder().add("course", course)
                             .add("inputQuestion", inputQuestion).add("id", id).build();
@@ -154,17 +156,13 @@ public class Fetch {
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
                             .post(formBody).build();
                     response = client.newCall(request).execute();
-                    root = new JSONObject(Objects.requireNonNull(response.body()).string());
+                    json = Objects.requireNonNull(response.body()).string();
+                    edukgResponse = gson.fromJson(json, type);
                 }
-                JSONArray array = root.getJSONArray("data");
-                for (int i=0; i<array.length(); i++){
-                    ResultBean resultBean = gson.fromJson(array.getJSONObject(i).toString(), ResultBean.class);
-                    result.add(resultBean);
-                }
-                return result;
+                return edukgResponse.getData();
             }
             return null;
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
@@ -172,7 +170,7 @@ public class Fetch {
         }
     }
 
-    public List<RecognitionBean> fetchLinkInstance(@NonNull String context, @NonNull String course) {
+    public List<RecognitionBean> fetchLinkInstance(@NonNull String course, @NonNull String context) {
         String url = "http://open.edukg.cn/opedukg/api/typeOpen/open/linkInstance";
         FormBody formBody = new FormBody.Builder().add("course", course)
                 .add("context", context).add("id", id).build();
@@ -183,9 +181,10 @@ public class Fetch {
         try {
             Response response =  client.newCall(request).execute();
             if (response.isSuccessful()) {
-                List<RecognitionBean> result = new ArrayList<>();
-                JSONObject root = new JSONObject(Objects.requireNonNull(response.body()).string());
-                if (root.getString("code").equals("-1")) {
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<EdukgResponse<LinkInstanceResponse>>(){}.getType();
+                EdukgResponse<LinkInstanceResponse> edukgResponse = gson.fromJson(json, type);
+                if (edukgResponse.getCode().equals("-1")) {
                     this.id = fetchId();
                     formBody = new FormBody.Builder().add("course", course)
                             .add("context", context).add("id", id).build();
@@ -193,17 +192,13 @@ public class Fetch {
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
                             .post(formBody).build();
                     response =  client.newCall(request).execute();
-                    root = new JSONObject(Objects.requireNonNull(response.body()).string());
+                    json = Objects.requireNonNull(response.body()).string();
+                    edukgResponse = gson.fromJson(json, type);
                 }
-                JSONArray array = root.getJSONObject("data").getJSONArray("results");
-                for (int i=0; i<array.length(); i++){
-                    RecognitionBean recognitionBean = gson.fromJson(array.getJSONObject(i).toString(), RecognitionBean.class);
-                    result.add(recognitionBean);
-                }
-                return result;
+                return edukgResponse.getData().getResults();
             }
             return null;
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
@@ -218,27 +213,23 @@ public class Fetch {
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                List<ProblemBean> result = new ArrayList<>();
-                JSONObject root = new JSONObject(Objects.requireNonNull(response.body()).string());
-                if (root.getString("code").equals("-1")) {
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<EdukgResponse<List<ProblemBean>>>(){}.getType();
+                EdukgResponse<List<ProblemBean>> edukgResponse = gson.fromJson(json,type);
+                if (edukgResponse.getCode().equals("-1")) {
                     this.id = fetchId();
                     url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getUri(), id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
-                    root = new JSONObject(Objects.requireNonNull(response.body()).string());
+                    json = Objects.requireNonNull(response.body()).string();
+                    edukgResponse = gson.fromJson(json,type);
                 }
-                // 获取列表，暂时删去
-//                JSONArray array = root.getJSONArray("data");
-//                for (int i=0; i<root.length(); i++) {
-//                    ProblemBean problemBean = gson.fromJson(array.getJSONObject(i).toString(), ProblemBean.class);
-//                    result.add(problemBean);
-//                }
-                entityBean.setProblemStore(root.getString("data"));
-                entityBean.save();
+                entityBean.setProblems(edukgResponse.getData());
+                entityBean.setProblemStore(edukgResponse.getData().toString());
                 return entityBean;
             }
             return null;
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
@@ -257,9 +248,10 @@ public class Fetch {
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                List<ResultBean> result = new ArrayList<>();
-                JSONObject root = new JSONObject(Objects.requireNonNull(response.body()).string());
-                if (root.getString("code").equals("-1")) {
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<EdukgResponse<List<ResultBean>>>(){}.getType();
+                EdukgResponse<List<ResultBean>> edukgResponse = gson.fromJson(json, type);
+                if (edukgResponse.getCode().equals("-1")) {
                     this.id = fetchId();
                     formBody = new FormBody.Builder().add("course", course)
                             .add("subjectName", subjectName).add("id", id).build();
@@ -267,17 +259,13 @@ public class Fetch {
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
                             .post(formBody).build();
                     response = client.newCall(request).execute();
-                    root = new JSONObject(Objects.requireNonNull(response.body()).string());
+                    json = Objects.requireNonNull(response.body()).string();
+                    edukgResponse = gson.fromJson(json, type);
                 }
-                JSONArray array = root.getJSONArray("data");
-                for (int i=0; i<array.length(); i++){
-                    ResultBean resultBean = gson.fromJson(array.getJSONObject(i).toString(), ResultBean.class);
-                    result.add(resultBean);
-                }
-                return result;
+                return edukgResponse.getData();
             }
             return null;
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
@@ -292,4 +280,9 @@ class EdukgResponse<T> {
     private String msg;
     private String id;
     private T data;
+}
+
+@Data
+class LinkInstanceResponse {
+    private List<RecognitionBean> results;
 }
