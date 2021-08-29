@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import com.example.gkude.data.LoginDataSource;
-import com.example.gkude.data.LoginRepository;
+import com.example.gkude.server.LoginDataSource;
+import com.example.gkude.server.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

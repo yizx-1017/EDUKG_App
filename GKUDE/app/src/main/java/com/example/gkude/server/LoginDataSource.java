@@ -1,20 +1,8 @@
-package com.example.gkude.data;
+package com.example.gkude.server;
 
-import com.example.gkude.bean.EntityBean;
-import com.example.gkude.bean.ProblemBean;
-import com.example.gkude.data.model.LoggedInUser;
+import com.example.gkude.server.model.User;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.util.logging.XMLFormatter;
-
-import okhttp3.Call;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -46,10 +34,10 @@ public class LoginDataSource {
         }
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result login(String username, String password) {
         System.out.println(username);
         System.out.println(password);
-        LoggedInUser fakeUser = new LoggedInUser("0",username);
+        User fakeUser = new User("0",username);
         return new Result.Success<>(fakeUser);
 //        try {
 //            // TODO: handle loggedInUser authentication

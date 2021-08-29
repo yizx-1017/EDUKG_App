@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import com.example.gkude.data.LoginRepository;
-import com.example.gkude.data.Result;
-import com.example.gkude.data.model.LoggedInUser;
+import com.example.gkude.server.LoginRepository;
+import com.example.gkude.server.Result;
+import com.example.gkude.server.model.User;
 import com.example.gkude.R;
 
 public class LoginViewModel extends ViewModel {
@@ -31,10 +31,10 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        Result result = loginRepository.login(username, password);
 
         if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            User data = ((Result.Success<User>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
