@@ -32,14 +32,16 @@ import okhttp3.Response;
 public class Fetch {
     private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new Gson();
-    private String id;
+    private static String id = null;
 
     Fetch() {
-        this.id = fetchId();
+        if (id == null) {
+            id = fetchId();
+        }
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public String fetchId() {

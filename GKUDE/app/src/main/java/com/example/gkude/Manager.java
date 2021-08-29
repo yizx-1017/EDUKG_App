@@ -1,5 +1,7 @@
 package com.example.gkude;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 
 import com.example.gkude.bean.EntityBean;
@@ -17,10 +19,15 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class Manager {
-    private static Fetch fetch = new Fetch();
+    private static Fetch fetch = null;
 
+    @SuppressLint("CheckResult")
     public static void searchEntity(@NonNull String course, @NonNull String searchKey, Observer<List<EntityBean>> observer) {
+
         Observable.create((ObservableOnSubscribe<List<EntityBean>>) emitter -> {
+            if (fetch == null) {
+                fetch = new Fetch();
+            }
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
             System.out.println("I got here searchEntity");
             System.out.println(list);
@@ -33,6 +40,9 @@ public class Manager {
 
     public static void getEntityInfo(@NonNull EntityBean entityBean, Observer<EntityBean> observer) {
         Observable.create((ObservableOnSubscribe<EntityBean>) emitter -> {
+            if (fetch == null) {
+                fetch = new Fetch();
+            }
             fetch.fetchInfoByInstanceName(entityBean);
             fetch.fetchQuestionListByUriName(entityBean);
             entityBean.setVisited(true);
@@ -44,8 +54,11 @@ public class Manager {
                 .subscribe(observer);
     }
 
-    public void answerInputQuestion(@NonNull String course, @NonNull String inputQuestion, Observer<List<ResultBean>> observer) {
+    public static void answerInputQuestion(@NonNull String course, @NonNull String inputQuestion, Observer<List<ResultBean>> observer) {
         Observable.create((ObservableOnSubscribe<List<ResultBean>>) emitter -> {
+            if (fetch == null) {
+                fetch = new Fetch();
+            }
             List<ResultBean> list = fetch.fetchInputQuestion(course, inputQuestion);
             emitter.onNext(list);
             emitter.onComplete();
@@ -54,8 +67,11 @@ public class Manager {
                 .subscribe(observer);
     }
 
-    public void recognizeEntity(@NonNull String course, @NonNull String context, Observer<List<RecognitionBean>> observer) {
+    public static void recognizeEntity(@NonNull String course, @NonNull String context, Observer<List<RecognitionBean>> observer) {
         Observable.create((ObservableOnSubscribe<List<RecognitionBean>>) emitter -> {
+            if (fetch == null) {
+                fetch = new Fetch();
+            }
             List<RecognitionBean> list = fetch.fetchLinkInstance(course, context);
             emitter.onNext(list);
             emitter.onComplete();
