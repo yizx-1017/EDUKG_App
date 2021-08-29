@@ -19,12 +19,11 @@ import lombok.NoArgsConstructor;
 public class Manager {
     private static Fetch fetch = new Fetch();
 
-    public static void searchEntity(Observer<List<EntityBean>> observer, String keyword) {
-    }
-
     public static void searchEntity(@NonNull String course, @NonNull String searchKey, Observer<List<EntityBean>> observer) {
         Observable.create((ObservableOnSubscribe<List<EntityBean>>) emitter -> {
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
+            System.out.println("I got here searchEntity");
+            System.out.println(list);
             emitter.onNext(list);
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
@@ -32,7 +31,7 @@ public class Manager {
                 .subscribe(observer);
     }
 
-    public void getEntityInfo(@NonNull EntityBean entityBean, Observer<EntityBean> observer) {
+    public static void getEntityInfo(@NonNull EntityBean entityBean, Observer<EntityBean> observer) {
         Observable.create((ObservableOnSubscribe<EntityBean>) emitter -> {
             fetch.fetchInfoByInstanceName(entityBean);
             fetch.fetchQuestionListByUriName(entityBean);
