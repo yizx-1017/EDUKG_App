@@ -1,11 +1,14 @@
 package com.example.gkude.bean;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import com.orm.SugarRecord;
 
 import com.orm.dsl.Ignore;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import lombok.Getter;
@@ -43,6 +46,23 @@ public class EntityBean extends SugarRecord implements Serializable{
 
     public boolean isVisited() {
         return this.isVisited();
+    }
+    public List<RelationBean> getRelationsFromStore() {
+        Type type = new TypeToken<List<RelationBean>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(relationStore, type);
+    }
+
+    public List<PropertyBean> getPropertiesFromStore() {
+        Type type = new TypeToken<List<PropertyBean>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(propertyStore, type);
+    }
+
+    public List<ProblemBean> getProblemsFromStore() {
+        Type type = new TypeToken<List<ProblemBean>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(problemStore, type);
     }
 }
 

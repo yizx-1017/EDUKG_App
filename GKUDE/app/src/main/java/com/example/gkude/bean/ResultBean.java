@@ -1,10 +1,12 @@
 package com.example.gkude.bean;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ResultBean {
     private String all;
     private String fsanswer;

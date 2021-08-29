@@ -1,10 +1,10 @@
 package com.example.gkude;
 
-import android.annotation.SuppressLint;
-
 import androidx.annotation.NonNull;
 
 import com.example.gkude.bean.EntityBean;
+import com.example.gkude.bean.RecognitionBean;
+import com.example.gkude.bean.ResultBean;
 
 import java.util.List;
 
@@ -22,7 +22,6 @@ public class Manager {
     public static void searchEntity(Observer<List<EntityBean>> observer, String keyword) {
     }
 
-    @SuppressLint("CheckResult")
     public static void searchEntity(@NonNull String course, @NonNull String searchKey, Observer<List<EntityBean>> observer) {
         Observable.create((ObservableOnSubscribe<List<EntityBean>>) emitter -> {
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
@@ -33,12 +32,33 @@ public class Manager {
                 .subscribe(observer);
     }
 
-    @SuppressLint("CheckResult")
     public void getEntityInfo(@NonNull EntityBean entityBean, Observer<EntityBean> observer) {
         Observable.create((ObservableOnSubscribe<EntityBean>) emitter -> {
             fetch.fetchInfoByInstanceName(entityBean);
+            fetch.fetchQuestionListByUriName(entityBean);
+            entityBean.setVisited(true);
             entityBean.save();
             emitter.onNext(entityBean);
+            emitter.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void answerInputQuestion(@NonNull String course, @NonNull String inputQuestion, Observer<List<ResultBean>> observer) {
+        Observable.create((ObservableOnSubscribe<List<ResultBean>>) emitter -> {
+            List<ResultBean> list = fetch.fetchInputQuestion(course, inputQuestion);
+            emitter.onNext(list);
+            emitter.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void recognizeEntity(@NonNull String course, @NonNull String context, Observer<List<RecognitionBean>> observer) {
+        Observable.create((ObservableOnSubscribe<List<RecognitionBean>>) emitter -> {
+            List<RecognitionBean> list = fetch.fetchLinkInstance(course, context);
+            emitter.onNext(list);
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
