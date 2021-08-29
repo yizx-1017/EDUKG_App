@@ -82,8 +82,9 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
-        // TODO(zhiyuxie): Manage.getEntity
-//        Manager.getEntityList(observer, keyword);
+        // TODO: check
+//        System.out.println("aaaaa");
+//        Manager.searchEntity("chinese", keyword, observer);
     }
 
     @Override

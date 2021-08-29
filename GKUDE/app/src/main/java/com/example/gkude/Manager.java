@@ -17,10 +17,13 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class Manager {
-    private final Fetch fetch = new Fetch();
+    private static Fetch fetch = new Fetch();
+
+    public static void searchEntity(Observer<List<EntityBean>> observer, String keyword) {
+    }
 
     @SuppressLint("CheckResult")
-    public void searchEntity(@NonNull String course, @NonNull String searchKey, Observer<List<EntityBean>> observer) {
+    public static void searchEntity(@NonNull String course, @NonNull String searchKey, Observer<List<EntityBean>> observer) {
         Observable.create((ObservableOnSubscribe<List<EntityBean>>) emitter -> {
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
             emitter.onNext(list);

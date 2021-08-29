@@ -40,5 +40,9 @@ public class EntityBean extends SugarRecord implements Serializable{
     private String problemStore;
     @Ignore
     public List<ProblemBean> problems;
+
+    public boolean isVisited() {
+        return this.isVisited();
+    }
 }
 
