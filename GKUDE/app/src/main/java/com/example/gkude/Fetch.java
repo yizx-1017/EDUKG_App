@@ -51,12 +51,13 @@ public class Fetch {
         Request request = new Request.Builder().url(url)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .post(formBody).build();
-        System.out.println("I got here.... request");
+        System.out.println("I got here.... request fetchID");
         try {
             Response response = client.newCall(request).execute();
             String json = Objects.requireNonNull(response.body()).string();
             Type type = new TypeToken<EdukgResponse<String>>(){}.getType();
             EdukgResponse<String> edukgResponse = gson.fromJson(json, type);
+            System.out.println("id get!");
             return edukgResponse.getId();
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +101,7 @@ public class Fetch {
     public EntityBean fetchInfoByInstanceName(@NonNull EntityBean entityBean) {
         String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName?course=%s&name=%s&id=%s",entityBean.getCourse(),entityBean.getLabel(),id);
         Request request = new Request.Builder().url(url).get().build();
-        System.out.println("I got here.... request");
+        System.out.println("I got here.... request fetchInfoByInstanceName");
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
@@ -123,8 +124,13 @@ public class Fetch {
                 if (entityBean.getProperties() != null) {
                     entityBean.setPropertyStore(edukgResponse.getData().getProperties().toString());
                 }
+                System.out.println("in fetch: entityBean.getRelations():");
+                System.out.println(entityBean.getRelations());
+                System.out.println("prepare to return entity");
+                entityBean.save();
                 return entityBean;
             } else {
+                System.out.println("ops! error");
                 return null;
             }
 
