@@ -28,7 +28,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 public class EntityViewActivity extends AppCompatActivity {
-    private int entity_id;
+    private Long entity_id;
     private String label, description;
     private List<RelationBean> relations;
     private List<PropertyBean> properties;
@@ -39,7 +39,7 @@ public class EntityViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_view);
-        entity_id = getIntent().getIntExtra("entity_id", 1);
+        entity_id = getIntent().getLongExtra("entity_id", 1);
         initObserver();
         // TODO(zhiyuxie): check if data can be accessed here. thread problem?
         EntityBean entity = EntityBean.findById(EntityBean.class, entity_id);
@@ -75,6 +75,9 @@ public class EntityViewActivity extends AppCompatActivity {
         // TODO: check
         System.out.println("in EntityViewActivity.java, observer, prepare to getEntityInfo");
         Manager.getEntityInfo(EntityBean.findById(EntityBean.class, entity_id), observer);
+        EntityBean entityBean = EntityBean.findById(EntityBean.class, entity_id);
+        System.out.println(entityBean.getRelations());
+        System.out.println(entityBean.getRelationsFromStore());
     }
 
     private void initToolbar() {

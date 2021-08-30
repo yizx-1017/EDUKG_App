@@ -44,9 +44,15 @@ public class Manager {
                 fetch = new Fetch();
             }
             fetch.fetchInfoByInstanceName(entityBean);
+            System.out.println("in manager: entityBean.getRelations():");
+            System.out.println(entityBean.getRelations());
+            System.out.println("prepare to return entity");
             fetch.fetchQuestionListByUriName(entityBean);
             entityBean.setVisited(true);
             entityBean.save();
+            System.out.println("inside Manager getEntityInfo");
+            System.out.println(entityBean.getRelations());
+            System.out.println(entityBean.getRelationsFromStore());
             emitter.onNext(entityBean);
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())

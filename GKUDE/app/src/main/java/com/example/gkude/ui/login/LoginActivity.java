@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Entity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -29,6 +30,8 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.RelationBean;
 import com.google.gson.Gson;
 import com.orm.SugarContext;
+import com.orm.SchemaGenerator;
+import com.orm.SugarDb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SugarContext.terminate();
-        SugarContext.init(this); // TODO(zhiyuxie): where to delete
+        SugarContext.init(this); // TODO(zhiyuxie): where to delete?
 
 //        test_create_entitybean();  //TODO(zhiyuxie): delete test
 
