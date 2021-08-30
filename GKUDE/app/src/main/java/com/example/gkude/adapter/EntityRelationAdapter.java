@@ -1,5 +1,6 @@
 package com.example.gkude.adapter;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gkude.R;
 import com.example.gkude.bean.EntityBean;
 import com.bumptech.glide.Glide;
+import com.example.gkude.bean.RelationBean;
 
 import org.javatuples.Triplet;
 
@@ -19,9 +21,9 @@ import java.util.List;
 
 public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAdapter.EntityRelationViewHolder> {
 
-    private List<Triplet<String, Boolean, EntityBean>> relations;
+    private List<RelationBean> relations;
 
-    public EntityRelationAdapter(List<Triplet<String, Boolean, EntityBean>> relations){
+    public EntityRelationAdapter(List<RelationBean> relations){
         this.relations = relations;
     }
 
@@ -56,13 +58,18 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
             mImg = itemView.findViewById(R.id.entity_forward);
         }
 
-        public void bind(final Triplet<String, Boolean, EntityBean> entity) {
-
+        public void bind(final RelationBean relation) {
+            boolean forward = true;
+            String name = relation.getObjectName();
+            if(name == null) {
+                name = relation.getSubjectName();
+                forward = false;
+            }
             // load relation info
-            mLabel.setText(entity.getValue2().getLabel());
-            mRelation.setText(entity.getValue0());
+            mLabel.setText(name);
+            mRelation.setText(relation.getRelationName());
 
-            if(entity.getValue1()){
+            if(forward){
                 Glide.with(mImg.getContext())
                         .load(R.drawable.ic_arrow_circle_forward_24px)
                         .into(mImg);

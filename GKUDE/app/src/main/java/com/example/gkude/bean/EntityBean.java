@@ -44,9 +44,6 @@ public class EntityBean extends SugarRecord implements Serializable{
     @Ignore
     public List<ProblemBean> problems;
 
-    public boolean isVisited() {
-        return this.isVisited();
-    }
     public List<RelationBean> getRelationsFromStore() {
         Type type = new TypeToken<List<RelationBean>>(){}.getType();
         Gson gson = new Gson();

@@ -28,7 +28,7 @@
                 android:layout_width="50dp"
                 android:id="@+id/spin_filter"
                 android:entries="@array/filters"
-                android:spinnerMode="dialog">
+                android:spinnerMode="dropdown">
             </Spinner>
 
             <TextView android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:layout_width="50dp"
                 android:id="@+id/spin_sorter"
                 android:entries="@array/sorters"
-                android:spinnerMode="dialog">
+                android:spinnerMode="dropdown">
             </Spinner>
 
             <androidx.appcompat.widget.SearchView

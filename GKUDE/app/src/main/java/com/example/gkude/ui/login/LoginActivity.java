@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SugarContext.terminate();
         SugarContext.init(this); // TODO(zhiyuxie): where to delete
 
 //        test_create_entitybean();  //TODO(zhiyuxie): delete test

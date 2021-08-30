@@ -17,7 +17,9 @@ import com.example.gkude.EntitySearchedActivity;
 import com.example.gkude.R;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -40,6 +42,9 @@ public class HomeFragment extends Fragment {
     private TabViewModel tabViewModel;
 
     private HomePagerAdapter homePagerAdapter;
+    private Spinner spinner_filter;
+    private List<String> data_list;
+    private ArrayAdapter<String> arrayAdapter;
 
     private void initView(View view){
         // init Tab view
@@ -92,11 +97,15 @@ public class HomeFragment extends Fragment {
     private void initSearchbar(View view) {
         Toolbar mToolbar = view.findViewById(R.id.toolbar);
 //        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        System.out.println("aaaaa");
-        System.out.println(mToolbar);
-        System.out.println("bbbbb");
+        spinner_filter = view.findViewById(R.id.spin_filter);
+        data_list = new ArrayList<String>();
+        data_list.add("filter 1");
+        data_list.add("filter 2");
+        data_list.add("filter 3");
+        arrayAdapter = new ArrayAdapter<String>(this.getContext(),
+                R.layout.support_simple_spinner_dropdown_item, data_list);
+        spinner_filter.setAdapter(arrayAdapter);
 
-        System.out.println(view.findViewById(R.id.search_view));
         final SearchView mSearchView = view.findViewById(R.id.search_view);
         System.out.println("ccccc");
         mSearchView.findViewById(R.id.search_plate).setBackground(null);
@@ -109,6 +118,8 @@ public class HomeFragment extends Fragment {
                 mSearchView.setIconified(true);
                 Intent intent = new Intent(getActivity(), EntitySearchedActivity.class);
                 intent.putExtra("keyword", s);
+//                Spinner spinner_filter = view.findViewById(R.id.spin_filter);
+
                 startActivity(intent);
                 return true;
             }
