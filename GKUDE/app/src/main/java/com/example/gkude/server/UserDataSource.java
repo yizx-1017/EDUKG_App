@@ -20,26 +20,6 @@ public class UserDataSource {
 
     private final Gson gson = new Gson();
 
-    public String post_login(String username, String password) {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody formBody = new FormBody.Builder().add(
-                "username", username).add(
-                "password", password).build();
-        Request request = new Request.Builder()
-                .url("http://10.0.2.2:8080/api/login")
-                .post(formBody)
-                .build();
-        System.out.println("I got here.... request");
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("The wrong message is>>>");
-            System.out.println(e.getMessage());
-            return e.getMessage();
-        }
-    }
-
     public Result<String> login(String username, String password) {
         System.out.println(username);
         System.out.println(password);
