@@ -1,6 +1,7 @@
 package com.example.gkude;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,11 +30,13 @@ import com.orm.SugarContext;
 
 public class HomeActivity extends AppCompatActivity {
     public static final int SUBJECTS = 111, CATEGORY = 13;
+    private TabViewModel tabViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout. content_main);
+        tabViewModel = new ViewModelProvider(this).get(TabViewModel.class);
         initNavView();
     }
 
@@ -49,4 +52,16 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("HomeActivity", "message back");
+        List<String> cat = data.getStringArrayListExtra("category");
+        tabViewModel = new ViewModelProvider(this).get(TabViewModel.class);
+        tabViewModel.setCategory(data.getStringArrayListExtra("category"));
+        tabViewModel.setDelCategory(data.getStringArrayListExtra("delCategory"));
+        for (String s: cat){
+            Log.e("HomeActivity", s);
+        }
+    }
 }

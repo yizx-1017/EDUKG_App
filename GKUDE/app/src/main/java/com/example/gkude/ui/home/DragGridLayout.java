@@ -1,8 +1,10 @@
 package com.example.gkude.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.Gravity;
@@ -12,14 +14,16 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.gkude.CategoryActivity;
 import com.example.gkude.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DragGridLayout extends GridLayout {
     private boolean isRemain;
-    private List<String> items;
+    public List<String> items;
     private int margin = 40;
 
     private boolean isCanDrag;
@@ -60,7 +64,6 @@ public class DragGridLayout extends GridLayout {
         tv.setGravity(Gravity.CENTER);
         if(!isRemain){
             tv.setTextColor(0xFF9c9393);
-            //tv.setBackgroundResource(R.drawable.textview_unselect_border);
         }
         LayoutParams params = new LayoutParams();
         params.width = getResources().getDisplayMetrics().widthPixels / 4 - margin * 2;
@@ -112,6 +115,7 @@ public class DragGridLayout extends GridLayout {
                     int index = indexOfChild(dragView);
                     items.remove(((TextView)dragView).getText().toString());
                     items.add(index, ((TextView)dragView).getText().toString());
+                    onDragItemClickListener.onDrag(items);
                     break;
             }
 
@@ -151,6 +155,7 @@ public class DragGridLayout extends GridLayout {
     //接口
     public interface OnDragItemClickListener {
         void onDragItemClick(TextView tv);
+        void onDrag(List<String> tv);
     }
 
     private OnDragItemClickListener onDragItemClickListener;

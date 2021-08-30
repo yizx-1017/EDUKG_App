@@ -11,8 +11,6 @@ import com.example.gkude.ui.home.EntityCollectionFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-// Since this(???) is an object collection, use a FragmentStatePagerAdapter,
-// and NOT a FragmentPagerAdapter.
 public class HomePagerAdapter extends FragmentStatePagerAdapter {
     List<String> category = new ArrayList<>();
     List<String> delCategory = new ArrayList<>();

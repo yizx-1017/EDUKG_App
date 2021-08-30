@@ -1,5 +1,6 @@
 package com.example.gkude;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -105,7 +106,7 @@ public class EntityViewActivity extends AppCompatActivity {
 
         TextView mLabel = findViewById(R.id.entity_label);
         TextView mInfo = findViewById(R.id.entity_description);
-
+        //mLabel.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/FZZJ-QNTJW.TTF"));
         mLabel.setText(label);
         mInfo.setText(description);
 

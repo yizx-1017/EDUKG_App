@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -40,12 +39,7 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        // TODO(zixuanyi): fix initToolbar error here
-        // possible solutions:
-        //1. 标签页：toolbar --> button (set and back to)
-        //2. 四个栏：只有首页为content_main 其他的都不需要tool bar
         Toolbar toolbar = findViewById(R.id.entity_toolbar);
-//        System.out.println(getSupportActionBar().toString());
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -71,12 +65,20 @@ public class CategoryActivity extends AppCompatActivity {
         gridLayout1.setOnDragItemClickListener(new DragGridLayout.OnDragItemClickListener() {
             @Override
             public void onDragItemClick(TextView tv) {
+                Log.e("CategoryActivity", tv.getText().toString());
                 mCategory.remove(tv.getText().toString().replace("+", ""));
                 mDelCategory.add(tv.getText().toString().replace("+", ""));
                 gridLayout1.removeView(tv);
                 gridLayout2.addGridItem(tv.getText().toString());
             }
+
+            @Override
+            public void onDrag(List<String> s) {
+                mCategory = s;
+                mDelCategory = gridLayout2.items;
+            }
         });
+
         gridLayout2.setOnDragItemClickListener(new DragGridLayout.OnDragItemClickListener() {
             @Override
             public void onDragItemClick(TextView tv) {
@@ -84,6 +86,11 @@ public class CategoryActivity extends AppCompatActivity {
                 mCategory.add(tv.getText().toString().replace("+", ""));
                 gridLayout2.removeView(tv);
                 gridLayout1.addGridItem(tv.getText().toString());
+            }
+
+            @Override
+            public void onDrag(List<String> s) {
+
             }
         });
     }

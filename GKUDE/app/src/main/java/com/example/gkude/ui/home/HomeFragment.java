@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.example.gkude.HomeActivity;
@@ -38,9 +39,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
-    public static final int SUBJECTS = 111, CATEGORY = 13;
     private TabViewModel tabViewModel;
-
     private HomePagerAdapter homePagerAdapter;
     private Spinner spinner_filter;
     private List<String> data_list;
@@ -52,7 +51,7 @@ public class HomeFragment extends Fragment {
         ViewPager viewPager = view.findViewById(R.id.view_pager);
 
         // bind: fragment -> viewPager -> tabLayout
-        homePagerAdapter = new HomePagerAdapter(getFragmentManager());
+        homePagerAdapter = new HomePagerAdapter(getParentFragmentManager());
         viewPager.setAdapter(homePagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -61,10 +60,12 @@ public class HomeFragment extends Fragment {
         addTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("click the category button");
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 intent.putExtra("category", new ArrayList<>(Objects.requireNonNull(tabViewModel.getCategory().getValue())));
                 intent.putExtra("delCategory",  new ArrayList<>(Objects.requireNonNull(tabViewModel.getDelCategory().getValue())));
-                startActivity(intent);
+                Log.e("HomeFragment", String.valueOf(HomeActivity.CATEGORY));
+                startActivityForResult(intent, HomeActivity.CATEGORY);
             }
         });
         //init Search Bar
@@ -76,12 +77,13 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         initView(root);
-        tabViewModel = new ViewModelProvider(this).get(TabViewModel.class);
+        tabViewModel = new ViewModelProvider(getActivity()).get(TabViewModel.class);
 
         tabViewModel.getCategory().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(@Nullable List<String> s) {
                 homePagerAdapter.setCategory(s);
+                Log.e("HomeFragment", s.toString());
             }
         });
 
@@ -89,6 +91,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<String> s) {
                 homePagerAdapter.setDelCategory(s);
+                Log.e("HomeFragment", s.toString());
             }
         });
         return root;

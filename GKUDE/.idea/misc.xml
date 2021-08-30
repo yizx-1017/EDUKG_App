@@ -11,7 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1828125" />
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1828125" />
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1828125" />
-        <entry key="app/src/main/res/layout/activity_category.xml" value="0.2910317444917101" />
+        <entry key="app/src/main/res/layout/activity_category.xml" value="0.5519098246262963" />
         <entry key="app/src/main/res/layout/activity_entity_searched.xml" value="0.2680902601575138" />
         <entry key="app/src/main/res/layout/activity_entity_view.xml" value="0.26666002775947917" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.21706335921887476" />
@@ -46,7 +46,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
