@@ -28,7 +28,7 @@ public class UserRepository {
 
     public Result<User> login(String username, String password) {
         // handle login
-        Result<String> result = dataSource.login(username, password);
+        Result<String> result = dataSource.login(username, password, "http://10.0.2.2:8080/api/login");
         if (result.getStatus().equals(200)) {
             User user = new User();
             user.setUserToken(result.getData());
@@ -58,7 +58,7 @@ public class UserRepository {
     }
 
     public Result<String> cancelFavorite(EntityBean entityBean) {
-        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/canel");
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/cancel");
     }
 
     public Result<List<EntityBean>> getHistories() {

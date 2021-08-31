@@ -23,7 +23,7 @@ public class UserDataSource {
     private final Gson gson = new Gson();
     private final OkHttpClient client = new OkHttpClient();
 
-    public Result<String> login(String username, String password) {
+    public Result<String> login(String username, String password, String url) {
         System.out.println(username);
         System.out.println(password);
         String userToken = "eyJhbGciOiJIUzI1NiJ9." +
@@ -35,7 +35,7 @@ public class UserDataSource {
 //            RequestBody formBody = new FormBody.Builder()
 //                    .add("username", username).add("password", password).build();
 //            Request request = new Request.Builder()
-//                    .url("http://10.0.2.2:8080/api/login")
+//                    .url(url)
 //                    .post(formBody)
 //                    .build();
 //            System.out.println("I got here.... request");

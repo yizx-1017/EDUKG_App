@@ -8,6 +8,10 @@ import com.example.gkude.bean.CourseType;
 import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.RecognitionBean;
 import com.example.gkude.bean.RelationBean;
+import com.example.gkude.server.Result;
+import com.example.gkude.server.UserDataSource;
+import com.example.gkude.server.UserRepository;
+import com.example.gkude.server.model.User;
 import com.google.gson.Gson;
 import com.orm.SugarApp;
 
@@ -51,5 +55,25 @@ public class ExampleUnitTest extends SugarApp {
         System.out.println(relationBean.getEntityUri());
         System.out.println(relationBean.getSubjectName());
         System.out.println(relationBean.getObjectName());
+    }
+
+    @Test
+    public void favoriteTest() {
+        Fetch fetch = new Fetch();
+        List<EntityBean> list = fetch.fetchInstanceList(CourseType.CHINESE.getCourseType(),"李白");
+        EntityBean entityBean = list.get(0);
+        System.out.println(entityBean.getLabel());
+        UserRepository userRepository = UserRepository.getInstance(new UserDataSource());
+        Result<User> userResult = userRepository.login("Jackson", "123456");
+        String token = userResult.getData().getUserToken();
+        System.out.println(token);
+        List<EntityBean> entityBeanList = userRepository.getFavorites().getData();
+        System.out.println(entityBeanList);
+        userRepository.addFavorite(entityBean);
+        entityBeanList = userRepository.getFavorites().getData();
+        System.out.println(entityBeanList.size());
+        userRepository.cancelFavorite(entityBean);
+        entityBeanList = userRepository.getFavorites().getData();
+        System.out.println(entityBeanList);
     }
 }
