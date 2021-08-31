@@ -43,17 +43,18 @@ public class Manager {
             if (fetch == null) {
                 fetch = new Fetch();
             }
-            fetch.fetchInfoByInstanceName(entityBean);
-            System.out.println("in manager: entityBean.getRelations():");
-            System.out.println(entityBean.getRelations());
-            System.out.println("prepare to return entity");
-            fetch.fetchQuestionListByUriName(entityBean);
-            entityBean.setVisited(true);
-            entityBean.save();
-            System.out.println("inside Manager getEntityInfo");
-            System.out.println(entityBean.getRelations());
-            System.out.println(entityBean.getRelationsFromStore());
-            emitter.onNext(entityBean);
+            List<EntityBean> list = EntityBean.findWithQuery(EntityBean.class, "uri = ?", entityBean.getUri());
+            EntityBean privateEntityBean;
+            if (list.isEmpty()) {
+                privateEntityBean = entityBean;
+            } else {
+                privateEntityBean = list.get(0);
+            }
+            fetch.fetchInfoByInstanceName(privateEntityBean);
+            fetch.fetchQuestionListByUriName(privateEntityBean);
+            privateEntityBean.setVisited(true);
+            privateEntityBean.save();
+            emitter.onNext(privateEntityBean);
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
