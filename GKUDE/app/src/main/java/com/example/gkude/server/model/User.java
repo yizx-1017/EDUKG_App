@@ -1,5 +1,9 @@
 package com.example.gkude.server.model;
 
+import com.example.gkude.bean.EntityBean;
+
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +20,8 @@ public class User {
 
     private String userToken;
     private String username;
+
+    private List<EntityBean> favorites;
+    private List<EntityBean> histories;
 
 }

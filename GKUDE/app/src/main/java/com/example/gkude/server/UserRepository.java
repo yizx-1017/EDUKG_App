@@ -1,6 +1,9 @@
 package com.example.gkude.server;
 
+import com.example.gkude.bean.EntityBean;
 import com.example.gkude.server.model.User;
+
+import java.util.List;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -16,31 +19,11 @@ public class UserRepository {
     // @see https://developer.android.com/training/articles/keystore
     private User user = null;
 
-    // private constructor : singleton access
-    private UserRepository(UserDataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
     public static UserRepository getInstance(UserDataSource dataSource) {
         if (instance == null) {
             instance = new UserRepository(dataSource);
         }
         return instance;
-    }
-
-    public boolean isLoggedIn() {
-        return user != null;
-    }
-
-    public void logout() {
-        user = null;
-        dataSource.logout();
-    }
-
-    private void setLoggedInUser(User user) {
-        this.user = user;
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
     }
 
     public Result<User> login(String username, String password) {
@@ -53,5 +36,50 @@ public class UserRepository {
             setLoggedInUser(user);
         }
         return new Result<>(result.getStatus(), result.getMsg(), user);
+    }
+
+    public boolean isLoggedIn() {
+        return user != null;
+    }
+
+    public void logout() {
+        user = null;
+    }
+
+    public Result<List<EntityBean>> getFavorites() {
+        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/favorite/get");
+        // favorite 有可能是null，用时先检查
+        user.setFavorites(result.getData());
+        return result;
+    }
+
+    public Result<String> addFavorite(EntityBean entityBean) {
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
+    }
+
+    public Result<String> cancelFavorite(EntityBean entityBean) {
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/canel");
+    }
+
+    public Result<List<EntityBean>> getHistories() {
+        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/history/get");
+        // 有可能是null，用时先检查
+        user.setHistories(result.getData());
+        return result;
+    }
+
+    public Result<String> addHistory(EntityBean entityBean) {
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
+    }
+
+    // private constructor : singleton access
+    private UserRepository(UserDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    private void setLoggedInUser(User user) {
+        this.user = user;
+        // If user credentials will be cached in local storage, it is recommended it be encrypted
+        // @see https://developer.android.com/training/articles/keystore
     }
 }

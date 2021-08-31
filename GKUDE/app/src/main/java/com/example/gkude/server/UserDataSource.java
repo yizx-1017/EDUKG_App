@@ -1,10 +1,12 @@
 package com.example.gkude.server;
 
-import com.example.gkude.server.model.User;
+import com.example.gkude.bean.EntityBean;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.FormBody;
@@ -19,6 +21,7 @@ import okhttp3.Response;
 public class UserDataSource {
 
     private final Gson gson = new Gson();
+    private final OkHttpClient client = new OkHttpClient();
 
     public Result<String> login(String username, String password) {
         System.out.println(username);
@@ -27,50 +30,103 @@ public class UserDataSource {
                 "eyJ1aWQiOjUsInN1YiI6IlVzZXIiLCJpc3MiOiJHS1VERV9TZXJ2ZXIiLCJleHAiOjE2MzAyOTQzNTAsImlhdCI6MTYzMDI5MTc1OCwianRpIjoiNWIwOTMwZDItZmYyNy00OTQxLThiYzMtYjVlZDIzMWIzZjU2In0." +
                 "q3nhcW9QthZ6z45DoWevTsMUL9v7NzMPnlezreobq0w";
         // return new Result<>(200, "OK!", userToken);
-        try {
-            // handle loggedInUser authentication
-            // send to backend the username and password, check if valid
-            Result<String> result = new Result<>();
-            Thread thread = new Thread(() -> {
-                OkHttpClient client = new OkHttpClient();
-                RequestBody formBody = new FormBody.Builder()
-                        .add("username", username).add("password", password).build();
-                Request request = new Request.Builder()
-                        .url("http://10.0.2.2:8080/api/login")
-                        .post(formBody)
-                        .build();
-                System.out.println("I got here.... request");
-                try {
-                    Response response = client.newCall(request).execute();
-                    String json = Objects.requireNonNull(response.body()).string();
-                    Type type = new TypeToken<Result<String>>(){}.getType();
-                    Result<String> private_result = gson.fromJson(json, type);
-                    result.setData(private_result.getData());
-                    result.setMsg(private_result.getData());
-                    result.setStatus(private_result.getStatus());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("The wrong message is>>>");
-                    System.out.println(e.getMessage());
-                }
-            });
-            thread.start();
+        Result<String> result = new Result<>();
+        Thread thread = new Thread(() -> {
+            RequestBody formBody = new FormBody.Builder()
+                    .add("username", username).add("password", password).build();
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:8080/api/login")
+                    .post(formBody)
+                    .build();
+            System.out.println("I got here.... request");
             try {
-                thread.join();
-            } catch (InterruptedException e) {
+                Response response = client.newCall(request).execute();
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<Result<String>>() {
+                }.getType();
+                Result<String> private_result = gson.fromJson(json, type);
+                result.setData(private_result.getData());
+                result.setMsg(private_result.getData());
+                result.setStatus(private_result.getStatus());
+            } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("The wrong message is>>>");
+                System.out.println(e.getMessage());
             }
-            if (result.getStatus().equals(200))
-                return result;
-            else
-                return new Result<>(400, "bad request", "Error logging in");
-        } catch (Exception e) {
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            return new Result<>(400, "bad request", "Error logging in");
         }
+        if (result.getStatus().equals(200))
+            return result;
+        else
+            return new Result<>(400, "bad request", "Error logging in");
     }
 
-    public void logout() {
-        // TODO: revoke authentication
+    public Result<List<EntityBean>> getEntityList(String userToken, String url) {
+        Result<List<EntityBean>> result = new Result<>();
+        Thread thread = new Thread(() -> {
+            Request request = new Request.Builder().url(url).addHeader("token", userToken).get().build();
+            try {
+                Response response = client.newCall(request).execute();
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<Result<List<EntityBean>>>() {
+                }.getType();
+                Result<List<EntityBean>> privateResult = gson.fromJson(json, type);
+                result.setStatus(privateResult.getStatus());
+                result.setMsg(privateResult.getMsg());
+                result.setData(privateResult.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("The wrong message is>>>");
+                System.out.println(e.getMessage());
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.getStatus().equals(200))
+            return result;
+        else
+            return new Result<>(400, "bad request", null);
     }
+
+    public Result<String> changeEntityList(EntityBean entityBean, String userToken, String url) {
+        Result<String> result = new Result<>();
+        Thread thread = new Thread(()->{
+           RequestBody formBody = new FormBody.Builder().add("uri", entityBean.getUri())
+                   .add("label", entityBean.getLabel())
+                   .add("course", entityBean.getCourse())
+                   .add("category", entityBean.getCategory()).build();
+           Request request = new Request.Builder().url(url)
+                   .addHeader("token", userToken).post(formBody).build();
+           try {
+               Response response = client.newCall(request).execute();
+               String json = Objects.requireNonNull(response.body()).string();
+               Type type = new TypeToken<Result<String>>(){}.getType();
+               Result<String> privateResult = gson.fromJson(json, type);
+               result.setStatus(privateResult.getStatus());
+               result.setMsg(privateResult.getMsg());
+               result.setData(privateResult.getData());
+           } catch (IOException e) {
+               e.printStackTrace();
+               System.out.println("The wrong message is>>>");
+               System.out.println(e.getMessage());
+           }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }
