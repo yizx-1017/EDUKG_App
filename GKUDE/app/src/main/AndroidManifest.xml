@@ -1,33 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gkude">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <queries>
+        <package android:name="com.sina.weibo" />
+    </queries>
     <application
         android:allowBackup="true"
         android:fullBackupOnly="true"
-        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:label="654321"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GKUDE">
+        android:theme="@style/Theme.GKUDE"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="123456"
-            android:exported="true">
+            android:exported="true"
+            android:label="123456">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity" android:exported="false"/>
-        <activity android:name=".CategoryActivity" android:exported="false"/>
-        <activity android:name=".EntitySearchedActivity" android:exported="false"/>
-        <activity android:name=".EntityViewActivity" android:exported="false"/>
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EntitySearchedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EntityViewActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="DATABASE"
             android:value="entity.db" />
