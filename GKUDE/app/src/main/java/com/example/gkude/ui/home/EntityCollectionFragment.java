@@ -33,22 +33,21 @@ import io.reactivex.disposables.Disposable;
  */
 public class EntityCollectionFragment extends Fragment implements EntityCollectionAdapter.OnEntitySelectedListener {
 
-    private static String TAG = new String();
+    private final String TAG;
     private Observer<List<EntityBean>> observer = null;
     private List<EntityBean> entityList = new LinkedList<>();
     private EntityCollectionAdapter mAdapter;
 
     public EntityCollectionFragment(final String tag) {
-        Log.e("EntityCollectionFragment", TAG);
         this.TAG = tag;
+        Log.e("EntityCollectionFragment", TAG);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.e("EntityCollectionFragment", "Create a news fragment");
+        Log.e("EntityCollectionFragment", TAG);
         super.onCreate(savedInstanceState);
-        SugarContext.init(getContext());
-        initObserver();
+//        SugarContext.init(getContext());
     }
 
     @Override
@@ -56,6 +55,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_entity_collection, container, false);
+        initObserver();
 
         // Set layout manager
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -77,9 +77,13 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.e(TAG,"observer subscribed");
             }
             @Override
-            public void onNext(List<EntityBean> news) {
+            public void onNext(List<EntityBean> entities) {
+
                 Log.e(TAG,"getList");
-                mAdapter.setEntityList(news);
+                for (EntityBean entity: entities) {
+                    Log.e(TAG, entity.getLabel());
+                }
+                mAdapter.setEntityList(entities);
 
 //                if(TAG.equals("news")|| TAG.equals("paper")) {
 //                    if (refreshLayout != null) {
@@ -124,10 +128,8 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
             }
         };
         // TODO(zixuanyi): Manage.refresh_n
-        Log.e("EntityCollectionFragment", "libai got here ");
-        Manager.searchEntity(TAG, "李白", observer);
-        // Get information according to the TAG
-        //Manager.refresh_n(TAG, observer);
+        Log.e("chinese", "libai got here ");
+        Manager.searchEntity("chinese", "中", observer);
     }
 
     @Override
