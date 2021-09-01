@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gkude.EntityViewActivity;
+import com.example.gkude.Manager;
 import com.example.gkude.R;
 import com.example.gkude.adapter.EntityCollectionAdapter;
 import com.example.gkude.bean.EntityBean;
@@ -38,13 +39,16 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
     private EntityCollectionAdapter mAdapter;
 
     public EntityCollectionFragment(final String tag) {
+        Log.e("EntityCollectionFragment", TAG);
         this.TAG = tag;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.e("EntityCollectionFragment", "Create a news fragment");
         super.onCreate(savedInstanceState);
         SugarContext.init(getContext());
+        initObserver();
     }
 
     @Override
@@ -66,7 +70,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         return rootView;
     }
 
-    private void initObserver(boolean getNew) {
+    private void initObserver() {
         observer = new Observer<List<EntityBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -120,6 +124,8 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
             }
         };
         // TODO(zixuanyi): Manage.refresh_n
+        Log.e("EntityCollectionFragment", "libai got here ");
+        Manager.searchEntity(TAG, "李白", observer);
         // Get information according to the TAG
         //Manager.refresh_n(TAG, observer);
     }
