@@ -40,14 +40,9 @@ public class EntityViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_view);
         entity_id = getIntent().getLongExtra("entity_id", 1);
+        System.out.println("on create entity view: entity_id = " + entity_id);
         initObserver();
         // TODO(zhiyuxie): check if data can be accessed here. thread problem?
-        EntityBean entity = EntityBean.findById(EntityBean.class, entity_id);
-        label = entity.getLabel();
-        description = entity.getDescription();
-        relations = entity.getRelationsFromStore();
-        properties = entity.getPropertiesFromStore();
-        problems = entity.getProblemsFromStore();
 
         initToolbar();
         initView();
@@ -62,6 +57,16 @@ public class EntityViewActivity extends AppCompatActivity {
 
             @Override
             public void onNext(EntityBean entityBean) {
+                System.out.println("in. entityView observer onNext");
+                label = entityBean.getLabel();
+                description = entityBean.getDescription();
+                relations = entityBean.getRelationsFromStore();
+                properties = entityBean.getPropertiesFromStore();
+                problems = entityBean.getProblemsFromStore();
+                System.out.println("onNext!!!!!");
+                mAdapter = new EntityRelationAdapter(relations);
+                System.out.println("onNext!" + label);
+                entityBean.save();
             }
 
             @Override
@@ -97,7 +102,7 @@ public class EntityViewActivity extends AppCompatActivity {
 
         // Set adapter for recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view_relation);
-        mAdapter = new EntityRelationAdapter(relations);
+//        mAdapter = new EntityRelationAdapter(relations);
         recyclerView.setAdapter(mAdapter);
         RecyclerView rv = findViewById(R.id.recycler_view_property);
         // TODO(zixuanyi): set recyclerView for properties and problems
@@ -110,6 +115,8 @@ public class EntityViewActivity extends AppCompatActivity {
         TextView mLabel = findViewById(R.id.entity_label);
         TextView mInfo = findViewById(R.id.entity_description);
         //mLabel.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/FZZJ-QNTJW.TTF"));
+
+        System.out.println("initView!" + label);
         mLabel.setText(label);
         mInfo.setText(description);
 

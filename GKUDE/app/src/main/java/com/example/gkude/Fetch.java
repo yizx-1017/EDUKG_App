@@ -215,9 +215,13 @@ public class Fetch {
     }
 
     public EntityBean fetchQuestionListByUriName(@NonNull EntityBean entityBean) {
-        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getUri(), id);
+        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?id=%s&uriName=%s", id, entityBean.getUri());
         Request request = new Request.Builder().url(url).get().build();
-        System.out.println("I got here.... request");
+        System.out.println("I got here.... request fetchQuestion");
+        System.out.println(entityBean.getUri());
+        System.out.println(id);
+        System.out.println(url);
+
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
@@ -226,14 +230,17 @@ public class Fetch {
                 EdukgResponse<List<ProblemBean>> edukgResponse = gson.fromJson(json,type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();
+                    System.out.println("test test test");
                     url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getUri(), id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json,type);
+                    System.out.println(edukgResponse);
                 }
                 entityBean.setProblems(edukgResponse.getData());
                 entityBean.setProblemStore(edukgResponse.getData().toString());
+                System.out.println("in fetch: entityBean set problems" + entityBean.getProblems());
                 return entityBean;
             }
             return null;
