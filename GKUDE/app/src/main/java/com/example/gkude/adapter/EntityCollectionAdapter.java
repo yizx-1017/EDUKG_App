@@ -33,7 +33,7 @@ public class EntityCollectionAdapter extends RecyclerView.Adapter<EntityCollecti
     @SuppressLint("NotifyDataSetChanged")
     public void setEntityList(List<EntityBean> entities) {
         this.entityList = entities;
-        Log.e("EntityCollectionAdapter", "setEntityList");
+        Log.i("EntityCollectionAdapter", "setEntityList");
         notifyDataSetChanged();
     }
 

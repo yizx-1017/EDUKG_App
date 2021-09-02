@@ -22,6 +22,7 @@ import com.orm.SugarContext;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -45,7 +46,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.e("EntityCollectionFragment", TAG);
+        Log.e("EntityCollectionFragmentonCreate", TAG);
         super.onCreate(savedInstanceState);
 //        SugarContext.init(getContext());
     }
@@ -55,7 +56,6 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_entity_collection, container, false);
-        initObserver();
 
         // Set layout manager
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -67,6 +67,8 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         mAdapter = new EntityCollectionAdapter(entityList, this);
         recyclerView.setAdapter(mAdapter);
 
+        initObserver();
+
         return rootView;
     }
 
@@ -74,15 +76,12 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         observer = new Observer<List<EntityBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e(TAG,"observer subscribed");
+                Log.i(TAG,"observer subscribed");
             }
             @Override
             public void onNext(List<EntityBean> entities) {
 
-                Log.e(TAG,"getList");
-                for (EntityBean entity: entities) {
-                    Log.e(TAG, entity.getLabel());
-                }
+                Log.i(TAG,"getList");
                 mAdapter.setEntityList(entities);
 
 //                if(TAG.equals("news")|| TAG.equals("paper")) {
@@ -124,12 +123,38 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
             }
             @Override
             public void onComplete() {
-                Log.e(TAG,"Complete");
+                Log.i(TAG,"Complete");
             }
         };
-        // TODO(zixuanyi): Manage.refresh_n
-        Log.e("chinese", "libai got here ");
-        Manager.searchEntity("chinese", "中", observer);
+        // TODO(zixuanyi): 不同学科的默认列表页
+        if (TAG.equals("语文")) {
+            Log.i("EntityCollectionFragment", "search 语文");
+            Manager.searchEntity("chinese", "中", observer);
+        } else if(TAG.equals("英语")) {
+            Log.i("EntityCollectionFragment", "search 英语");
+            Manager.searchEntity("english", "语", observer);
+        } else if (TAG.equals("数学")) {
+            Log.i("EntityCollectionFragment", "search 数学");
+               Manager.searchEntity("math", "", observer);
+        } else if (TAG.equals("物理")) {
+            Log.i("EntityCollectionFragment", "search 物理");
+                Manager.searchEntity("physics", "力", observer);
+        } else if (TAG.equals("化学")) {
+            Log.i("EntityCollectionFragment", "search 化学");
+                Manager.searchEntity("chemistry","反", observer);
+        } else if (TAG.equals("生物")) {
+            Log.i("EntityCollectionFragment", "search 生物");
+                Manager.searchEntity("biology","胞", observer);
+        } else if (TAG.equals("历史")) {
+            Log.i("EntityCollectionFragment", "search 历史");
+                Manager.searchEntity("history","史", observer);
+        } else if(TAG.equals("地理")) {
+            Log.i("EntityCollectionFragment", "search 地理");
+            Manager.searchEntity("geo","国", observer);
+        } else if (TAG.equals("政治")) {
+            Log.i("EntityCollectionFragment", "search 政治");
+                Manager.searchEntity("politics","法", observer);
+        }
     }
 
     @Override
