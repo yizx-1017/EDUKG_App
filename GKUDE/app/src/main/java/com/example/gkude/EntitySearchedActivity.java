@@ -84,7 +84,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
-        // TODO: check
+        // TODO: change course
 //        System.out.println("aaaaa");
         Manager.searchEntity("chinese", keyword, observer);
     }
@@ -101,6 +101,9 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         // Go to the detailed page
         Intent intent = new Intent(this, EntityViewActivity.class);
         intent.putExtra("entity_id", entity.getId());
+        intent.putExtra("entity_label", entity.getLabel());
+        intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_uri", entity.getUri());
         startActivity(intent);
     }
 

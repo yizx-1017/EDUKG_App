@@ -77,43 +77,9 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.e(TAG,"observer subscribed");
             }
             @Override
-            public void onNext(List<EntityBean> news) {
+            public void onNext(List<EntityBean> entities) {
                 Log.e(TAG,"getList");
-                mAdapter.setEntityList(news);
-
-//                if(TAG.equals("news")|| TAG.equals("paper")) {
-//                    if (refreshLayout != null) {
-//                        if (isLoadingMore) {
-//                            refreshLayout.finishLoadMore();
-//                            if (TAG.equals("news")) {
-//                                for (News n : news) {
-//                                    if (News.find(News.class, "_id = ?", n.get_id()).size() > 0) {
-//                                        n.setVisited(true);
-//                                    } else {
-//                                        n.setVisited(false);
-//                                    }
-//                                }
-//                            }
-//                            mAdapter.addNewsList(news);
-//                        } else {
-//                            refreshLayout.finishRefresh();
-//                            if (TAG.equals("news")) {
-//                                for (News n : news) {
-//                                    if (News.find(News.class, "_id = ?", n.get_id()).size() > 0) {
-//                                        n.setVisited(true);
-//                                    } else {
-//                                        n.setVisited(false);
-//                                    }
-//                                }
-//                            }
-//
-//                            mAdapter.setNewsList(news);
-//                        }
-//                    }
-//                }
-//                else{
-//                    mAdapter.setNewsList(news);
-//                }
+                mAdapter.setEntityList(entities);
             }
             @Override
             public void onError(Throwable e) {

@@ -31,7 +31,7 @@ import io.reactivex.disposables.Disposable;
 
 public class EntityViewActivity extends AppCompatActivity {
     private Long entity_id;
-    private String label, category;
+    private String label, course, uri, category;
     private EntityRelationAdapter relation_adapter;
     private EntityPropertyAdapter property_adapter;
     private ProblemAdapter problem_adpater;
@@ -40,8 +40,12 @@ public class EntityViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_view);
-        entity_id = getIntent().getLongExtra("entity_id", 1);
-        System.out.println("on create entity view: entity_id = " + entity_id);
+        entity_id = getIntent().getLongExtra("entity_id", -1);
+        if(entity_id == -1) {
+            label = getIntent().getStringExtra("entity_label");
+            course = getIntent().getStringExtra("entity_course");
+            uri = getIntent().getStringExtra("entity_uri");
+        }
         initObserver();
         initToolbar();
     }
@@ -55,12 +59,14 @@ public class EntityViewActivity extends AppCompatActivity {
             @Override
             public void onNext(EntityBean entityBean) {
                 System.out.println("in. entityView observer onNext");
-                label = entityBean.getLabel();
+//                label = entityBean.getLabel();
                 category = entityBean.getCategory();
 //                relations = entityBean.getRelationsFromStore();
 //                properties = entityBean.getPropertiesFromStore();
 //                problems = entityBean.getProblemsFromStore();
                 System.out.println("onNext!!!!!");
+
+//                View relation_fragment = findViewById(R.id.fragment_entity_relation);
                 relation_adapter = new EntityRelationAdapter(entityBean.getRelationsFromStore());
                 property_adapter = new EntityPropertyAdapter(entityBean.getPropertiesFromStore());
                 problem_adpater = new ProblemAdapter(entityBean.getProblemsFromStore());
@@ -78,9 +84,16 @@ public class EntityViewActivity extends AppCompatActivity {
             public void onComplete() {
             }
         };
-        // TODO: check
         System.out.println("in EntityViewActivity.java, observer, prepare to getEntityInfo");
-        Manager.getEntityInfo(EntityBean.findById(EntityBean.class, entity_id), observer);
+        if(entity_id != -1)
+            Manager.getEntityInfo(EntityBean.findById(EntityBean.class, entity_id), observer);
+        else {
+            EntityBean tmp_bean = new EntityBean();
+            tmp_bean.setUri(uri);
+            tmp_bean.setLabel(label);
+            tmp_bean.setCourse(course);
+            Manager.getEntityInfo(tmp_bean, observer);
+        }
     }
 
     private void initToolbar() {
@@ -100,18 +113,14 @@ public class EntityViewActivity extends AppCompatActivity {
 
         // Set adapter for recyclerView
         RecyclerView relation = findViewById(R.id.recycler_view_relation);
-//        mAdapter = new EntityRelationAdapter(relations);
         relation.setAdapter(relation_adapter);
         RecyclerView property = findViewById(R.id.recycler_view_property);
         property.setAdapter(property_adapter);
         RecyclerView problem = findViewById(R.id.recycler_view_problem);
         problem.setAdapter(problem_adpater);
-        // TODO(zixuanyi): set recyclerView for properties and problems
     }
 
     private void initView() {
-        // TODO(zixuanyi): finish the content page of an entity
-
 
         TextView mLabel = findViewById(R.id.entity_label);
         TextView mInfo = findViewById(R.id.entity_description);
