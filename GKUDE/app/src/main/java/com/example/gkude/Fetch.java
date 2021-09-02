@@ -119,15 +119,16 @@ public class Fetch {
                 entityBean.setRelations(edukgResponse.getData().getRelations());
                 entityBean.setProperties(edukgResponse.getData().getProperties());
                 if (entityBean.getRelations() != null) {
-                    entityBean.setRelationStore(edukgResponse.getData().getRelations().toString());
+                    entityBean.setRelationStore(gson.toJson(entityBean.getRelations()));
                 }
                 if (entityBean.getProperties() != null) {
-                    entityBean.setPropertyStore(edukgResponse.getData().getProperties().toString());
+                    entityBean.setPropertyStore(gson.toJson(entityBean.getProperties()));
                 }
                 System.out.println("in fetch: entityBean.getRelations():");
-                System.out.println(entityBean.getRelations());
+                System.out.println(entityBean.getRelations().size());
+//                System.out.println(entityBean.getRelations());
+                System.out.println(entityBean.getRelationsFromStore().size());
                 System.out.println("prepare to return entity");
-                entityBean.save();
                 return entityBean;
             } else {
                 System.out.println("ops! error");
@@ -239,7 +240,7 @@ public class Fetch {
                     System.out.println(edukgResponse);
                 }
                 entityBean.setProblems(edukgResponse.getData());
-                entityBean.setProblemStore(edukgResponse.getData().toString());
+                entityBean.setProblemStore(gson.toJson(edukgResponse.getData()));
                 System.out.println("in fetch: entityBean set problems" + entityBean.getProblems());
                 return entityBean;
             }
