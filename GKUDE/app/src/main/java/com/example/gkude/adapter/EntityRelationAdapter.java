@@ -68,6 +68,7 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
             // load relation info
             mLabel.setText(name);
             mRelation.setText(relation.getRelationName());
+            // TODO(zhiyuxie): add link
 
             if(forward){
                 Glide.with(mImg.getContext())

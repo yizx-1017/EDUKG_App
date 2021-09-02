@@ -55,7 +55,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ProblemV
         public ProblemViewHolder(View itemView) {
             super(itemView);
             qBody = itemView.findViewById(R.id.entity_problem);
-//            TODO(zhiyuxie): add qAnswer, change layout
+//            TODO(zhiyuxie): add link
 //            qAnswer = itemView.findViewById(R.id.entity_relation);
         }
 
