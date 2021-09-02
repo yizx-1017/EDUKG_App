@@ -165,11 +165,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
 
         // Go to the detailed page
         Intent intent = new Intent(getActivity(), EntityViewActivity.class);
-        intent.putExtra("label", entity.getLabel());
-        intent.putExtra("description", entity.getDescription());
-        intent.putExtra("properties", (Parcelable) entity.getProperties());
-        intent.putExtra("relations", (Parcelable) entity.getRelations());
-        intent.putExtra("problems", (Parcelable) entity.getProblems());
+        intent.putExtra("entity_id", entity.getId());
         startActivity(intent);
     }
 }
