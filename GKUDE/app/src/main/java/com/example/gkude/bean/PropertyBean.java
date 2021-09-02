@@ -1,5 +1,7 @@
 package com.example.gkude.bean;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
