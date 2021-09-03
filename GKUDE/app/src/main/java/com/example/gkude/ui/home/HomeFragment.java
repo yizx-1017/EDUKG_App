@@ -17,9 +17,12 @@ import com.example.gkude.EntitySearchedActivity;
 import com.example.gkude.R;
 
 import android.os.Bundle;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -38,12 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static android.widget.AdapterView.*;
+
 public class HomeFragment extends Fragment {
     private TabViewModel tabViewModel;
     private HomePagerAdapter homePagerAdapter;
-    private Spinner spinner_filter;
-    private List<String> data_list;
-    private ArrayAdapter<String> arrayAdapter;
+    private Spinner spinner_filter, spinner_sorter;
 
     private void initView(View view){
         // init Tab view
@@ -101,16 +104,17 @@ public class HomeFragment extends Fragment {
         Toolbar mToolbar = view.findViewById(R.id.toolbar);
 //        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         spinner_filter = view.findViewById(R.id.spin_filter);
-        data_list = new ArrayList<String>();
-        data_list.add("filter 1");
-        data_list.add("filter 2");
-        data_list.add("filter 3");
-        arrayAdapter = new ArrayAdapter<String>(this.getContext(),
-                R.layout.support_simple_spinner_dropdown_item, data_list);
-        spinner_filter.setAdapter(arrayAdapter);
+        spinner_sorter = view.findViewById(R.id.spin_sorter);
+//        ArrayAdapter<CharSequence> adapter =
+//                ArrayAdapter.createFromResource(getActivity(), R.array.filters, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner_filter.setAdapter(adapter);
+//        ArrayAdapter<CharSequence> adapter2 =
+//                ArrayAdapter.createFromResource(getActivity(), R.array.sorters, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner_sorter.setAdapter(adapter2);
 
         final SearchView mSearchView = view.findViewById(R.id.search_view);
-        System.out.println("ccccc");
         mSearchView.findViewById(R.id.search_plate).setBackground(null);
         mSearchView.findViewById(R.id.submit_area).setBackground(null);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

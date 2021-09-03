@@ -34,17 +34,16 @@ public class ExampleUnitTest extends SugarApp {
     public void fetchFunctionTest() {
         Fetch fetch = new Fetch();
         System.out.println(fetch.getId());
-        List<EntityBean> list = fetch.fetchInstanceList(CourseType.CHINESE.getCourseType(),"李白");
+        List<EntityBean> list = fetch.fetchInstanceList(CourseType.CHINESE.getCourseType(),"中国");
         EntityBean entityBean = list.get(0);
         System.out.println(entityBean.getLabel());
         fetch.fetchInfoByInstanceName(entityBean);
         System.out.println(entityBean.getUri());
-        System.out.println(entityBean.getRelationStore());
-        System.out.println(entityBean.getRelationsFromStore());
-        List<RecognitionBean> recognitionBeans = fetch.fetchLinkInstance(CourseType.CHINESE.getCourseType(), "李白是一个伟大的诗人，杜甫也是一个伟大的诗人");
-        for(RecognitionBean bean: recognitionBeans) {
-            System.out.println(bean.getEntity());
-        }
+        System.out.println(entityBean.getRelations().size());
+//        System.out.println(entityBean.getRelationStore());
+        System.out.println("I got here before gson!");
+        System.out.println(entityBean.getRelationsFromStore().size());
+//        System.out.println(entityBean.getRelations());
     }
 
     @Test

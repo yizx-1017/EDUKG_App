@@ -1,5 +1,7 @@
 package com.example.gkude.bean;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -24,7 +26,6 @@ public class EntityBean extends SugarRecord implements Serializable{
     private String uri;
     private String label;
     private String category;
-    private String description;
     private String course;
     private boolean visited = false;
     private boolean favorite = false;
@@ -61,6 +62,13 @@ public class EntityBean extends SugarRecord implements Serializable{
         Type type = new TypeToken<List<ProblemBean>>(){}.getType();
         Gson gson = new Gson();
         return gson.fromJson(problemStore, type);
+    }
+
+    public String getDescription() {
+        if (this.getCategory() == null) {
+            return "暂无描述信息";
+        }
+        return this.getCategory();
     }
 }
 

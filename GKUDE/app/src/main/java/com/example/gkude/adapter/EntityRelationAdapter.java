@@ -1,5 +1,7 @@
 package com.example.gkude.adapter;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gkude.EntityViewActivity;
 import com.example.gkude.R;
 import com.example.gkude.bean.EntityBean;
 import com.bumptech.glide.Glide;
@@ -21,12 +24,21 @@ import java.util.List;
 
 public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAdapter.EntityRelationViewHolder> {
 
+    public interface OnRelationSelectedListener {
+        void onRelationSelected(RelationBean relation);
+    }
+
     private List<RelationBean> relations;
 
     public EntityRelationAdapter(List<RelationBean> relations){
         this.relations = relations;
     }
 
+//    @SuppressLint("NotifyDataSetChanged")
+//    public void setRelationList(List<RelationBean> relations) {
+//        this.relations = relations;
+//        notifyDataSetChanged();
+//    }
 
     @NonNull
     @Override
@@ -60,14 +72,15 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
 
         public void bind(final RelationBean relation) {
             boolean forward = true;
-            String name = relation.getObjectName();
-            if(name == null) {
-                name = relation.getSubjectName();
+            String entity_name = relation.getObjectName();
+            if(entity_name == null) {
+                entity_name = relation.getSubjectName();
                 forward = false;
             }
             // load relation info
-            mLabel.setText(name);
+            mLabel.setText(entity_name);
             mRelation.setText(relation.getRelationName());
+            // TODO(zhiyuxie): add link
 
             if(forward){
                 Glide.with(mImg.getContext())
@@ -78,6 +91,20 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                         .load(R.drawable.ic_arrow_circle_backward_24px)
                         .into(mImg);
             }
+
+            // Click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Go to the detailed page
+                    Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
+                    intent.putExtra("entity_label", relation.getName());
+                    intent.putExtra("entity_course", "chinese");
+                    // TODO(zhiyuxie): add course?
+                    intent.putExtra("entity_uri", relation.getEntityUri());
+                    view.getContext().startActivity(intent);
+                }
+            });
 
         }
     }
