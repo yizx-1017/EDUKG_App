@@ -16,18 +16,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="50dp"
         android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/course_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/course"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:spinnerMode="dialog"
+            android:textAlignment="center" />
+
         <EditText
             android:id="@+id/input_question"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="text"
-            android:importantForAutofill="no"
+            android:gravity="start"
             android:hint="@string/type_question_here"
-            android:textAllCaps="false"
+            android:importantForAutofill="no"
+            android:inputType="text"
             android:maxLines="2"
-            android:gravity="start"/>
+            android:minHeight="48dp"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/send_question"
             android:layout_width="wrap_content"

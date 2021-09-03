@@ -24,7 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gkude.Fetch;
 import com.example.gkude.HomeActivity;
+import com.example.gkude.Manager;
 import com.example.gkude.R;
 import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.RelationBean;
@@ -70,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
         SugarContext.init(this); // TODO(zhiyuxie): where to delete?
 
 //        test_create_entitybean();  //TODO(zhiyuxie): delete test
-
         setContentView(R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);

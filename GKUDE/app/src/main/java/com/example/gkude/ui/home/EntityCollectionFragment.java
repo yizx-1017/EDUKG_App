@@ -124,8 +124,8 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
             }
         };
         // TODO(zixuanyi): Manage.refresh_n
-        Log.e("EntityCollectionFragment", "libai got here ");
-        Manager.searchEntity(TAG, "李白", observer);
+//        Log.e("EntityCollectionFragment", "libai got here ");
+//        Manager.searchEntity(TAG, "李白", observer);
         // Get information according to the TAG
         //Manager.refresh_n(TAG, observer);
     }

@@ -1,6 +1,7 @@
 package com.example.gkude;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -66,6 +67,7 @@ public class Manager {
             if (fetch == null) {
                 fetch = new Fetch();
             }
+            System.out.println("I got here send question "+ inputQuestion);
             List<ResultBean> list = fetch.fetchInputQuestion(course, inputQuestion);
             emitter.onNext(list);
             emitter.onComplete();
