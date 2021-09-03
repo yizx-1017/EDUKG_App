@@ -68,7 +68,7 @@ public class EntityViewActivity extends AppCompatActivity {
                 relation_adapter = new EntityRelationAdapter(entityBean.getRelationsFromStore());
                 property_adapter = new EntityPropertyAdapter(properties);
                 problem_adpater = new ProblemAdapter(entityBean.getProblemsFromStore());
-                System.out.println("onNext!" + label);
+                System.out.println("onNext!" + entityBean.getProblems());
                 entityBean.save();
                 initView();
                 initRecyclerView();

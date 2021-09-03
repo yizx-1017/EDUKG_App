@@ -24,9 +24,6 @@ import java.util.List;
 
 public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAdapter.EntityRelationViewHolder> {
 
-    public interface OnRelationSelectedListener {
-        void onRelationSelected(RelationBean relation);
-    }
 
     private List<RelationBean> relations;
 
