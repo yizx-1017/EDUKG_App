@@ -61,9 +61,10 @@ public class EntityViewActivity extends AppCompatActivity {
                 System.out.println("in. entityView observer onNext");
                 label = entityBean.getLabel();
                 category = entityBean.getCategory();
-                System.out.println("onNext!!!!!");
 
-                relation_adapter = new EntityRelationAdapter(entityBean.getRelationsFromStore());
+                System.out.println("onNext!!!!! "+entityBean.getCourse());
+
+                relation_adapter = new EntityRelationAdapter(entityBean.getRelationsFromStore(), entityBean.getCourse());
                 property_adapter = new EntityPropertyAdapter(entityBean.getPropertiesFromStore());
                 problem_adpater = new ProblemAdapter(entityBean.getProblemsFromStore());
                 System.out.println("onNext!" + entityBean.getProblems());

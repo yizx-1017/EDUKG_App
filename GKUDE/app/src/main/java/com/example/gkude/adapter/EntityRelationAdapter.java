@@ -3,6 +3,7 @@ package com.example.gkude.adapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,12 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
 
 
     private List<RelationBean> relations;
+    private String course;
 
-    public EntityRelationAdapter(List<RelationBean> relations){
+    public EntityRelationAdapter(List<RelationBean> relations, String course){
+        Log.i("EntityRelation category", course);
         this.relations = relations;
+        this.course = course;
     }
 
 
@@ -91,7 +95,8 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                     // Go to the detailed page
                     Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
                     intent.putExtra("entity_label", relation.getName());
-                    intent.putExtra("entity_course", "chinese");
+
+                    intent.putExtra("entity_course",course);
                     // TODO(zhiyuxie): add course?
                     intent.putExtra("entity_uri", relation.getEntityUri());
                     view.getContext().startActivity(intent);
