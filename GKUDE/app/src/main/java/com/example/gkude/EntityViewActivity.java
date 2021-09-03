@@ -1,5 +1,6 @@
 package com.example.gkude;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Pair;
@@ -17,6 +18,9 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.ProblemBean;
 import com.example.gkude.bean.PropertyBean;
 import com.example.gkude.bean.RelationBean;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import  com.example.gkude.ShareActivity;
 
 import org.javatuples.Triplet;
 import org.w3c.dom.Entity;
@@ -52,6 +56,7 @@ public class EntityViewActivity extends AppCompatActivity {
         initToolbar();
         initView();
         initRecyclerView();
+
     }
 
     private void initObserver() {
@@ -89,6 +94,15 @@ public class EntityViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EntityViewActivity.this.finish();
+            }
+        });
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                startActivity(new Intent(EntityViewActivity.this, ShareActivity.class));
             }
         });
     }
