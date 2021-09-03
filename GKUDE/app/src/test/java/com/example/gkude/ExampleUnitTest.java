@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 import com.example.gkude.bean.CourseType;
 import com.example.gkude.bean.EntityBean;
+import com.example.gkude.bean.PropertyBean;
 import com.example.gkude.bean.RecognitionBean;
 import com.example.gkude.bean.RelationBean;
 import com.example.gkude.server.Result;
@@ -34,15 +35,19 @@ public class ExampleUnitTest extends SugarApp {
     public void fetchFunctionTest() {
         Fetch fetch = new Fetch();
         System.out.println(fetch.getId());
-        List<EntityBean> list = fetch.fetchInstanceList(CourseType.CHINESE.getCourseType(),"中国");
+        List<EntityBean> list = fetch.fetchInstanceList(CourseType.CHINESE.getCourseType(),"李白");
         EntityBean entityBean = list.get(0);
         System.out.println(entityBean.getLabel());
         fetch.fetchInfoByInstanceName(entityBean);
         System.out.println(entityBean.getUri());
-        System.out.println(entityBean.getRelations().size());
+        List<PropertyBean> properties = entityBean.getPropertiesFromStore();
+        System.out.println(properties.get(0).getObject().contains("http://"));
+        properties.removeIf(p->p.getObject().contains("http://"));
+        System.out.println(properties);
+//        System.out.println(entityBean.getRelations().size());
 //        System.out.println(entityBean.getRelationStore());
-        System.out.println("I got here before gson!");
-        System.out.println(entityBean.getRelationsFromStore().size());
+//        System.out.println("I got here before gson!");
+//        System.out.println(entityBean.getRelationsFromStore().size());
 //        System.out.println(entityBean.getRelations());
     }
 
