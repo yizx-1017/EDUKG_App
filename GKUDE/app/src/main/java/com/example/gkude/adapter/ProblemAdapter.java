@@ -25,10 +25,6 @@ import java.util.List;
 
 public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ProblemViewHolder> {
 
-    public interface OnRelationSelectedListener {
-        void onRelationSelected(RelationBean relation);
-    }
-
     private List<ProblemBean> problems;
 
     public ProblemAdapter(List<ProblemBean> problems){
