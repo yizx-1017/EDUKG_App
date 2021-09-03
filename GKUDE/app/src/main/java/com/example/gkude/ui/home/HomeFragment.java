@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment {
     private TabViewModel tabViewModel;
     private HomePagerAdapter homePagerAdapter;
     private Spinner spinner_filter, spinner_sorter;
+    private String course, sort;
 
     private void initView(View view){
         // init Tab view
@@ -102,21 +103,78 @@ public class HomeFragment extends Fragment {
 
     private void initSearchbar(View view) {
         Toolbar mToolbar = view.findViewById(R.id.toolbar);
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         spinner_filter = view.findViewById(R.id.spin_filter);
         spinner_sorter = view.findViewById(R.id.spin_sorter);
-//        ArrayAdapter<CharSequence> adapter =
-//                ArrayAdapter.createFromResource(getActivity(), R.array.filters, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner_filter.setAdapter(adapter);
-//        ArrayAdapter<CharSequence> adapter2 =
-//                ArrayAdapter.createFromResource(getActivity(), R.array.sorters, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner_sorter.setAdapter(adapter2);
+        ArrayAdapter<CharSequence> spinnerFilterAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.course, R.layout.my_support_simple_spinner_dropdown_item);
+        spinner_filter.setAdapter(spinnerFilterAdapter);
+        spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String courseCN = adapterView.getItemAtPosition(position).toString();
+                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
+                switch (courseCN){
+                    case "语文":
+                        course = "chinese";
+                        break;
+                    case "数学":
+                        course = "math";
+                        break;
+                    case "英语":
+                        course = "english";
+                        break;
+                    case "物理":
+                        course = "physics";
+                        break;
+                    case "化学":
+                        course = "chemistry";
+                        break;
+                    case "生物":
+                        course = "biology";
+                        break;
+                    case "历史":
+                        course = "history";
+                        break;
+                    case "政治":
+                        course = "politics";
+                        break;
+                    case "地理":
+                        course = "geo";
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        ArrayAdapter<CharSequence> spinnerSorterAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.sorters, R.layout.my_support_simple_spinner_dropdown_item);
+        spinner_sorter.setAdapter(spinnerSorterAdapter);
+        spinner_sorter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String courseCN = adapterView.getItemAtPosition(position).toString();
+                Toast.makeText(getContext(), "选择的排序是：" + courseCN, Toast.LENGTH_SHORT).show();
+                switch (courseCN){
+                    case "默认":
+                        sort = "normal";
+                        break;
+                    case "字母序":
+                        sort = "abc";
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         final SearchView mSearchView = view.findViewById(R.id.search_view);
-        mSearchView.findViewById(R.id.search_plate).setBackground(null);
-        mSearchView.findViewById(R.id.submit_area).setBackground(null);
+//        mSearchView.findViewById(R.id.search_plate).setBackground(null);
+//        mSearchView.findViewById(R.id.submit_area).setBackground(null);
+        // TODO(zhiyuxie): check these two lines
+//        spinner_filter.setBackground(null);
+//        spinner_sorter.setBackground(null);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -125,7 +183,9 @@ public class HomeFragment extends Fragment {
                 mSearchView.setIconified(true);
                 Intent intent = new Intent(getActivity(), EntitySearchedActivity.class);
                 intent.putExtra("keyword", s);
-//                Spinner spinner_filter = view.findViewById(R.id.spin_filter);
+                System.out.println("in HomeFragment, course:"+course);
+                intent.putExtra("course", course);
+                intent.putExtra("sort", sort);
 
                 startActivity(intent);
                 return true;

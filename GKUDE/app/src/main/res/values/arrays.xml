@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="filters">
-        <item> filter1 </item>
-        <item> filter2 </item>
-    </string-array>
-
 
     <string-array name="sorters">
-        <item> sorter1 </item>
-        <item> sorter2 </item>
+        <item>默认</item>
+        <item>字母序</item>
     </string-array>
 
     <string-array name="course">
