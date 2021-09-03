@@ -2,6 +2,7 @@ package com.example.gkude;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
@@ -58,6 +59,7 @@ public class EntityViewActivity extends AppCompatActivity {
 
             @Override
             public void onNext(EntityBean entityBean) {
+                Log.i("EntityBean", String.valueOf(entityBean.isVisited()));
                 System.out.println("in. entityView observer onNext");
                 label = entityBean.getLabel();
                 category = entityBean.getCategory();

@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="李白"
+                android:text="正在加载中..."
                 android:textSize="17sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/primary_text_light"/>
@@ -34,7 +34,7 @@
                 android:layout_below="@+id/entity_label"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="5dp"
-                android:text="李白，一个著名的唐朝诗人。"
+                android:text="正在加载中..."
                 android:textSize="12sp"
                 android:textColor="@android:color/secondary_text_light"/>
 

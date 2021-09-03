@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.example.gkude.R;
 import com.example.gkude.adapter.EntityCollectionAdapter;
 import com.example.gkude.bean.EntityBean;
 import com.orm.SugarContext;
+import com.example.gkude.utils.CategoryUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +50,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
     public void onCreate(Bundle savedInstanceState) {
         Log.e("EntityCollectionFragmentonCreate", TAG);
         super.onCreate(savedInstanceState);
-//        SugarContext.init(getContext());
+        SugarContext.init(getContext());
     }
 
     @Override
@@ -125,35 +127,9 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.i(TAG,"Complete");
             }
         };
-        // TODO(zixuanyi): 不同学科的默认列表页
-        if (TAG.equals("语文")) {
-            Log.i("EntityCollectionFragment", "search 语文");
-            Manager.searchEntity("chinese", "中", observer);
-        } else if(TAG.equals("英语")) {
-            Log.i("EntityCollectionFragment", "search 英语");
-            Manager.searchEntity("english", "语", observer);
-        } else if (TAG.equals("数学")) {
-            Log.i("EntityCollectionFragment", "search 数学");
-               Manager.searchEntity("math", "", observer);
-        } else if (TAG.equals("物理")) {
-            Log.i("EntityCollectionFragment", "search 物理");
-                Manager.searchEntity("physics", "力", observer);
-        } else if (TAG.equals("化学")) {
-            Log.i("EntityCollectionFragment", "search 化学");
-                Manager.searchEntity("chemistry","反", observer);
-        } else if (TAG.equals("生物")) {
-            Log.i("EntityCollectionFragment", "search 生物");
-                Manager.searchEntity("biology","胞", observer);
-        } else if (TAG.equals("历史")) {
-            Log.i("EntityCollectionFragment", "search 历史");
-                Manager.searchEntity("history","史", observer);
-        } else if(TAG.equals("地理")) {
-            Log.i("EntityCollectionFragment", "search 地理");
-            Manager.searchEntity("geo","国", observer);
-        } else if (TAG.equals("政治")) {
-            Log.i("EntityCollectionFragment", "search 政治");
-                Manager.searchEntity("politics","法", observer);
-        }
+        CategoryUtil cu = new CategoryUtil();
+        Pair<String, String> p = cu.getSearchKeyword(TAG);
+        Manager.searchEntity(p.first, p.second, observer);
     }
 
     @Override

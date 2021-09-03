@@ -44,7 +44,7 @@ public class Manager {
             if (fetch == null) {
                 fetch = new Fetch();
             }
-            List<EntityBean> list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = ?", entityBean.getUri());
+            List<EntityBean> list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + entityBean.getUri()+ "'");
             EntityBean privateEntityBean;
             if (list.isEmpty()) {
                 privateEntityBean = entityBean;
