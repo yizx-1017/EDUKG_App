@@ -129,7 +129,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         };
         CategoryUtil cu = new CategoryUtil();
         Pair<String, String> p = cu.getSearchKeyword(TAG);
-        Manager.searchEntity(p.first, p.second, observer);
+        Manager.searchEntity(p.first, p.second, null,observer);
     }
 
     @Override
