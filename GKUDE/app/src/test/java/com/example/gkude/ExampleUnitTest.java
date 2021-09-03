@@ -92,4 +92,10 @@ public class ExampleUnitTest extends SugarApp {
         entityBeanList.sort(Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length))); // 按字符串长度排序
         entityBeanList.sort(Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length)).reversed()); // 逆序
     }
+
+    @Test
+    public void stringTest() {
+        String a = "李白是一个伟大的诗人";
+        System.out.println(a.substring(a.length()-1));
+    }
 }

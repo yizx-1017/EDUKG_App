@@ -40,10 +40,7 @@ public class NotificationsFragment extends Fragment {
     private List<Message> messageList;
     private RecyclerView msgRecyclerView;
     private EditText inputQuestion;
-    private Spinner courseSpinner;
     private String course = "chinese";
-    private Button send;
-    private LinearLayoutManager layoutManager;
     private MessageAdapter messageAdapter;
 
     @Nullable
@@ -51,10 +48,10 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         msgRecyclerView = root.findViewById(R.id.msg_recycler_view);
-        courseSpinner = root.findViewById(R.id.course_spinner);
+        Spinner courseSpinner = root.findViewById(R.id.course_spinner);
         inputQuestion = root.findViewById(R.id.input_question);
-        send = root.findViewById(R.id.send_question);
-        layoutManager = new LinearLayoutManager(getActivity());
+        Button send = root.findViewById(R.id.send_question);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         messageAdapter = new MessageAdapter(messageList = getData());
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.course, R.layout.support_simple_spinner_dropdown_item);
         courseSpinner.setAdapter(spinnerAdapter);
