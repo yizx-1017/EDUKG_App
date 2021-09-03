@@ -30,6 +30,10 @@ public class Manager {
                 fetch = new Fetch();
             }
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
+            if (list.isEmpty()) {
+                Log.e("searchEntity", "fetchInstanceList missing");
+                list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN where COURSE = '"+ course + "'");
+            }
             System.out.println("I got here searchEntity");
             System.out.println(list);
             emitter.onNext(list);
@@ -54,6 +58,7 @@ public class Manager {
             fetch.fetchInfoByInstanceName(privateEntityBean);
             fetch.fetchQuestionListByUriName(privateEntityBean);
             privateEntityBean.setVisited(true);
+            Log.i("getEntityInfo", "save");
             privateEntityBean.save();
             emitter.onNext(privateEntityBean);
             emitter.onComplete();

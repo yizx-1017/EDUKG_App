@@ -91,12 +91,6 @@ public class EntitySearchedActivity extends AppCompatActivity implements
     @Override
     public void onEntitySelected(EntityBean entity) {
         System.out.println("entity clicked!!!!!!!!");
-        if(!entity.isVisited()){
-            System.out.println(entity);
-            System.out.println("before entity save");
-            entity.save();
-            System.out.println("after entity save");
-        }
         // Go to the detailed page
         Intent intent = new Intent(this, EntityViewActivity.class);
         intent.putExtra("entity_id", entity.getId());

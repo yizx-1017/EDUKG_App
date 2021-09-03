@@ -121,6 +121,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
             }
             @Override
             public void onError(Throwable e) {
+                Log.e("EntityCollection", e.getMessage());
             }
             @Override
             public void onComplete() {
@@ -130,13 +131,12 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         CategoryUtil cu = new CategoryUtil();
         Pair<String, String> p = cu.getSearchKeyword(TAG);
         Manager.searchEntity(p.first, p.second, observer);
+        // TODO: 如果处于离线状态，那么需要数据库中得到存储的实体
+
     }
 
     @Override
     public void onEntitySelected(EntityBean entity) {
-        if(!entity.isVisited()){
-            entity.save();
-        }
         // Go to the detailed page
         Intent intent = new Intent(getActivity(), EntityViewActivity.class);
         intent.putExtra("entity_id", entity.getId());
