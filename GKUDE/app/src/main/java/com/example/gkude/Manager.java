@@ -52,14 +52,14 @@ public class Manager {
             EntityBean privateEntityBean;
             if (list.isEmpty()) {
                 privateEntityBean = entityBean;
+                fetch.fetchInfoByInstanceName(privateEntityBean);
+                fetch.fetchQuestionListByUriName(privateEntityBean);
+                privateEntityBean.setVisited(true);
+                Log.i("getEntityInfo", "save");
+                privateEntityBean.save();
             } else {
                 privateEntityBean = list.get(0);
             }
-            fetch.fetchInfoByInstanceName(privateEntityBean);
-            fetch.fetchQuestionListByUriName(privateEntityBean);
-            privateEntityBean.setVisited(true);
-            Log.i("getEntityInfo", "save");
-            privateEntityBean.save();
             emitter.onNext(privateEntityBean);
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
