@@ -59,12 +59,12 @@ public class EntityViewActivity extends AppCompatActivity {
             @Override
             public void onNext(EntityBean entityBean) {
                 System.out.println("in. entityView observer onNext");
+                label = entityBean.getLabel();
                 category = entityBean.getCategory();
                 List<PropertyBean> properties = entityBean.getPropertiesFromStore();
                 properties.removeIf(p->p.getObject().contains("http://"));
                 System.out.println("onNext!!!!!");
 
-//                View relation_fragment = findViewById(R.id.fragment_entity_relation);
                 relation_adapter = new EntityRelationAdapter(entityBean.getRelationsFromStore());
                 property_adapter = new EntityPropertyAdapter(properties);
                 problem_adpater = new ProblemAdapter(entityBean.getProblemsFromStore());

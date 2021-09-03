@@ -1,5 +1,6 @@
 package com.example.gkude.adapter;
 
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gkude.EntityViewActivity;
+import com.example.gkude.ProblemViewActivity;
 import com.example.gkude.R;
 import com.example.gkude.bean.EntityBean;
 import com.bumptech.glide.Glide;
@@ -21,6 +24,10 @@ import org.javatuples.Triplet;
 import java.util.List;
 
 public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ProblemViewHolder> {
+
+    public interface OnRelationSelectedListener {
+        void onRelationSelected(RelationBean relation);
+    }
 
     private List<ProblemBean> problems;
 
@@ -61,7 +68,17 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ProblemV
 
         public void bind(final ProblemBean problem) {
             qBody.setText(problem.getQBody());
-
+            // Click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Go to the detailed page
+                    problem.save();
+                    Intent intent = new Intent(view.getContext(), ProblemViewActivity.class);
+                    intent.putExtra("problem_id", problem.getId());
+                    view.getContext().startActivity(intent);
+                }
+            });
         }
     }
 }
