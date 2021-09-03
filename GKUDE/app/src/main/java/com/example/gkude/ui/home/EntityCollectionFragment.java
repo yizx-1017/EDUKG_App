@@ -161,14 +161,12 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         if(!entity.isVisited()){
             entity.save();
         }
-
         // Go to the detailed page
         Intent intent = new Intent(getActivity(), EntityViewActivity.class);
-        intent.putExtra("label", entity.getLabel());
-        intent.putExtra("description", entity.getDescription());
-        intent.putExtra("properties", (Parcelable) entity.getProperties());
-        intent.putExtra("relations", (Parcelable) entity.getRelations());
-        intent.putExtra("problems", (Parcelable) entity.getProblems());
+        intent.putExtra("entity_id", entity.getId());
+        intent.putExtra("entity_label", entity.getLabel());
+        intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_uri", entity.getUri());
         startActivity(intent);
     }
 }

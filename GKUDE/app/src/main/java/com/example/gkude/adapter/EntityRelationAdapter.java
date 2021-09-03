@@ -34,11 +34,6 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
         this.relations = relations;
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    public void setRelationList(List<RelationBean> relations) {
-//        this.relations = relations;
-//        notifyDataSetChanged();
-//    }
 
     @NonNull
     @Override
