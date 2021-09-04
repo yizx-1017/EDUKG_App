@@ -1,11 +1,14 @@
 package com.example.gkude.ui.user;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +40,27 @@ public class UserFragment extends Fragment{
         Button quit = root.findViewById(R.id.btn_quit);
         update.setOnClickListener(view -> {
             // TODO complete
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("更改密码");
+            final View v = getLayoutInflater().inflate(R.layout.change_password, null);
+            builder.setView(v);
+            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    EditText old_password = v.findViewById(R.id.old_password);
+                    EditText new_password = v.findViewById(R.id.new_password);
+                    String s_old = old_password.getText().toString();
+                    String s_new = new_password.getText().toString();
+                    // TODO(wangxingqi):
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            builder.show();
         });
         favorite.setOnClickListener(view -> {
             // TODO complete

@@ -26,4 +26,6 @@
     <string name="updatePassword">更新密码</string>
     <string name="favorite">我的收藏</string>
     <string name="history">历史记录</string>
+    <string name="right_arrow">right_arrow</string>
+    <string name="icon">icon</string>
 </resources>
