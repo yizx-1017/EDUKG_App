@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
+    android:layout_margin="24dp"
     tools:context=".ui.link.DashboardFragment">
 
     <EditText
@@ -17,15 +18,19 @@
         android:gravity="start"
         android:hint="@string/dashboard_input_text"
         android:importantForAutofill="no"
+        android:textSize="15dp"
         android:inputType="textMultiLine"
         android:maxLines="6"
         android:minLines="6" />
 
     <TextView
         android:id="@+id/dashboard_output"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:textSize="15dp"
+        android:hint="识别结果..."
         android:gravity="start" />
 
     <LinearLayout
