@@ -18,31 +18,26 @@
             app:title="搜索"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <TextView android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="筛选"
-                android:layout_marginLeft="50dp">
-            </TextView>
-
-            <Spinner android:layout_height="50dp"
-                android:layout_width="50dp"
+            <Spinner
+                android:layout_marginLeft="30dp"
                 android:id="@+id/spin_filter"
-                android:entries="@array/filters"
-                android:spinnerMode="dropdown">
-            </Spinner>
-
-            <TextView android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="排序"
-                android:layout_marginLeft="50dp">
-            </TextView>
+                android:layout_height="wrap_content"
+                android:entries="@array/course"
+                android:gravity="center"
+                android:minHeight="48dp"
+                android:spinnerMode="dialog"
+                android:textAlignment="center" />
 
-            <Spinner android:layout_height="50dp"
-                android:layout_width="50dp"
+            <Spinner
                 android:id="@+id/spin_sorter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:entries="@array/sorters"
-                android:spinnerMode="dropdown">
-            </Spinner>
+                android:gravity="center"
+                android:minHeight="48dp"
+                android:spinnerMode="dialog"
+                android:textAlignment="center" />
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_view"

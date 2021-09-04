@@ -9,18 +9,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gkude.EntityViewActivity;
+import com.example.gkude.Manager;
 import com.example.gkude.R;
 import com.example.gkude.adapter.EntityCollectionAdapter;
 import com.example.gkude.bean.EntityBean;
 import com.orm.SugarContext;
+import com.example.gkude.utils.CategoryUtil;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -32,17 +36,19 @@ import io.reactivex.disposables.Disposable;
  */
 public class EntityCollectionFragment extends Fragment implements EntityCollectionAdapter.OnEntitySelectedListener {
 
-    private static String TAG = new String();
+    private final String TAG;
     private Observer<List<EntityBean>> observer = null;
     private List<EntityBean> entityList = new LinkedList<>();
     private EntityCollectionAdapter mAdapter;
 
     public EntityCollectionFragment(final String tag) {
         this.TAG = tag;
+        Log.e("EntityCollectionFragment", TAG);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.e("EntityCollectionFragmentonCreate", TAG);
         super.onCreate(savedInstanceState);
         SugarContext.init(getContext());
     }
@@ -63,19 +69,21 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         mAdapter = new EntityCollectionAdapter(entityList, this);
         recyclerView.setAdapter(mAdapter);
 
+        initObserver();
+
         return rootView;
     }
 
-    private void initObserver(boolean getNew) {
+    private void initObserver() {
         observer = new Observer<List<EntityBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e(TAG,"observer subscribed");
+                Log.i(TAG,"observer subscribed");
             }
             @Override
-            public void onNext(List<EntityBean> news) {
-                Log.e(TAG,"getList");
-                mAdapter.setEntityList(news);
+            public void onNext(List<EntityBean> entities) {
+                Log.i(TAG,"getList");
+                mAdapter.setEntityList(entities);
 
 //                if(TAG.equals("news")|| TAG.equals("paper")) {
 //                    if (refreshLayout != null) {
@@ -113,30 +121,28 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
             }
             @Override
             public void onError(Throwable e) {
+                Log.e("EntityCollection", e.getMessage());
             }
             @Override
             public void onComplete() {
-                Log.e(TAG,"Complete");
+                Log.i(TAG,"Complete");
             }
         };
-        // TODO(zixuanyi): Manage.refresh_n
-        // Get information according to the TAG
-        //Manager.refresh_n(TAG, observer);
+        CategoryUtil cu = new CategoryUtil();
+        Pair<String, String> p = cu.getSearchKeyword(TAG);
+        Manager.searchEntity(p.first, p.second, observer);
+        // TODO: 如果处于离线状态，那么需要数据库中得到存储的实体
+
     }
 
     @Override
     public void onEntitySelected(EntityBean entity) {
-        if(!entity.isVisited()){
-            entity.save();
-        }
-
         // Go to the detailed page
         Intent intent = new Intent(getActivity(), EntityViewActivity.class);
-        intent.putExtra("label", entity.getLabel());
-        intent.putExtra("description", entity.getDescription());
-        intent.putExtra("properties", (Parcelable) entity.getProperties());
-        intent.putExtra("relations", (Parcelable) entity.getRelations());
-        intent.putExtra("problems", (Parcelable) entity.getProblems());
+        intent.putExtra("entity_id", entity.getId());
+        intent.putExtra("entity_label", entity.getLabel());
+        intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_uri", entity.getUri());
         startActivity(intent);
     }
 }

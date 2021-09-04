@@ -65,52 +65,54 @@ public class Fetch {
         }
     }
 
-    public List<EntityBean> fetchInstanceList(@NonNull String course,@NonNull String searchKey) {
-        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/instanceList?course=%s&searchKey=%s&id=%s",course,searchKey,id);
+    public List<EntityBean> fetchInstanceList(@NonNull String course, @NonNull String searchKey) {
+        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/instanceList?course=%s&searchKey=%s&id=%s", course, searchKey, id);
         Request request = new Request.Builder().url(url).get().build();
         System.out.println("I got here.... request");
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String json = Objects.requireNonNull(response.body()).string();
-                Type type = new TypeToken<EdukgResponse<List<EntityBean>>>(){}.getType();
+                Type type = new TypeToken<EdukgResponse<List<EntityBean>>>() {
+                }.getType();
                 EdukgResponse<List<EntityBean>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();
-                    url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/instanceList?course=%s&searchKey=%s&id=%s",course,searchKey,id);
+                    url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/instanceList?course=%s&searchKey=%s&id=%s", course, searchKey, id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
                 }
                 List<EntityBean> list = edukgResponse.getData();
-                for (int i=0; i<list.size(); i++) {
+                for (int i = 0; i < list.size(); i++) {
                     list.get(i).setCourse(course);
                 }
                 return list;
             }
-            return null;
+            return new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
     }
 
     public EntityBean fetchInfoByInstanceName(@NonNull EntityBean entityBean) {
-        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName?course=%s&name=%s&id=%s",entityBean.getCourse(),entityBean.getLabel(),id);
+        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName?course=%s&name=%s&id=%s", entityBean.getCourse(), entityBean.getLabel(), id);
         Request request = new Request.Builder().url(url).get().build();
         System.out.println("I got here.... request fetchInfoByInstanceName");
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String json = Objects.requireNonNull(response.body()).string();
-                Type type = new TypeToken<EdukgResponse<EntityBean>>(){}.getType();
+                Type type = new TypeToken<EdukgResponse<EntityBean>>() {
+                }.getType();
                 EdukgResponse<EntityBean> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();
-                    url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName?course=%s&name=%s&id=%s",entityBean.getCourse(),entityBean.getLabel(),id);
+                    url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/infoByInstanceName?course=%s&name=%s&id=%s", entityBean.getCourse(), entityBean.getLabel(), id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
@@ -119,15 +121,16 @@ public class Fetch {
                 entityBean.setRelations(edukgResponse.getData().getRelations());
                 entityBean.setProperties(edukgResponse.getData().getProperties());
                 if (entityBean.getRelations() != null) {
-                    entityBean.setRelationStore(edukgResponse.getData().getRelations().toString());
+                    entityBean.setRelationStore(gson.toJson(entityBean.getRelations()));
                 }
                 if (entityBean.getProperties() != null) {
-                    entityBean.setPropertyStore(edukgResponse.getData().getProperties().toString());
+                    entityBean.setPropertyStore(gson.toJson(entityBean.getProperties()));
                 }
                 System.out.println("in fetch: entityBean.getRelations():");
-                System.out.println(entityBean.getRelations());
+                System.out.println(entityBean.getRelations().size());
+//                System.out.println(entityBean.getRelations());
+                System.out.println(entityBean.getRelationsFromStore().size());
                 System.out.println("prepare to return entity");
-                entityBean.save();
                 return entityBean;
             } else {
                 System.out.println("ops! error");
@@ -154,7 +157,8 @@ public class Fetch {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String json = Objects.requireNonNull(response.body()).string();
-                Type type = new TypeToken<EdukgResponse<List<ResultBean>>>(){}.getType();
+                Type type = new TypeToken<EdukgResponse<List<ResultBean>>>() {
+                }.getType();
                 EdukgResponse<List<ResultBean>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();
@@ -169,12 +173,12 @@ public class Fetch {
                 }
                 return edukgResponse.getData();
             }
-            return null;
+            return new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -187,10 +191,11 @@ public class Fetch {
                 .post(formBody).build();
         System.out.println("I got here.... request");
         try {
-            Response response =  client.newCall(request).execute();
+            Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String json = Objects.requireNonNull(response.body()).string();
-                Type type = new TypeToken<EdukgResponse<LinkInstanceResponse>>(){}.getType();
+                Type type = new TypeToken<EdukgResponse<LinkInstanceResponse>>() {
+                }.getType();
                 EdukgResponse<LinkInstanceResponse> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();
@@ -199,41 +204,48 @@ public class Fetch {
                     request = new Request.Builder().url(url)
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
                             .post(formBody).build();
-                    response =  client.newCall(request).execute();
+                    response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
                 }
                 return edukgResponse.getData().getResults();
             }
-            return null;
+            return new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
     }
 
     public EntityBean fetchQuestionListByUriName(@NonNull EntityBean entityBean) {
-        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getUri(), id);
+        String url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?id=%s&uriName=%s", id, entityBean.getLabel());
         Request request = new Request.Builder().url(url).get().build();
-        System.out.println("I got here.... request");
+        System.out.println("I got here.... request fetchQuestion");
+        System.out.println(entityBean.getUri());
+        System.out.println(id);
+        System.out.println(url);
+
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String json = Objects.requireNonNull(response.body()).string();
-                Type type = new TypeToken<EdukgResponse<List<ProblemBean>>>(){}.getType();
-                EdukgResponse<List<ProblemBean>> edukgResponse = gson.fromJson(json,type);
+                Type type = new TypeToken<EdukgResponse<List<ProblemBean>>>() {
+                }.getType();
+                EdukgResponse<List<ProblemBean>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();
-                    url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getUri(), id);
+                    url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getLabel(), id);
                     request = new Request.Builder().url(url).get().build();
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
-                    edukgResponse = gson.fromJson(json,type);
+                    edukgResponse = gson.fromJson(json, type);
+                    System.out.println(edukgResponse);
                 }
                 entityBean.setProblems(edukgResponse.getData());
-                entityBean.setProblemStore(edukgResponse.getData().toString());
+                entityBean.setProblemStore(gson.toJson(edukgResponse.getData()));
+                System.out.println("in fetch: entityBean set problems" + entityBean.getProblems());
                 return entityBean;
             }
             return null;
@@ -257,7 +269,8 @@ public class Fetch {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String json = Objects.requireNonNull(response.body()).string();
-                Type type = new TypeToken<EdukgResponse<List<ResultBean>>>(){}.getType();
+                Type type = new TypeToken<EdukgResponse<List<ResultBean>>>() {
+                }.getType();
                 EdukgResponse<List<ResultBean>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();

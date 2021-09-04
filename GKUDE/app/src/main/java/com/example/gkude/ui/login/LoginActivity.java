@@ -24,7 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gkude.Fetch;
 import com.example.gkude.HomeActivity;
+import com.example.gkude.Manager;
 import com.example.gkude.R;
 import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.RelationBean;
@@ -40,37 +42,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
 
-//    public void test_create_entitybean() {
-//        System.out.println("I got here test create entitybean");
-//        RelationBean relationBean = new RelationBean();
-//        RelationBean relationBean2 = new RelationBean();
-//        List<RelationBean> relationBeanList = new ArrayList<RelationBean>();
-//        relationBeanList.add(relationBean); relationBeanList.add(relationBean2);
-//        EntityBean entityBean = new EntityBean();
-//        entityBean.setDescription("清华是世界一流大学");
-//        entityBean.save();
-//        System.out.println(entityBean.getId());
-//        System.out.println(EntityBean.count(EntityBean.class));
-//        EntityBean entityBean1 = new EntityBean();
-//        entityBean1.setDescription("北大是世界一流大学");
-//        entityBean1.save();
-//        System.out.println(entityBean1.getDescription());
-//        System.out.println(EntityBean.count(EntityBean.class));
-//        Gson gson = new Gson();
-//        entityBean1.setRelationStore(gson.toJson(relationBeanList));
-//        entityBean1.save();
-//        System.out.println(entityBean1.getRelations());
-//        System.out.println(EntityBean.listAll(EntityBean.class));
-//    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SugarContext.init(this); // TODO(zhiyuxie): where to delete?
 
 //        test_create_entitybean();  //TODO(zhiyuxie): delete test
-
         setContentView(R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);

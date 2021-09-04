@@ -41,4 +41,9 @@ public class RelationBean implements Serializable {
                 ", \"predicate\": \"" + relationUri + '\"' +
                 '}';
     }
+
+    public String getName() {
+        if(objectName == null) return subjectName;
+        return objectName;
+    }
 }

@@ -3,6 +3,7 @@ package com.example.gkude;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +14,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.bumptech.glide.Glide;
+import com.example.gkude.adapter.EntityPropertyAdapter;
 import com.example.gkude.adapter.EntityRelationAdapter;
+import com.example.gkude.adapter.ProblemAdapter;
 import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.ProblemBean;
 import com.example.gkude.bean.PropertyBean;
@@ -33,30 +36,25 @@ import io.reactivex.disposables.Disposable;
 
 public class EntityViewActivity extends AppCompatActivity {
     private Long entity_id;
-    private String label, description;
-    private List<RelationBean> relations;
-    private List<PropertyBean> properties;
-    private List<ProblemBean> problems;
-    private EntityRelationAdapter mAdapter;
+    private String label, course, uri, category;
+    private EntityRelationAdapter relation_adapter;
+    private EntityPropertyAdapter property_adapter;
+    private ProblemAdapter problem_adpater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_view);
-        entity_id = getIntent().getLongExtra("entity_id", 1);
+        entity_id = getIntent().getLongExtra("entity_id", -1);
+        if(entity_id == -1) {
+            label = getIntent().getStringExtra("entity_label");
+            course = getIntent().getStringExtra("entity_course");
+            uri = getIntent().getStringExtra("entity_uri");
+        }
         initObserver();
-        // TODO(zhiyuxie): check if data can be accessed here. thread problem?
-        EntityBean entity = EntityBean.findById(EntityBean.class, entity_id);
-        label = entity.getLabel();
-        description = entity.getDescription();
-        relations = entity.getRelationsFromStore();
-        properties = entity.getPropertiesFromStore();
-        problems = entity.getProblemsFromStore();
-
         initToolbar();
         initView();
         initRecyclerView();
-
     }
 
     private void initObserver() {
@@ -67,6 +65,20 @@ public class EntityViewActivity extends AppCompatActivity {
 
             @Override
             public void onNext(EntityBean entityBean) {
+                Log.i("EntityBean", String.valueOf(entityBean.isVisited()));
+                System.out.println("in. entityView observer onNext");
+                label = entityBean.getLabel();
+                category = entityBean.getCategory();
+                List<PropertyBean> properties = entityBean.getPropertiesFromStore();
+                properties.removeIf(p->p.getObject().contains("http://"));
+                System.out.println("onNext!!!!! "+entityBean.getCourse());
+
+                relation_adapter = new EntityRelationAdapter(entityBean.getRelationsFromStore(), entityBean.getCourse());
+                property_adapter = new EntityPropertyAdapter(properties);
+                problem_adpater = new ProblemAdapter(entityBean.getProblemsFromStore());
+                System.out.println("onNext!" + entityBean.getProblems());
+                initView();
+                initRecyclerView();
             }
 
             @Override
@@ -77,12 +89,16 @@ public class EntityViewActivity extends AppCompatActivity {
             public void onComplete() {
             }
         };
-        // TODO: check
         System.out.println("in EntityViewActivity.java, observer, prepare to getEntityInfo");
-        Manager.getEntityInfo(EntityBean.findById(EntityBean.class, entity_id), observer);
-        EntityBean entityBean = EntityBean.findById(EntityBean.class, entity_id);
-        System.out.println(entityBean.getRelations());
-        System.out.println(entityBean.getRelationsFromStore());
+        if(entity_id != -1)
+            Manager.getEntityInfo(EntityBean.findById(EntityBean.class, entity_id), observer);
+        else {
+            EntityBean tmp_bean = new EntityBean();
+            tmp_bean.setUri(uri);
+            tmp_bean.setLabel(label);
+            tmp_bean.setCourse(course);
+            Manager.getEntityInfo(tmp_bean, observer);
+        }
     }
 
     private void initToolbar() {
@@ -96,13 +112,18 @@ public class EntityViewActivity extends AppCompatActivity {
                 EntityViewActivity.this.finish();
             }
         });
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton share = findViewById(R.id.fab_share);
+        share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 startActivity(new Intent(EntityViewActivity.this, ShareActivity.class));
+            }
+        });
+        FloatingActionButton fav = findViewById(R.id.fab_fav);
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Mark this entity as favorite
             }
         });
     }
@@ -110,37 +131,23 @@ public class EntityViewActivity extends AppCompatActivity {
     private void initRecyclerView() {
 
         // Set adapter for recyclerView
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_relation);
-        mAdapter = new EntityRelationAdapter(relations);
-        recyclerView.setAdapter(mAdapter);
-        RecyclerView rv = findViewById(R.id.recycler_view_property);
-        // TODO(zixuanyi): set recyclerView for properties and problems
+        RecyclerView relation = findViewById(R.id.recycler_view_relation);
+        relation.setAdapter(relation_adapter);
+        RecyclerView property = findViewById(R.id.recycler_view_property);
+        property.setAdapter(property_adapter);
+        RecyclerView problem = findViewById(R.id.recycler_view_problem);
+        problem.setAdapter(problem_adpater);
     }
 
     private void initView() {
-        // TODO(zixuanyi): finish the content page of an entity
-
 
         TextView mLabel = findViewById(R.id.entity_label);
         TextView mInfo = findViewById(R.id.entity_description);
-        //mLabel.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/FZZJ-QNTJW.TTF"));
-        mLabel.setText(label);
-        mInfo.setText(description);
 
-//        TextView mDef = findViewById(R.id.entity_definition_content);
-//        TextView mFeature = findViewById(R.id.entity_relation);
-//        TextView mInclude = findViewById(R.id.entity_include_content);
-//        TextView mCondition = findViewById(R.id.entity_condition_content);
-//        TextView mSpread = findViewById(R.id.entity_spread_content);
-//        TextView mApplication = findViewById(R.id.entity_application_content);
-//        if(prop != null) {
-//            mDef.setText(prop.getDefinition());
-//            mFeature.setText(prop.getFeature());
-//            mInclude.setText(prop.getInclude());
-//            mCondition.setText(prop.getCondition());
-//            mSpread.setText(prop.getSpread());
-//            mApplication.setText(prop.getApplication());
-//        }
+        System.out.println("initView!" + label);
+        mLabel.setText(label);
+        mInfo.setText(category);
+
     }
 
 }

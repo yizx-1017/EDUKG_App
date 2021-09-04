@@ -1,6 +1,7 @@
 package com.example.gkude;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -29,6 +30,10 @@ public class Manager {
                 fetch = new Fetch();
             }
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
+            if (list.isEmpty()) {
+                Log.e("searchEntity", "fetchInstanceList missing");
+                list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN where COURSE = '"+ course + "'");
+            }
             System.out.println("I got here searchEntity");
             System.out.println(list);
             emitter.onNext(list);
@@ -43,17 +48,18 @@ public class Manager {
             if (fetch == null) {
                 fetch = new Fetch();
             }
-            List<EntityBean> list = EntityBean.findWithQuery(EntityBean.class, "uri = ?", entityBean.getUri());
+            List<EntityBean> list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + entityBean.getUri()+ "'");
             EntityBean privateEntityBean;
             if (list.isEmpty()) {
                 privateEntityBean = entityBean;
+                fetch.fetchInfoByInstanceName(privateEntityBean);
+                fetch.fetchQuestionListByUriName(privateEntityBean);
+                privateEntityBean.setVisited(true);
+                Log.i("getEntityInfo", "save");
+                privateEntityBean.save();
             } else {
                 privateEntityBean = list.get(0);
             }
-            fetch.fetchInfoByInstanceName(privateEntityBean);
-            fetch.fetchQuestionListByUriName(privateEntityBean);
-            privateEntityBean.setVisited(true);
-            privateEntityBean.save();
             emitter.onNext(privateEntityBean);
             emitter.onComplete();
         }).subscribeOn(Schedulers.io())
@@ -66,6 +72,7 @@ public class Manager {
             if (fetch == null) {
                 fetch = new Fetch();
             }
+            System.out.println("I got here send question "+ inputQuestion);
             List<ResultBean> list = fetch.fetchInputQuestion(course, inputQuestion);
             emitter.onNext(list);
             emitter.onComplete();

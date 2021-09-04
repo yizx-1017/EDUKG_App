@@ -2,6 +2,7 @@ package com.example.gkude.adapter;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class EntityCollectionAdapter extends RecyclerView.Adapter<EntityCollecti
     @SuppressLint("NotifyDataSetChanged")
     public void setEntityList(List<EntityBean> entities) {
         this.entityList = entities;
+        Log.i("EntityCollectionAdapter", "setEntityList");
         notifyDataSetChanged();
     }
 
@@ -72,6 +74,10 @@ public class EntityCollectionAdapter extends RecyclerView.Adapter<EntityCollecti
             // load entity info
             mLabel.setText(entity.getLabel());
             mInfo.setText(entity.getDescription());
+            Log.i("EntityCollectionAdapter", String.valueOf(entity.isVisited()));
+            if(entity.isVisited()){
+                mLabel.setTextColor(itemView.getResources().getColor(R.color.clickedNews2));
+            }
 
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {

@@ -22,8 +22,7 @@ import io.reactivex.disposables.Disposable;
 
 public class EntitySearchedActivity extends AppCompatActivity implements
         EntityCollectionAdapter.OnEntitySelectedListener {
-    private String keyword;
-    private String course;
+    private String keyword, course, sort;
 
     private List<EntityBean> entityList = new LinkedList<>();
     private EntityCollectionAdapter mAdapter;
@@ -33,7 +32,8 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_searched);
         keyword = getIntent().getStringExtra("keyword");
-        // TODO(zhiyuxie): add filters and sorting parameters
+        course = getIntent().getStringExtra("course");
+        sort = getIntent().getStringExtra("sort");
         initToolbar();
         initRecyclerView();
         initObserver();
@@ -84,23 +84,19 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
-        // TODO: check
-//        System.out.println("aaaaa");
-        Manager.searchEntity("chinese", keyword, observer);
+        // TODO(zhiyuxie): add sort in manager
+        Manager.searchEntity(course, keyword, observer);
     }
 
     @Override
     public void onEntitySelected(EntityBean entity) {
         System.out.println("entity clicked!!!!!!!!");
-        if(!entity.isVisited()){
-            System.out.println(entity);
-            System.out.println("before entity save");
-            entity.save();
-            System.out.println("after entity save");
-        }
         // Go to the detailed page
         Intent intent = new Intent(this, EntityViewActivity.class);
         intent.putExtra("entity_id", entity.getId());
+        intent.putExtra("entity_label", entity.getLabel());
+        intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_uri", entity.getUri());
         startActivity(intent);
     }
 
