@@ -26,44 +26,44 @@ public class UserDataSource {
     public Result<String> login(String username, String password, String url) {
         System.out.println(username);
         System.out.println(password);
-        String userToken = "eyJhbGciOiJIUzI1NiJ9." +
-                "eyJ1aWQiOjUsInN1YiI6IlVzZXIiLCJpc3MiOiJHS1VERV9TZXJ2ZXIiLCJleHAiOjE2MzAyOTQzNTAsImlhdCI6MTYzMDI5MTc1OCwianRpIjoiNWIwOTMwZDItZmYyNy00OTQxLThiYzMtYjVlZDIzMWIzZjU2In0." +
-                "q3nhcW9QthZ6z45DoWevTsMUL9v7NzMPnlezreobq0w";
-        return new Result<>(200, "OK!", userToken);
-//        Result<String> result = new Result<>();
-//        Thread thread = new Thread(() -> {
-//            RequestBody formBody = new FormBody.Builder()
-//                    .add("username", username).add("password", password).build();
-//            Request request = new Request.Builder()
-//                    .url(url)
-//                    .post(formBody)
-//                    .build();
-//            System.out.println("I got here.... request");
-//            try {
-//                Response response = client.newCall(request).execute();
-//                String json = Objects.requireNonNull(response.body()).string();
-//                Type type = new TypeToken<Result<String>>() {
-//                }.getType();
-//                Result<String> private_result = gson.fromJson(json, type);
-//                result.setData(private_result.getData());
-//                result.setMsg(private_result.getData());
-//                result.setStatus(private_result.getStatus());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                System.out.println("The wrong message is>>>");
-//                System.out.println(e.getMessage());
-//            }
-//        });
-//        thread.start();
-//        try {
-//            thread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        if (result.getStatus().equals(200))
-//            return result;
-//        else
-//            return new Result<>(400, "bad request", "Error logging in");
+//        String userToken = "eyJhbGciOiJIUzI1NiJ9." +
+//                "eyJ1aWQiOjUsInN1YiI6IlVzZXIiLCJpc3MiOiJHS1VERV9TZXJ2ZXIiLCJleHAiOjE2MzAyOTQzNTAsImlhdCI6MTYzMDI5MTc1OCwianRpIjoiNWIwOTMwZDItZmYyNy00OTQxLThiYzMtYjVlZDIzMWIzZjU2In0." +
+//                "q3nhcW9QthZ6z45DoWevTsMUL9v7NzMPnlezreobq0w";
+//        return new Result<>(200, "OK!", userToken);
+        Result<String> result = new Result<>();
+        Thread thread = new Thread(() -> {
+            RequestBody formBody = new FormBody.Builder()
+                    .add("username", username).add("password", password).build();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(formBody)
+                    .build();
+            System.out.println("I got here.... request");
+            try {
+                Response response = client.newCall(request).execute();
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<Result<String>>() {
+                }.getType();
+                Result<String> private_result = gson.fromJson(json, type);
+                result.setData(private_result.getData());
+                result.setMsg(private_result.getData());
+                result.setStatus(private_result.getStatus());
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("The wrong message is>>>");
+                System.out.println(e.getMessage());
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.getStatus().equals(200))
+            return result;
+        else
+            return new Result<>(400, "bad request", "Error logging in");
     }
 
     public Result<String> updatePassword(String userToken, String oldPassword, String newPassword, String url) {
