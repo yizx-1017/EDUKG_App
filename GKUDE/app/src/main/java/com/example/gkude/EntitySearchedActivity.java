@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gkude.adapter.EntityCollectionAdapter;
 import com.example.gkude.bean.EntityBean;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -85,7 +86,10 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             }
         };
         // TODO(zhiyuxie): add sort in manager
-        Manager.searchEntity(course, keyword, null, observer);
+        Comparator comparator = null;
+        if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
+        else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
+        Manager.searchEntity(course, keyword, comparator, observer);
     }
 
     @Override
