@@ -1,5 +1,6 @@
 package com.example.gkude;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +22,11 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.ProblemBean;
 import com.example.gkude.bean.PropertyBean;
 import com.example.gkude.bean.RelationBean;
+import com.example.gkude.server.UserDataSource;
+import com.example.gkude.server.UserRepository;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import  com.example.gkude.ShareActivity;
 
 import org.javatuples.Triplet;
 import org.w3c.dom.Entity;
@@ -36,6 +43,8 @@ public class EntityViewActivity extends AppCompatActivity {
     private EntityRelationAdapter relation_adapter;
     private EntityPropertyAdapter property_adapter;
     private ProblemAdapter problem_adpater;
+    Boolean clicked = false;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,8 @@ public class EntityViewActivity extends AppCompatActivity {
         }
         initObserver();
         initToolbar();
+        initView();
+        initRecyclerView();
     }
 
     private void initObserver() {
@@ -63,6 +74,7 @@ public class EntityViewActivity extends AppCompatActivity {
                 System.out.println("in. entityView observer onNext");
                 label = entityBean.getLabel();
                 category = entityBean.getCategory();
+                entity_id = entityBean.getId();
                 List<PropertyBean> properties = entityBean.getPropertiesFromStore();
                 properties.removeIf(p->p.getObject().contains("http://"));
                 System.out.println("onNext!!!!! "+entityBean.getCourse());
@@ -71,7 +83,6 @@ public class EntityViewActivity extends AppCompatActivity {
                 property_adapter = new EntityPropertyAdapter(properties);
                 problem_adpater = new ProblemAdapter(entityBean.getProblemsFromStore());
                 System.out.println("onNext!" + entityBean.getProblems());
-                entityBean.save();
                 initView();
                 initRecyclerView();
             }
@@ -105,6 +116,35 @@ public class EntityViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EntityViewActivity.this.finish();
+            }
+        });
+        FloatingActionButton share = findViewById(R.id.fab_share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EntityViewActivity.this, ShareActivity.class);
+                intent.putExtra("isEntity", true);
+                intent.putExtra("id", entity_id);
+                startActivity(intent);
+            }
+        });
+        FloatingActionButton fav = findViewById(R.id.fab_fav);
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userRepository = UserRepository.getInstance(new UserDataSource());
+                EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
+                if (!userRepository.getFavorites().getData().contains(fav_bean)) {
+                    Log.i("fav button", "click to add favourite");
+                    userRepository.addFavorite(fav_bean);
+                    fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+                    Toast.makeText(getApplicationContext(), "成功收藏", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.i("fav button", "click to cancel favourite");
+                    userRepository.cancelFavorite(fav_bean);
+                    fav.setImageResource(android.R.drawable.star_big_off);
+                    Toast.makeText(getApplicationContext(), "取消收藏", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
