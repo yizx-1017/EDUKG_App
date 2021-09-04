@@ -63,7 +63,9 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ProblemV
         }
 
         public void bind(final ProblemBean problem) {
-            qBody.setText(problem.getQBody());
+            String text = problem.getQBody();
+            if(text.length()>30) text = text.substring(0, 27) + "...";
+            qBody.setText(text);
             // Click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
