@@ -118,8 +118,10 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
             if (result.getStatus().equals(200)) {
                 entityList = result.getData();
                 Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(true);
             } else {
                 Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(false);
             }
 
         } else {
@@ -129,8 +131,10 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
             if (result.getStatus().equals(200)) {
                 entityList = result.getData();
                 Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(true);
             } else {
                 Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(false);
             }
         }
     }
