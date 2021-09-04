@@ -22,6 +22,10 @@ import com.example.gkude.adapter.EntityCollectionAdapter;
 import com.example.gkude.bean.EntityBean;
 import com.orm.SugarContext;
 import com.example.gkude.utils.CategoryUtil;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.ClassicsHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,10 +45,14 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
     private Observer<List<EntityBean>> observer = null;
     private List<EntityBean> entityList = new LinkedList<>();
     private EntityCollectionAdapter mAdapter;
+    private RefreshLayout refreshLayout;
+    CategoryUtil cu = new CategoryUtil();
+    Pair<String, String> p;
 
     public EntityCollectionFragment(final String tag) {
         this.TAG = tag;
         Log.e("EntityCollectionFragment", TAG);
+        p = cu.getSearchKeyword(TAG);
     }
 
     @Override
@@ -71,7 +79,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         recyclerView.setAdapter(mAdapter);
 
         initObserver();
-
+        initSwipeRefresh(rootView);
         return rootView;
     }
 
@@ -84,7 +92,19 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
             @Override
             public void onNext(@NonNull List<EntityBean> entities) {
                 Log.i(TAG,"getList");
-                mAdapter.setEntityList(entities);
+                if (refreshLayout != null) {
+                    refreshLayout.finishRefresh();
+                    for (EntityBean n : entities) {
+                        if (!EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + n.getUri()+ "'").isEmpty()) {
+                            n.setVisited(true);
+                        }else {
+                            n.setVisited(false);
+                        }
+                    }
+                    mAdapter.setEntityList(entities);
+                } else {
+                    mAdapter.setEntityList(entities);
+                }
             }
             @Override
             public void onError(Throwable e) {
@@ -95,11 +115,22 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.i(TAG,"Complete");
             }
         };
-        CategoryUtil cu = new CategoryUtil();
-        Pair<String, String> p = cu.getSearchKeyword(TAG);
         Manager.searchEntity(p.first, p.second, null,observer);
-        // TODO: 如果处于离线状态，那么需要数据库中得到存储的实体
+    }
 
+    private void initSwipeRefresh(View rootView) {
+        refreshLayout = rootView.findViewById(R.id.swipe_refresh);
+        refreshLayout.setRefreshHeader(new ClassicsHeader(this.getContext()));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(this.getContext()));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                Log.e(TAG, "onRefresh: ");
+                // This method performs the actual data-refresh operation.
+                // The method calls setRefreshing(false) when it's finished.
+                Manager.searchEntity(p.first, p.second, null,observer);
+            }
+        });
     }
 
     @Override

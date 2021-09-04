@@ -31,12 +31,12 @@ public class Manager {
                 fetch = new Fetch();
             }
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
-            if (comparator != null) {
-                list.sort(comparator);
-            }
             if (list.isEmpty()) {
                 Log.e("searchEntity", "fetchInstanceList missing");
-                list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN where COURSE = '"+ course + "'");
+                list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN where COURSE = '" + course + "'");
+            }
+            if (comparator != null) {
+                list.sort(comparator);
             }
             System.out.println("I got here searchEntity");
             System.out.println(list);

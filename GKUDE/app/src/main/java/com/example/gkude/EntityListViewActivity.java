@@ -2,8 +2,11 @@ package com.example.gkude;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +20,15 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.server.Result;
 import com.example.gkude.server.UserDataSource;
 import com.example.gkude.server.UserRepository;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.ClassicsHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.zip.Inflater;
 
 public class EntityListViewActivity extends AppCompatActivity implements EntityCollectionAdapter.OnEntitySelectedListener {
 
@@ -28,16 +36,22 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
     private EntityCollectionAdapter mAdapter;
     private boolean isFavorite;
     private UserRepository userRepository;
+    private RefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entity_searched);
+        setContentView(R.layout.entity_list_view);
         isFavorite = getIntent().getBooleanExtra("isFavorite", true);
         userRepository = UserRepository.getInstance(new UserDataSource());
-        syncEntityList();
+        if (isFavorite) {
+            entityList = userRepository.getUser().getFavorites();
+        } else {
+            entityList = userRepository.getUser().getHistories();
+        }
         initToolbar(isFavorite);
         initRecyclerView();
+        initSwipeRefresh(this);
     }
 
     @Override
@@ -81,6 +95,36 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new EntityCollectionAdapter(entityList, this);
         recyclerView.setAdapter(mAdapter);
+    }
+    private void initSwipeRefresh(EntityListViewActivity rootView) {
+        Log.i("EntityListView","initSwipe");
+        refreshLayout = rootView.findViewById(R.id.swipe_refresh2);
+        refreshLayout.setRefreshHeader(new ClassicsHeader(this));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(this));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                Log.e("refresh swipe", "onRefresh");
+                if (isFavorite) {
+                    Result<List<EntityBean>> result = userRepository.syncFavorites();
+                    if (result.getStatus().equals(200)) {
+                        entityList = result.getData();
+                        Toast.makeText(getApplicationContext(), "同步成功！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "同步失败！", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // sync
+                    Result<List<EntityBean>> result = userRepository.syncHistories();
+                    if (result.getStatus().equals(200)) {
+                        entityList = result.getData();
+                        Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     private void syncEntityList() {
