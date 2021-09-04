@@ -95,7 +95,6 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                     // Go to the detailed page
                     Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
                     intent.putExtra("entity_label", relation.getName());
-
                     intent.putExtra("entity_course",course);
                     intent.putExtra("entity_uri", relation.getEntityUri());
                     view.getContext().startActivity(intent);

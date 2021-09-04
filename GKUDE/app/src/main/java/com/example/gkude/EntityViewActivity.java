@@ -8,6 +8,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +22,8 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.ProblemBean;
 import com.example.gkude.bean.PropertyBean;
 import com.example.gkude.bean.RelationBean;
+import com.example.gkude.server.UserDataSource;
+import com.example.gkude.server.UserRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import  com.example.gkude.ShareActivity;
@@ -40,6 +43,7 @@ public class EntityViewActivity extends AppCompatActivity {
     private EntityRelationAdapter relation_adapter;
     private EntityPropertyAdapter property_adapter;
     private ProblemAdapter problem_adpater;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,11 @@ public class EntityViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Mark this entity as favorite
+                Log.i("fav button", "click to add favourite");
+                userRepository = UserRepository.getInstance(new UserDataSource());
+                EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
+                userRepository.addFavorite(fav_bean);
+                Toast.makeText(getApplicationContext(), "成功收藏", Toast.LENGTH_LONG).show();
             }
         });
     }
