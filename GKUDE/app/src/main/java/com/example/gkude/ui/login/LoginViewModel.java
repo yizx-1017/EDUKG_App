@@ -8,7 +8,7 @@ import android.util.Patterns;
 
 import com.example.gkude.server.UserRepository;
 import com.example.gkude.server.Result;
-import com.example.gkude.server.model.User;
+import com.example.gkude.server.User;
 import com.example.gkude.R;
 
 public class LoginViewModel extends ViewModel {

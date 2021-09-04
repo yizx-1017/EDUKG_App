@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 String courseCN = adapterView.getItemAtPosition(position).toString();
-                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
                 switch (courseCN){
                     case "语文":
                         course = "chinese";
@@ -153,13 +153,16 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 String courseCN = adapterView.getItemAtPosition(position).toString();
-                Toast.makeText(getContext(), "选择的排序是：" + courseCN, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "选择的排序是：" + courseCN, Toast.LENGTH_SHORT).show();
                 switch (courseCN){
                     case "默认":
                         sort = "normal";
                         break;
                     case "字母序":
                         sort = "abc";
+                        break;
+                    case "长度":
+                        sort = "length";
                         break;
                 }
             }

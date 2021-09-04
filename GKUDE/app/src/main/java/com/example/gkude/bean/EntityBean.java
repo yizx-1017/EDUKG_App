@@ -12,6 +12,7 @@ import com.orm.dsl.Ignore;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,6 +70,14 @@ public class EntityBean extends SugarRecord implements Serializable{
             return "暂无描述信息";
         }
         return this.getCategory();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        EntityBean edukgEntity = (EntityBean) o;
+        return Objects.equals(uri, edukgEntity.uri);
     }
 }
 

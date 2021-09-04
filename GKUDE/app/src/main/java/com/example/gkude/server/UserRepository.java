@@ -1,8 +1,8 @@
 package com.example.gkude.server;
 
 import com.example.gkude.bean.EntityBean;
-import com.example.gkude.server.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +26,10 @@ public class UserRepository {
         return instance;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public Result<User> login(String username, String password) {
         // handle login
         Result<String> result = dataSource.login(username, password, "http://10.0.2.2:8080/api/login");
@@ -33,6 +37,8 @@ public class UserRepository {
             User user = new User();
             user.setUserToken(result.getData());
             user.setUsername(username);
+            user.setFavorites(new ArrayList<>());
+            user.setHistories(new ArrayList<>());
             setLoggedInUser(user);
         }
         return new Result<>(result.getStatus(), result.getMsg(), user);
@@ -46,29 +52,58 @@ public class UserRepository {
         user = null;
     }
 
-    public Result<List<EntityBean>> getFavorites() {
+    public Result<String> updatePassword(String oldPassword, String newPassword) {
+        return dataSource.updatePassword(user.getUserToken(), oldPassword, newPassword, "http://10.0.2.2:8080/api/update/password");
+    }
+
+    public Result<List<EntityBean>> syncFavorites() {
         Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/favorite/get");
-        // favorite 有可能是null，用时先检查
-        user.setFavorites(result.getData());
+        if (result.getData()!=null) {
+            // 本地取并集
+            user.getFavorites().removeAll(result.getData());
+            user.getFavorites().addAll(result.getData());
+            // 上传差集
+            List<EntityBean> upload = new ArrayList<>(user.getFavorites());
+            upload.removeAll(result.getData());
+            for (EntityBean e : upload) {
+                dataSource.changeEntityList(e, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
+            }
+        }
+        result.setData(user.getFavorites());
         return result;
     }
 
     public Result<String> addFavorite(EntityBean entityBean) {
+        if (!user.getFavorites().contains(entityBean)) {
+            user.getFavorites().add(entityBean);
+        }
         return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
     }
 
     public Result<String> cancelFavorite(EntityBean entityBean) {
+        user.getFavorites().remove(entityBean);
         return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/cancel");
     }
 
-    public Result<List<EntityBean>> getHistories() {
+    public Result<List<EntityBean>> syncHistories() {
         Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/history/get");
-        // 有可能是null，用时先检查
-        user.setHistories(result.getData());
+        if (result.getData()!=null) {
+            // 本地取并集
+            user.getHistories().removeAll(result.getData());
+            user.getHistories().addAll(result.getData());
+            // 上传差集
+            List<EntityBean> upload = new ArrayList<>(user.getHistories());
+            upload.removeAll(result.getData());
+            for (EntityBean e : upload) {
+                dataSource.changeEntityList(e, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
+            }
+        }
+        result.setData(user.getFavorites());
         return result;
     }
 
     public Result<String> addHistory(EntityBean entityBean) {
+        user.getHistories().add(entityBean);
         return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
     }
 

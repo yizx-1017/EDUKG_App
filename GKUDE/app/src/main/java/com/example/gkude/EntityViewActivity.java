@@ -70,7 +70,6 @@ public class EntityViewActivity extends AppCompatActivity {
 
             @Override
             public void onNext(EntityBean entityBean) {
-                Log.i("EntityBean", String.valueOf(entityBean.isVisited()));
                 System.out.println("in. entityView observer onNext");
                 label = entityBean.getLabel();
                 category = entityBean.getCategory();
@@ -134,7 +133,7 @@ public class EntityViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 userRepository = UserRepository.getInstance(new UserDataSource());
                 EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
-                if (!userRepository.getFavorites().getData().contains(fav_bean)) {
+                if (!userRepository.getUser().getFavorites().contains(fav_bean)) {
                     Log.i("fav button", "click to add favourite");
                     userRepository.addFavorite(fav_bean);
                     fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
