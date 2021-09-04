@@ -161,6 +161,9 @@ public class HomeFragment extends Fragment {
                     case "字母序":
                         sort = "abc";
                         break;
+                    case "长度":
+                        sort = "length";
+                        break;
                 }
             }
             @Override

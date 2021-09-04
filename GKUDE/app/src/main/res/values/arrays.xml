@@ -4,6 +4,7 @@
     <string-array name="sorters">
         <item>默认</item>
         <item>字母序</item>
+        <item>长度</item>
     </string-array>
 
     <string-array name="course">
