@@ -43,6 +43,7 @@ public class EntityViewActivity extends AppCompatActivity {
     private EntityRelationAdapter relation_adapter;
     private EntityPropertyAdapter property_adapter;
     private ProblemAdapter problem_adpater;
+    Boolean clicked = false;
     private UserRepository userRepository;
 
     @Override
@@ -131,12 +132,19 @@ public class EntityViewActivity extends AppCompatActivity {
         fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Mark this entity as favorite
-                Log.i("fav button", "click to add favourite");
                 userRepository = UserRepository.getInstance(new UserDataSource());
                 EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
-                userRepository.addFavorite(fav_bean);
-                Toast.makeText(getApplicationContext(), "成功收藏", Toast.LENGTH_LONG).show();
+                if (!userRepository.getFavorites().getData().contains(fav_bean)) {
+                    Log.i("fav button", "click to add favourite");
+                    userRepository.addFavorite(fav_bean);
+                    fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+                    Toast.makeText(getApplicationContext(), "成功收藏", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.i("fav button", "click to cancel favourite");
+                    userRepository.cancelFavorite(fav_bean);
+                    fav.setImageResource(android.R.drawable.star_big_off);
+                    Toast.makeText(getApplicationContext(), "取消收藏", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
