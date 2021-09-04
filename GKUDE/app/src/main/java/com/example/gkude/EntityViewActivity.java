@@ -69,6 +69,7 @@ public class EntityViewActivity extends AppCompatActivity {
                 System.out.println("in. entityView observer onNext");
                 label = entityBean.getLabel();
                 category = entityBean.getCategory();
+                entity_id = entityBean.getId();
                 List<PropertyBean> properties = entityBean.getPropertiesFromStore();
                 properties.removeIf(p->p.getObject().contains("http://"));
                 System.out.println("onNext!!!!! "+entityBean.getCourse());
@@ -116,7 +117,10 @@ public class EntityViewActivity extends AppCompatActivity {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EntityViewActivity.this, ShareActivity.class));
+                Intent intent = new Intent(EntityViewActivity.this, ShareActivity.class);
+                intent.putExtra("isEntity", true);
+                intent.putExtra("id", entity_id);
+                startActivity(intent);
             }
         });
         FloatingActionButton fav = findViewById(R.id.fab_fav);
