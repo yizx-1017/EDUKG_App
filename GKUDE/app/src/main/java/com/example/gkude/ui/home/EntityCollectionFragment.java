@@ -3,6 +3,7 @@ package com.example.gkude.ui.home;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,43 +82,9 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.i(TAG,"observer subscribed");
             }
             @Override
-            public void onNext(List<EntityBean> entities) {
+            public void onNext(@NonNull List<EntityBean> entities) {
                 Log.i(TAG,"getList");
                 mAdapter.setEntityList(entities);
-
-//                if(TAG.equals("news")|| TAG.equals("paper")) {
-//                    if (refreshLayout != null) {
-//                        if (isLoadingMore) {
-//                            refreshLayout.finishLoadMore();
-//                            if (TAG.equals("news")) {
-//                                for (News n : news) {
-//                                    if (News.find(News.class, "_id = ?", n.get_id()).size() > 0) {
-//                                        n.setVisited(true);
-//                                    } else {
-//                                        n.setVisited(false);
-//                                    }
-//                                }
-//                            }
-//                            mAdapter.addNewsList(news);
-//                        } else {
-//                            refreshLayout.finishRefresh();
-//                            if (TAG.equals("news")) {
-//                                for (News n : news) {
-//                                    if (News.find(News.class, "_id = ?", n.get_id()).size() > 0) {
-//                                        n.setVisited(true);
-//                                    } else {
-//                                        n.setVisited(false);
-//                                    }
-//                                }
-//                            }
-//
-//                            mAdapter.setNewsList(news);
-//                        }
-//                    }
-//                }
-//                else{
-//                    mAdapter.setNewsList(news);
-//                }
             }
             @Override
             public void onError(Throwable e) {
@@ -131,7 +98,6 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         CategoryUtil cu = new CategoryUtil();
         Pair<String, String> p = cu.getSearchKeyword(TAG);
         Manager.searchEntity(p.first, p.second, null,observer);
-        Manager.searchEntity(p.first, p.second, observer);
         // TODO: 如果处于离线状态，那么需要数据库中得到存储的实体
 
     }
@@ -143,6 +109,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         intent.putExtra("entity_id", entity.getId());
         intent.putExtra("entity_label", entity.getLabel());
         intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_category", entity.getCategory());
         intent.putExtra("entity_uri", entity.getUri());
         startActivity(intent);
     }

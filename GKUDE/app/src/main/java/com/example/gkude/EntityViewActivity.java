@@ -22,6 +22,7 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.ProblemBean;
 import com.example.gkude.bean.PropertyBean;
 import com.example.gkude.bean.RelationBean;
+import com.example.gkude.server.Result;
 import com.example.gkude.server.UserDataSource;
 import com.example.gkude.server.UserRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,17 +44,18 @@ public class EntityViewActivity extends AppCompatActivity {
     private EntityRelationAdapter relation_adapter;
     private EntityPropertyAdapter property_adapter;
     private ProblemAdapter problem_adpater;
-    Boolean clicked = false;
     private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_view);
+        userRepository = UserRepository.getInstance(new UserDataSource());
         entity_id = getIntent().getLongExtra("entity_id", -1);
         if(entity_id == -1) {
             label = getIntent().getStringExtra("entity_label");
             course = getIntent().getStringExtra("entity_course");
+            category = getIntent().getStringExtra("entity_category");
             uri = getIntent().getStringExtra("entity_uri");
         }
         initObserver();
@@ -85,6 +87,8 @@ public class EntityViewActivity extends AppCompatActivity {
                 System.out.println("onNext!" + entityBean.getProblems());
                 initView();
                 initRecyclerView();
+                // 添加历史记录，为保证速度暂时删去
+                // userRepository.addHistory(entityBean);
             }
 
             @Override
@@ -103,6 +107,7 @@ public class EntityViewActivity extends AppCompatActivity {
             tmp_bean.setUri(uri);
             tmp_bean.setLabel(label);
             tmp_bean.setCourse(course);
+            tmp_bean.setCategory(category);
             Manager.getEntityInfo(tmp_bean, observer);
         }
     }
@@ -132,18 +137,28 @@ public class EntityViewActivity extends AppCompatActivity {
         fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userRepository = UserRepository.getInstance(new UserDataSource());
+
                 EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
-                if (!userRepository.getFavorites().getData().contains(fav_bean)) {
+                if (!userRepository.getUser().getFavorites().contains(fav_bean)) {
                     Log.i("fav button", "click to add favourite");
-                    userRepository.addFavorite(fav_bean);
+                    Log.i("fav button", fav_bean.getCategory());
+                    Result<String> result = userRepository.addFavorite(fav_bean);
                     fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-                    Toast.makeText(getApplicationContext(), "成功收藏", Toast.LENGTH_LONG).show();
+                    if (result.getStatus().equals(200)){
+                        Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "收藏成功，同步失败", Toast.LENGTH_LONG).show();
+                    }
+
                 } else {
                     Log.i("fav button", "click to cancel favourite");
-                    userRepository.cancelFavorite(fav_bean);
+                    Result<String> result = userRepository.cancelFavorite(fav_bean);
                     fav.setImageResource(android.R.drawable.star_big_off);
-                    Toast.makeText(getApplicationContext(), "取消收藏", Toast.LENGTH_LONG).show();
+                    if (result.getStatus().equals(200)) {
+                        Toast.makeText(getApplicationContext(), "取消收藏", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "取消收藏，同步失败", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

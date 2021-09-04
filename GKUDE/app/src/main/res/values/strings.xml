@@ -31,4 +31,5 @@
     <string name="right_arrow">right_arrow</string>
     <string name="icon">icon</string>
     <string name="submit">submit</string>
+    <string name="cancelShare">取消分享</string>
 </resources>

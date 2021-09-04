@@ -3,6 +3,7 @@ package com.example.gkude;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ import com.sina.weibo.sdk.openapi.IWBAPI;
 import com.sina.weibo.sdk.openapi.WBAPIFactory;
 import com.sina.weibo.sdk.share.WbShareCallback;
 
-public class ShareActivity extends Activity implements View.OnClickListener, WbShareCallback {
+public class ShareActivity extends Activity implements WbShareCallback {
     //在微博开发平台为应用申请的App Key
     private static final String APP_KY = "2045436852";
     //在微博开放平台设置的授权回调页
@@ -33,7 +34,6 @@ public class ShareActivity extends Activity implements View.OnClickListener, WbS
                     + "follow_app_official_microblog," + "invitation_write";
 
     private IWBAPI mWBAPI;
-    private Button mCommit;
     private String shareText;
 
     @Override
@@ -43,15 +43,17 @@ public class ShareActivity extends Activity implements View.OnClickListener, WbS
         generateText();
         TextView shareTextView = findViewById(R.id.shareActivityText);
         shareTextView.setText(shareText);
-        mCommit = findViewById(R.id.shareActivityButton);
+        Button mCommit = findViewById(R.id.shareActivityButton);
+        Button mCancel = findViewById(R.id.cancelShareActivity);
+        mCancel.setOnClickListener(view -> {
+            finish();
+        });
         initSdk();
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.equals(mCommit)) {
+        mCommit.setOnClickListener(view -> {
+            Log.i("ShareActivity", "commit cliked!");
             doWeiboShare();
-        }
+        });
+
     }
 
     private void initSdk() {

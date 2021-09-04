@@ -100,6 +100,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         intent.putExtra("entity_id", entity.getId());
         intent.putExtra("entity_label", entity.getLabel());
         intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_category", entity.getCategory());
         intent.putExtra("entity_uri", entity.getUri());
         startActivity(intent);
     }

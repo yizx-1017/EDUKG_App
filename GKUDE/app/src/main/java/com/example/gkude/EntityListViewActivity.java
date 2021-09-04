@@ -26,36 +26,35 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
 
     private List<EntityBean> entityList;
     private EntityCollectionAdapter mAdapter;
+    private boolean isFavorite;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entity_searched);
-        boolean isFavorite = getIntent().getBooleanExtra("isFavorite", true);
-        UserRepository userRepository = UserRepository.getInstance(new UserDataSource());
-        if (isFavorite) {
-            entityList = userRepository.getUser().getFavorites();
-            // sync TODO 把同步部分移到下拉刷新中去，下同
-            Result<List<EntityBean>> result = userRepository.syncFavorites();
-            if (result.getStatus().equals(200)) {
-                entityList = result.getData();
-                Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
-            }
-
-        } else {
-            entityList = userRepository.getUser().getHistories();
-            // sync
-            Result<List<EntityBean>> result = userRepository.syncHistories();
-            if (result.getStatus().equals(200)) {
-                entityList = result.getData();
-                Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
-            }
-        }
+        isFavorite = getIntent().getBooleanExtra("isFavorite", true);
+        userRepository = UserRepository.getInstance(new UserDataSource());
+        syncEntityList();
         initToolbar(isFavorite);
+        initRecyclerView();
+    }
+
+    @Override
+    public void onEntitySelected(EntityBean entity) {
+        // Go to the detailed page
+        Intent intent = new Intent(this, EntityViewActivity.class);
+        intent.putExtra("entity_id", entity.getId());
+        intent.putExtra("entity_label", entity.getLabel());
+        intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_uri", entity.getUri());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        syncEntityList();
         initRecyclerView();
     }
 
@@ -84,17 +83,28 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         recyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onEntitySelected(EntityBean entity) {
-        if(!entity.isVisited()){
-            entity.save();
+    private void syncEntityList() {
+        if (isFavorite) {
+            entityList = userRepository.getUser().getFavorites();
+            // sync TODO 把同步部分移到下拉刷新中去，下同
+            Result<List<EntityBean>> result = userRepository.syncFavorites();
+            if (result.getStatus().equals(200)) {
+                entityList = result.getData();
+                Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            entityList = userRepository.getUser().getHistories();
+            // sync
+            Result<List<EntityBean>> result = userRepository.syncHistories();
+            if (result.getStatus().equals(200)) {
+                entityList = result.getData();
+                Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
+            }
         }
-        // Go to the detailed page
-        Intent intent = new Intent(this, EntityViewActivity.class);
-        intent.putExtra("entity_id", entity.getId());
-        intent.putExtra("entity_label", entity.getLabel());
-        intent.putExtra("entity_course", entity.getCourse());
-        intent.putExtra("entity_uri", entity.getUri());
-        startActivity(intent);
     }
 }

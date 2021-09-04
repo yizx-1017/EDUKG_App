@@ -55,12 +55,15 @@ public class Manager {
             List<EntityBean> list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + entityBean.getUri()+ "'");
             EntityBean privateEntityBean;
             if (list.isEmpty()) {
+                EntityBean tmpEntityBean1 = fetch.fetchInfoByInstanceName(entityBean);
+                EntityBean tmpEntityBean2 = fetch.fetchQuestionListByUriName(entityBean);
+                // 只有成功获取全部详细信息的entity才会保存到数据库中
+                if (tmpEntityBean1!=null&&tmpEntityBean2!=null) {
+                    entityBean.setVisited(true);
+                    Log.i("getEntityInfo", "save");
+                    entityBean.save();
+                }
                 privateEntityBean = entityBean;
-                fetch.fetchInfoByInstanceName(privateEntityBean);
-                fetch.fetchQuestionListByUriName(privateEntityBean);
-                privateEntityBean.setVisited(true);
-                Log.i("getEntityInfo", "save");
-                privateEntityBean.save();
             } else {
                 privateEntityBean = list.get(0);
             }

@@ -131,7 +131,7 @@ public class NotificationsFragment extends Fragment {
             public void onNext(@NonNull List<ResultBean> answerList) {
                 Log.e(TAG,"getAnswer");
                 String content;
-                if (answerList.get(0).getValue().equals("")) {
+                if (answerList.isEmpty()||answerList.get(0).getValue().equals("")) {
                     content = "抱歉！您问的问题知识图谱无法解答呢，换个问题/学科试试吧";
                 } else {
                     content = answerList.get(0).getValue();
