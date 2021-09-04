@@ -68,83 +68,57 @@
                 android:textSize="16dp"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#efefef" />
-        <!--item内容部分的容器-->
+
         <LinearLayout
             android:id="@+id/favorite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
             android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp">
-
-            <!--item左边的Icon-->
+            android:paddingBottom="10dp"
+            android:background="@drawable/card_rectangle"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
             <ImageView
-                android:contentDescription="@string/icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
-
-            <!--item中间部分的文字-->
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_history"/>
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:text="@string/favorite"
-                android:textSize="16sp" />
-
-            <!--item右边的Icon 默认是向右的箭头-->
-            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:contentDescription="@string/right_arrow"
-                android:src="@mipmap/ic_arrow_forward" />
+                android:layout_marginLeft="10dp"
+                android:text="我的收藏"
+                android:textSize="16dp"/>
         </LinearLayout>
 
 
-        <!--item内容部分的容器-->
         <LinearLayout
             android:id="@+id/history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
             android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp">
-
-            <!--item左边的Icon-->
+            android:paddingBottom="10dp"
+            android:background="@drawable/card_rectangle"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
             <ImageView
-                android:contentDescription="@string/icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
-
-            <!--item中间部分的文字-->
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_history"/>
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:text="@string/history"
-                android:textSize="16sp" />
-
-            <!--item右边的Icon 默认是向右的箭头-->
-            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/right_arrow"
-                android:src="@drawable/ic_arrow_forward" />
+                android:layout_marginLeft="10dp"
+                android:text="历史记录"
+                android:textSize="16dp"/>
         </LinearLayout>
-
 
     </LinearLayout>
 

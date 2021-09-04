@@ -82,6 +82,7 @@ public class UserDataSource {
                 result.setMsg(privateResult.getMsg());
                 result.setData(privateResult.getData());
             } catch (IOException e) {
+                result.setStatus(400);
                 e.printStackTrace();
                 System.out.println("The wrong message is>>>");
                 System.out.println(e.getMessage());
@@ -113,6 +114,7 @@ public class UserDataSource {
                 result.setMsg(privateResult.getMsg());
                 result.setData(privateResult.getData());
             } catch (IOException e) {
+                result.setStatus(400);
                 e.printStackTrace();
                 System.out.println("The wrong message is>>>");
                 System.out.println(e.getMessage());
@@ -148,6 +150,7 @@ public class UserDataSource {
                result.setMsg(privateResult.getMsg());
                result.setData(privateResult.getData());
            } catch (IOException e) {
+               result.setStatus(400);
                e.printStackTrace();
                System.out.println("The wrong message is>>>");
                System.out.println(e.getMessage());

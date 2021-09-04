@@ -29,6 +29,7 @@
         <activity android:name=".EntitySearchedActivity" android:exported="false"/>
         <activity android:name=".EntityViewActivity" android:exported="false"/>
         <activity android:name=".ProblemViewActivity" android:exported="false"/>
+        <activity android:name=".EntityListViewActivity" android:exported="false"/>
         <meta-data
             android:name="DATABASE"
             android:value="entity.db" />
