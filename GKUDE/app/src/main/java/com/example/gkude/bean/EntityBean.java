@@ -79,10 +79,5 @@ public class EntityBean extends SugarRecord implements Serializable{
         EntityBean edukgEntity = (EntityBean) o;
         return Objects.equals(uri, edukgEntity.uri);
     }
-
-    @Override
-    public int hashCode() {
-        return uri.hashCode();
-    }
 }
 
