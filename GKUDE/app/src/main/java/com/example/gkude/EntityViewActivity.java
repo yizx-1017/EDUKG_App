@@ -98,8 +98,8 @@ public class EntityViewActivity extends AppCompatActivity {
                 System.out.println("onNext!" + entityBean.getProblems());
                 initView();
                 initRecyclerView();
-                // 添加历史记录，为保证速度暂时删去
-                // userRepository.addHistory(entityBean);
+                // 添加历史记录
+                userRepository.addHistory(entityBean);
             }
 
             @Override
