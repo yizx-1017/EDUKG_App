@@ -74,7 +74,6 @@ public class EntityCollectionAdapter extends RecyclerView.Adapter<EntityCollecti
             // load entity info
             mLabel.setText(entity.getLabel());
             mInfo.setText(entity.getDescription());
-            Log.i("EntityCollectionAdapter", String.valueOf(entity.isVisited()));
             if(entity.isVisited()){
                 mLabel.setTextColor(itemView.getResources().getColor(R.color.clickedNews2));
             }
