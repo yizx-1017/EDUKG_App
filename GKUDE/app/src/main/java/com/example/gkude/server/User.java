@@ -1,4 +1,4 @@
-package com.example.gkude.server.model;
+package com.example.gkude.server;
 
 import com.example.gkude.bean.EntityBean;
 

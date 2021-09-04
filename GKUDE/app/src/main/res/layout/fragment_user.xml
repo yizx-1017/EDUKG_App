@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".ui.user.UserFragment">
 
@@ -44,44 +43,29 @@
         android:layout_marginVertical="10dp"
         android:orientation="vertical">
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#efefef" />
-
-        <!--item内容部分的容器-->
         <LinearLayout
             android:id="@+id/update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
             android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp">
-
-            <!--item左边的Icon-->
+            android:paddingBottom="10dp"
+            android:background="@drawable/card_rectangle"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
-
-            <!--item中间部分的文字-->
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_history"/>
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:text="@string/updatePassword"
-                android:textSize="16sp" />
-
-            <!--item右边的Icon 默认是向右的箭头-->
-            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:src="@mipmap/ic_arrow_forward" />
+                android:layout_marginLeft="10dp"
+                android:text="更新密码"
+                android:textSize="16dp"/>
         </LinearLayout>
 
         <View
@@ -103,6 +87,7 @@
 
             <!--item左边的Icon-->
             <ImageView
+                android:contentDescription="@string/icon"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
 
@@ -120,20 +105,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="10dp"
+                android:contentDescription="@string/right_arrow"
                 android:src="@mipmap/ic_arrow_forward" />
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#efefef" />
 
         <!--item内容部分的容器-->
         <LinearLayout
             android:id="@+id/history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -143,6 +124,7 @@
 
             <!--item左边的Icon-->
             <ImageView
+                android:contentDescription="@string/icon"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
 
@@ -159,14 +141,10 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:src="@mipmap/ic_arrow_forward" />
+                android:contentDescription="@string/right_arrow"
+                android:src="@drawable/ic_arrow_forward" />
         </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#efefef" />
 
     </LinearLayout>
 
@@ -181,5 +159,6 @@
         android:text="退出登录"
         android:textColor="@color/white"
         android:textSize="18sp" />
+
 
 </LinearLayout>
