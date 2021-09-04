@@ -18,7 +18,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
+import com.example.gkude.EntityListViewActivity;
 import com.example.gkude.R;
+import com.example.gkude.server.Result;
 import com.example.gkude.server.UserDataSource;
 import com.example.gkude.server.UserRepository;
 import com.example.gkude.ui.login.LoginActivity;
@@ -39,7 +41,6 @@ public class UserFragment extends Fragment{
         LinearLayout history = root.findViewById(R.id.history);
         Button quit = root.findViewById(R.id.btn_quit);
         update.setOnClickListener(view -> {
-            // TODO complete
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("更改密码");
             final View v = getLayoutInflater().inflate(R.layout.change_password, null);
@@ -51,7 +52,12 @@ public class UserFragment extends Fragment{
                     EditText new_password = v.findViewById(R.id.new_password);
                     String s_old = old_password.getText().toString();
                     String s_new = new_password.getText().toString();
-                    // TODO(wangxingqi):
+                    Result<String> result = userRepository.updatePassword(s_old, s_new);
+                    if (result.getStatus().equals(200)) {
+                        Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "修改失败", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -63,10 +69,14 @@ public class UserFragment extends Fragment{
             builder.show();
         });
         favorite.setOnClickListener(view -> {
-            // TODO complete
+            Intent intent = new Intent(getActivity(), EntityListViewActivity.class);
+            intent.putExtra("isFavorite", true);
+            startActivity(intent);
         });
         history.setOnClickListener(view->{
-            // TODO complete
+            Intent intent = new Intent(getActivity(), EntityListViewActivity.class);
+            intent.putExtra("isFavorite", false);
+            startActivity(intent);
         });
         quit.setOnClickListener(view -> {
             userRepository.logout();

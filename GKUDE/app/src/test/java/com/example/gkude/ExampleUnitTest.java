@@ -7,20 +7,18 @@ import static org.junit.Assert.*;
 import com.example.gkude.bean.CourseType;
 import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.PropertyBean;
-import com.example.gkude.bean.RecognitionBean;
 import com.example.gkude.bean.RelationBean;
-import com.example.gkude.databinding.FragmentEntityCollectionBinding;
 import com.example.gkude.server.Result;
 import com.example.gkude.server.UserDataSource;
 import com.example.gkude.server.UserRepository;
-import com.example.gkude.server.model.User;
+import com.example.gkude.server.User;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orm.SugarApp;
 
+import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.List;
-
-import okhttp3.Request;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -56,11 +54,10 @@ public class ExampleUnitTest extends SugarApp {
     @Test
     public void gsonTest() {
         Gson gson = new Gson();
-        String test = "{\"predicate\":\"http://edukg.org/knowledge/0.1/property/common#includes\",\"subject_label\":\"科普文章的基本知识\",\"subject\":\"http://edukg.org/knowledge/0.1/instance/chinese#kepuwenzhangdejibenzhishi-ae085387c0f93174d1d5a1173490bddb\",\"predicate_label\":\"包含\"}";
-        RelationBean relationBean = gson.fromJson(test, RelationBean.class);
-        System.out.println(relationBean.getEntityUri());
-        System.out.println(relationBean.getSubjectName());
-        System.out.println(relationBean.getObjectName());
+        String test = "{\"status\": 200, \"msg\":OK, \"data\": null}";
+        Type type = new TypeToken<Result<List<RelationBean>>>() {}.getType();
+        Result<List<RelationBean>> relationBean = gson.fromJson(test, type);
+        System.out.println(relationBean.getStatus());
     }
 
     @Test
@@ -73,13 +70,13 @@ public class ExampleUnitTest extends SugarApp {
         Result<User> userResult = userRepository.login("Jackson", "123456");
         String token = userResult.getData().getUserToken();
         System.out.println(token);
-        List<EntityBean> entityBeanList = userRepository.getFavorites().getData();
+        List<EntityBean> entityBeanList = userRepository.syncFavorites().getData();
         System.out.println(entityBeanList);
         userRepository.addFavorite(entityBean);
-        entityBeanList = userRepository.getFavorites().getData();
+        entityBeanList = userRepository.syncFavorites().getData();
         System.out.println(entityBeanList.size());
         userRepository.cancelFavorite(entityBean);
-        entityBeanList = userRepository.getFavorites().getData();
+        entityBeanList = userRepository.syncFavorites().getData();
         System.out.println(entityBeanList);
     }
 

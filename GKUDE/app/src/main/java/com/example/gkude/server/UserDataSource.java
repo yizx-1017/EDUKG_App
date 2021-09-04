@@ -66,6 +66,39 @@ public class UserDataSource {
 //            return new Result<>(400, "bad request", "Error logging in");
     }
 
+    public Result<String> updatePassword(String userToken, String oldPassword, String newPassword, String url) {
+        Result<String> result = new Result<>();
+        Thread thread = new Thread(()->{
+            RequestBody formBody = new FormBody.Builder().add("oldPassword", oldPassword)
+                    .add("newPassword", newPassword).build();
+            Request request = new Request.Builder().url(url).addHeader("token", userToken).post(formBody).build();
+            try {
+                Response response = client.newCall(request).execute();
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<Result<String>>() {
+                }.getType();
+                Result<String> privateResult = gson.fromJson(json, type);
+                result.setStatus(privateResult.getStatus());
+                result.setMsg(privateResult.getMsg());
+                result.setData(privateResult.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("The wrong message is>>>");
+                System.out.println(e.getMessage());
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.getStatus().equals(200))
+            return result;
+        else
+            return new Result<>(400, "bad request", null);
+    }
+
     public Result<List<EntityBean>> getEntityList(String userToken, String url) {
         Result<List<EntityBean>> result = new Result<>();
         Thread thread = new Thread(() -> {
@@ -126,7 +159,10 @@ public class UserDataSource {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return result;
+        if (result.getStatus().equals(200)||result.getStatus().equals(202))
+            return result;
+        else
+            return new Result<>(400, "bad request", null);
     }
 
 }
