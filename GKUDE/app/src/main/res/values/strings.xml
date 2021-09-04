@@ -22,4 +22,8 @@
     <string name="dashboard_input_text">输入待识别文本</string>
     <string name="button_recognize">一键识别</string>
     <string name="robot_avatar">robot_avatar</string>
+    <string name="username">用户名</string>
+    <string name="updatePassword">更新密码</string>
+    <string name="favorite">我的收藏</string>
+    <string name="history">历史记录</string>
 </resources>
