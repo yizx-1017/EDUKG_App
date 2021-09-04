@@ -17,6 +17,9 @@
     <string name="query_hint">请输入…</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="type_question_here">Type question here</string>
-    <string name="send_question">Send</string>
+    <string name="type_question_here">输入问题</string>
+    <string name="send_question">发送</string>
+    <string name="dashboard_input_text">输入待识别文本</string>
+    <string name="button_recognize">一键识别</string>
+    <string name="robot_avatar">robot_avatar</string>
 </resources>

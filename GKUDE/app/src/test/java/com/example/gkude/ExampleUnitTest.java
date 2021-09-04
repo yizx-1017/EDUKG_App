@@ -9,6 +9,7 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.PropertyBean;
 import com.example.gkude.bean.RecognitionBean;
 import com.example.gkude.bean.RelationBean;
+import com.example.gkude.databinding.FragmentEntityCollectionBinding;
 import com.example.gkude.server.Result;
 import com.example.gkude.server.UserDataSource;
 import com.example.gkude.server.UserRepository;
@@ -16,6 +17,7 @@ import com.example.gkude.server.model.User;
 import com.google.gson.Gson;
 import com.orm.SugarApp;
 
+import java.util.Comparator;
 import java.util.List;
 
 import okhttp3.Request;
@@ -79,5 +81,21 @@ public class ExampleUnitTest extends SugarApp {
         userRepository.cancelFavorite(entityBean);
         entityBeanList = userRepository.getFavorites().getData();
         System.out.println(entityBeanList);
+    }
+
+    @Test
+    public void stringSortTest() {
+        Fetch fetch = new Fetch();
+        List<EntityBean> entityBeanList = fetch.fetchInstanceList("chinese", "中");
+        entityBeanList.sort(Comparator.comparing(EntityBean::getLabel)); // 按label ascii码排序
+        entityBeanList.sort(Comparator.comparing(EntityBean::getLabel).reversed()); // 逆序
+        entityBeanList.sort(Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length))); // 按字符串长度排序
+        entityBeanList.sort(Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length)).reversed()); // 逆序
+    }
+
+    @Test
+    public void stringTest() {
+        String a = "李白是一个伟大的诗人";
+        System.out.println(a.substring(a.length()-1));
     }
 }

@@ -9,6 +9,7 @@ import com.example.gkude.bean.EntityBean;
 import com.example.gkude.bean.RecognitionBean;
 import com.example.gkude.bean.ResultBean;
 
+import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -23,7 +24,7 @@ public class Manager {
     private static Fetch fetch = null;
 
     @SuppressLint("CheckResult")
-    public static void searchEntity(@NonNull String course, @NonNull String searchKey, Observer<List<EntityBean>> observer) {
+    public static void searchEntity(@NonNull String course, @NonNull String searchKey, Comparator<? super EntityBean> comparator, Observer<List<EntityBean>> observer) {
 
         Observable.create((ObservableOnSubscribe<List<EntityBean>>) emitter -> {
             if (fetch == null) {
@@ -32,7 +33,10 @@ public class Manager {
             List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
             if (list.isEmpty()) {
                 Log.e("searchEntity", "fetchInstanceList missing");
-                list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN where COURSE = '"+ course + "'");
+                list = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN where COURSE = '" + course + "'");
+            }
+            if (comparator != null) {
+                list.sort(comparator);
             }
             System.out.println("I got here searchEntity");
             System.out.println(list);

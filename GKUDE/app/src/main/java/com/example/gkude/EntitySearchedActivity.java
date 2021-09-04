@@ -85,7 +85,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             }
         };
         // TODO(zhiyuxie): add sort in manager
-        Manager.searchEntity(course, keyword, observer);
+        Manager.searchEntity(course, keyword, null, observer);
     }
 
     @Override

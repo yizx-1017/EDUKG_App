@@ -130,9 +130,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         };
         CategoryUtil cu = new CategoryUtil();
         Pair<String, String> p = cu.getSearchKeyword(TAG);
-        Manager.searchEntity(p.first, p.second, observer);
-        // TODO: 如果处于离线状态，那么需要数据库中得到存储的实体
-
+        Manager.searchEntity(p.first, p.second, null,observer);
     }
 
     @Override
