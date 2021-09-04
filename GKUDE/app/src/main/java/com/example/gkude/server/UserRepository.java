@@ -26,6 +26,10 @@ public class UserRepository {
         return instance;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public Result<User> login(String username, String password) {
         // handle login
         Result<String> result = dataSource.login(username, password, "http://10.0.2.2:8080/api/login");

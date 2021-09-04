@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -141,11 +142,12 @@ public class DashboardFragment extends Fragment {
                         ClickableSpan recognizeSpan = new ClickableSpan() {
                             @Override
                             public void onClick(@NonNull View view) {
+                                Log.e(TAG,"Item clicked!");
                                 Intent intent = new Intent(getActivity(), EntityViewActivity.class);
                                 intent.putExtra("entity_label", r.getContent());
                                 intent.putExtra("entity_course", course);
                                 intent.putExtra("entity_uri", r.getUri());
-                                startActivity(intent); // TODO: fix won't start activity error
+                                startActivity(intent);
                             }
                         };
                         recognizeSpannable.setSpan(recognizeSpan, 0, r.getContent().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -154,6 +156,7 @@ public class DashboardFragment extends Fragment {
                         textView.append(r.getContent());
                     }
                 }
+                textView.setMovementMethod(LinkMovementMethod.getInstance());
             }
         };
     }
