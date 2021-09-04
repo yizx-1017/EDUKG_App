@@ -105,24 +105,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 Log.e("refresh swipe", "onRefresh");
-                if (isFavorite) {
-                    Result<List<EntityBean>> result = userRepository.syncFavorites();
-                    if (result.getStatus().equals(200)) {
-                        entityList = result.getData();
-                        Toast.makeText(getApplicationContext(), "同步成功！", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "同步失败！", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    // sync
-                    Result<List<EntityBean>> result = userRepository.syncHistories();
-                    if (result.getStatus().equals(200)) {
-                        entityList = result.getData();
-                        Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
-                    }
-                }
+                syncEntityList();
             }
         });
     }
@@ -130,7 +113,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
     private void syncEntityList() {
         if (isFavorite) {
             entityList = userRepository.getUser().getFavorites();
-            // sync TODO 把同步部分移到下拉刷新中去，下同
+            // sync
             Result<List<EntityBean>> result = userRepository.syncFavorites();
             if (result.getStatus().equals(200)) {
                 entityList = result.getData();
