@@ -12,12 +12,32 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-        <!-- Toolbar -->
+<!-- Toolbar -->
         <include layout="@layout/app_bar_entity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <include layout="@layout/content_entity_display" />
+    <include layout="@layout/content_entity_display" />
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_share"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="80dp"
+        android:backgroundTint="#8AC5F4"
+        android:contentDescription="@string/submit"
+        android:src="?attr/actionModeShareDrawable" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_fav"
+        android:backgroundTint="#8AC5F4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@android:drawable/star_big_off"
+        android:contentDescription="@string/submit"
+        android:layout_margin="16dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

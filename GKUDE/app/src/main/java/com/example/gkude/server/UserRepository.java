@@ -74,9 +74,7 @@ public class UserRepository {
     }
 
     public Result<String> addFavorite(EntityBean entityBean) {
-        if (!user.getFavorites().contains(entityBean)) {
-            user.getFavorites().add(entityBean);
-        }
+        user.getFavorites().add(entityBean);
         return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
     }
 

@@ -1,5 +1,6 @@
 package com.example.gkude;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.example.gkude.bean.ProblemBean;
 import com.example.gkude.bean.PropertyBean;
 import com.example.gkude.bean.RelationBean;
 import com.example.gkude.ui.chat.Message;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.javatuples.Triplet;
 import org.w3c.dom.Entity;
@@ -65,6 +67,17 @@ public class ProblemViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ProblemViewActivity.this.finish();
+            }
+        });
+        FloatingActionButton share = findViewById(R.id.fab_share_problem);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("problem share","onclick");
+                Intent intent = new Intent(ProblemViewActivity.this, ShareActivity.class);
+                intent.putExtra("isEntity", false);
+                intent.putExtra("id", problem_id);
+                startActivity(intent);
             }
         });
     }

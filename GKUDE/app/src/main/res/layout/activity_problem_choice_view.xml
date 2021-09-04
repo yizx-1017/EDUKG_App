@@ -70,5 +70,14 @@
             android:textColor="@android:color/primary_text_light"/>
 
     </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_share_problem"
+        android:layout_width="78dp"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:backgroundTint="#8AC5F4"
+        android:contentDescription="@string/submit"
+        android:src="?attr/actionModeShareDrawable" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

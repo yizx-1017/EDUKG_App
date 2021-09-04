@@ -19,6 +19,8 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.225" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_news_searched.xml" value="0.22291666666666668" />
+        <entry key="app/src/main/res/layout/activity_problem_choice_view.xml" value="0.14427083333333332" />
+        <entry key="app/src/main/res/layout/activity_problem_view.xml" value="0.2755208333333333" />
         <entry key="app/src/main/res/layout/activity_share.xml" value="0.23652405145225652" />
         <entry key="app/src/main/res/layout/app_bar.xml" value="0.1" />
         <entry key="app/src/main/res/layout/app_bar_entity.xml" value="0.209375" />
@@ -42,6 +44,7 @@
         <entry key="app/src/main/res/layout/item_entity_problem.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_entity_property.xml" value="0.2520833333333333" />
         <entry key="app/src/main/res/layout/item_entity_relation.xml" value="0.45896656534954405" />
+        <entry key="app/src/main/res/layout/item_message.xml" value="0.24479166666666666" />
         <entry key="app/src/main/res/layout/item_news.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/menu-v21/bottom_nav_menu.xml" value="0.225" />
         <entry key="app/src/main/res/menu/bottom_nav_animated_menu.xml" value="0.30833333333333335" />

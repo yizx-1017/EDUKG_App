@@ -3,6 +3,7 @@ package com.example.gkude.ui.home;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,7 +90,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.i(TAG,"observer subscribed");
             }
             @Override
-            public void onNext(List<EntityBean> entities) {
+            public void onNext(@NonNull List<EntityBean> entities) {
                 Log.i(TAG,"getList");
                 if (refreshLayout != null) {
                     refreshLayout.finishRefresh();
@@ -139,6 +140,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
         intent.putExtra("entity_id", entity.getId());
         intent.putExtra("entity_label", entity.getLabel());
         intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_category", entity.getCategory());
         intent.putExtra("entity_uri", entity.getUri());
         startActivity(intent);
     }

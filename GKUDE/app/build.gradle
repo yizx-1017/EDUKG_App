@@ -13,8 +13,10 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters 'armeabi' //, 'armeabi-v7a','arm64-v8a'
+        }
     }
 
     buildTypes {
@@ -58,8 +60,9 @@ dependencies {
     implementation 'com.scwang.smart:refresh-header-classics:2.0.1'
     implementation 'com.scwang.smart:refresh-header-material:2.0.1'
     implementation 'org.javatuples:javatuples:1.2'
-    compileOnly 'org.projectlombok:lombok:1.18.20'
+    implementation 'io.github.sinaweibosdk:core:11.8.1@aar'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

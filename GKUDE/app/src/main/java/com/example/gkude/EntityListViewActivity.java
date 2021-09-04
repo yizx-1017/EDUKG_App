@@ -34,9 +34,9 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
 
     private List<EntityBean> entityList;
     private EntityCollectionAdapter mAdapter;
+    private boolean isFavorite;
+    private UserRepository userRepository;
     private RefreshLayout refreshLayout;
-    boolean isFavorite;
-    UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,24 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         initToolbar(isFavorite);
         initRecyclerView();
         initSwipeRefresh(this);
+    }
+
+    @Override
+    public void onEntitySelected(EntityBean entity) {
+        // Go to the detailed page
+        Intent intent = new Intent(this, EntityViewActivity.class);
+        intent.putExtra("entity_id", entity.getId());
+        intent.putExtra("entity_label", entity.getLabel());
+        intent.putExtra("entity_course", entity.getCourse());
+        intent.putExtra("entity_uri", entity.getUri());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        syncEntityList();
+        initRecyclerView();
     }
 
     private void initToolbar(boolean isFavorite) {
@@ -87,43 +105,37 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 Log.e("refresh swipe", "onRefresh");
-                if (isFavorite) {
-                    Result<List<EntityBean>> result = userRepository.syncFavorites();
-                    if (result.getStatus().equals(200)) {
-                        entityList = result.getData();
-                        Toast.makeText(getApplicationContext(), "同步成功！", Toast.LENGTH_SHORT).show();
-                        refreshLayout.finishRefresh(true);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "同步失败！", Toast.LENGTH_SHORT).show();
-                        refreshLayout.finishRefresh(false);
-                    }
-                } else {
-                    // sync
-                    Result<List<EntityBean>> result = userRepository.syncHistories();
-                    if (result.getStatus().equals(200)) {
-                        entityList = result.getData();
-                        Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
-                        refreshLayout.finishRefresh(true);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
-                        refreshLayout.finishRefresh(false);
-                    }
-                }
+                syncEntityList();
             }
         });
     }
 
-    @Override
-    public void onEntitySelected(EntityBean entity) {
-        if(!entity.isVisited()){
-            entity.save();
+    private void syncEntityList() {
+        if (isFavorite) {
+            entityList = userRepository.getUser().getFavorites();
+            // sync
+            Result<List<EntityBean>> result = userRepository.syncFavorites();
+            if (result.getStatus().equals(200)) {
+                entityList = result.getData();
+                Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(true);
+            } else {
+                Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(false);
+            }
+
+        } else {
+            entityList = userRepository.getUser().getHistories();
+            // sync
+            Result<List<EntityBean>> result = userRepository.syncHistories();
+            if (result.getStatus().equals(200)) {
+                entityList = result.getData();
+                Toast.makeText(getApplicationContext(), "同步成功！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(true);
+            } else {
+                Toast.makeText(getApplicationContext(), "同步失败！",Toast.LENGTH_SHORT).show();
+                refreshLayout.finishRefresh(false);
+            }
         }
-        // Go to the detailed page
-        Intent intent = new Intent(this, EntityViewActivity.class);
-        intent.putExtra("entity_id", entity.getId());
-        intent.putExtra("entity_label", entity.getLabel());
-        intent.putExtra("entity_course", entity.getCourse());
-        intent.putExtra("entity_uri", entity.getUri());
-        startActivity(intent);
     }
 }

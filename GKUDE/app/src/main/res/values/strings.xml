@@ -15,6 +15,8 @@
     <string name="title_chat">知识问答</string>
     <string name="title_user">我</string>
     <string name="query_hint">请输入…</string>
+    <string name="share_activity_title">分享到微博</string>
+    <string name="share_activity_button">一键分享</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="type_question_here">输入问题</string>
@@ -28,4 +30,6 @@
     <string name="history">历史记录</string>
     <string name="right_arrow">right_arrow</string>
     <string name="icon">icon</string>
+    <string name="submit">submit</string>
+    <string name="cancelShare">取消分享</string>
 </resources>
