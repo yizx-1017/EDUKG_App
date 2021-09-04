@@ -32,6 +32,7 @@ import  com.example.gkude.ShareActivity;
 import org.javatuples.Triplet;
 import org.w3c.dom.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,12 +78,23 @@ public class EntityViewActivity extends AppCompatActivity {
                 category = entityBean.getCategory();
                 entity_id = entityBean.getId();
                 List<PropertyBean> properties = entityBean.getPropertiesFromStore();
+                List<RelationBean> relations = entityBean.getRelationsFromStore();
+                List<ProblemBean> problems = entityBean.getProblemsFromStore();
+                if (properties == null) {
+                    properties = new ArrayList<>();
+                }
+                if (relations == null) {
+                    relations = new ArrayList<>();
+                }
+                if (problems == null) {
+                    problems = new ArrayList<>();
+                }
                 properties.removeIf(p->p.getObject().contains("http://"));
                 System.out.println("onNext!!!!! "+entityBean.getCourse());
 
-                relation_adapter = new EntityRelationAdapter(entityBean.getRelationsFromStore(), entityBean.getCourse());
+                relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
                 property_adapter = new EntityPropertyAdapter(properties);
-                problem_adpater = new ProblemAdapter(entityBean.getProblemsFromStore());
+                problem_adpater = new ProblemAdapter(problems);
                 System.out.println("onNext!" + entityBean.getProblems());
                 initView();
                 initRecyclerView();
@@ -143,9 +155,11 @@ public class EntityViewActivity extends AppCompatActivity {
                     Log.i("fav button", fav_bean.getCategory());
                     Result<String> result = userRepository.addFavorite(fav_bean);
                     fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+                    Log.i("fav button", result.getStatus().toString());
                     if (result.getStatus().equals(200)){
                         Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_LONG).show();
                     } else {
+                        Log.i("fav button", result.getStatus().toString());
                         Toast.makeText(getApplicationContext(), "收藏成功，同步失败", Toast.LENGTH_LONG).show();
                     }
 
