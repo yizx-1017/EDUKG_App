@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.zip.Inflater;
 
 public class EntityListViewActivity extends AppCompatActivity implements EntityCollectionAdapter.OnEntitySelectedListener {
 
@@ -48,6 +51,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         }
         initToolbar(isFavorite);
         initRecyclerView();
+        initSwipeRefresh(this);
     }
 
     private void initToolbar(boolean isFavorite) {
@@ -74,8 +78,11 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         mAdapter = new EntityCollectionAdapter(entityList, this);
         recyclerView.setAdapter(mAdapter);
     }
-    private void initSwipeRefresh(View rootView) {
-        refreshLayout = rootView.findViewById(R.id.swipe_refresh);
+    private void initSwipeRefresh(EntityListViewActivity rootView) {
+        Log.i("EntityListView","initSwipe");
+        refreshLayout = rootView.findViewById(R.id.swipe_refresh2);
+        refreshLayout.setRefreshHeader(new ClassicsHeader(this));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(this));
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
