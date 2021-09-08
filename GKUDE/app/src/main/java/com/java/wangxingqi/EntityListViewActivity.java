@@ -25,9 +25,10 @@ import java.util.Objects;
 
 public class EntityListViewActivity extends AppCompatActivity implements EntityCollectionAdapter.OnEntitySelectedListener {
 
+    private final String TAG = "EntityListView";
     private List<EntityBean> entityList;
     private EntityCollectionAdapter mAdapter;
-    private boolean isFavorite;
+    private Boolean isFavorite;
     private UserRepository userRepository;
     private RefreshLayout refreshLayout;
 
@@ -37,6 +38,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         setContentView(R.layout.entity_list_view);
         isFavorite = getIntent().getBooleanExtra("isFavorite", true);
         userRepository = UserRepository.getInstance(new UserDataSource());
+        Log.i(TAG, isFavorite.toString());
         if (isFavorite) {
             entityList = userRepository.getUser().getFavorites();
         } else {
