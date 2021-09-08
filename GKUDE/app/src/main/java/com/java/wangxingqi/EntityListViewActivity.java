@@ -39,7 +39,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         isFavorite = getIntent().getBooleanExtra("isFavorite", true);
         userRepository = UserRepository.getInstance(new UserDataSource());
         Log.i(TAG, isFavorite.toString());
-        if (isFavorite) {
+        if (isFavorite.equals(true)) {
             entityList = userRepository.getUser().getFavorites();
         } else {
             entityList = userRepository.getUser().getHistories();

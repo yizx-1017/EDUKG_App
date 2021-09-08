@@ -59,6 +59,15 @@ public class UserRepository {
     public Result<List<EntityBean>> syncFavorites() {
         Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/favorite/get");
         if (result.getData()!=null) {
+            // 先找本地缓存
+            result.getData().replaceAll(entityBean -> {
+                List<EntityBean> list = EntityBean.find(EntityBean.class, "uri = ?", entityBean.getUri());
+                if (list.isEmpty()) {
+                    return entityBean;
+                } else {
+                    return list.get(0);
+                }
+            });
             // 本地取并集
             user.getFavorites().removeAll(result.getData());
             user.getFavorites().addAll(result.getData());
@@ -86,6 +95,15 @@ public class UserRepository {
     public Result<List<EntityBean>> syncHistories() {
         Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/history/get");
         if (result.getData()!=null) {
+            // 先找本地缓存
+            result.getData().replaceAll(entityBean -> {
+                List<EntityBean> list = EntityBean.find(EntityBean.class, "uri = ?", entityBean.getUri());
+                if (list.isEmpty()) {
+                    return entityBean;
+                } else {
+                    return list.get(0);
+                }
+            });
             // 本地取并集
             user.getHistories().removeAll(result.getData());
             user.getHistories().addAll(result.getData());
@@ -96,7 +114,7 @@ public class UserRepository {
                 dataSource.changeEntityList(e, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
             }
         }
-        result.setData(user.getFavorites());
+        result.setData(user.getHistories());
         return result;
     }
 
