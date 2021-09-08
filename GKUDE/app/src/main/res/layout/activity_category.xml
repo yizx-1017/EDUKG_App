@@ -42,7 +42,7 @@
 
     </LinearLayout>
 
-    <com.example.gkude.ui.home.DragGridLayout
+    <com.java.wangxingqi.ui.home.DragGridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/arr_grid1"
@@ -52,7 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         >
 
-    </com.example.gkude.ui.home.DragGridLayout>
+    </com.java.wangxingqi.ui.home.DragGridLayout>
 
 
     <LinearLayout
@@ -86,7 +86,7 @@
             />
     </LinearLayout>
 
-    <com.example.gkude.ui.home.DragGridLayout
+    <com.java.wangxingqi.ui.home.DragGridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/arr_grid2"
@@ -95,6 +95,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
     >
-    </com.example.gkude.ui.home.DragGridLayout>
+    </com.java.wangxingqi.ui.home.DragGridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
