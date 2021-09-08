@@ -15,6 +15,8 @@ public class UserRepository {
 
     private final UserDataSource dataSource;
 
+    private final String prefix = "http://172.20.10.8:8080/";
+
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
     private User user = null;
@@ -32,7 +34,7 @@ public class UserRepository {
 
     public Result<User> login(String username, String password) {
         // handle login
-        Result<String> result = dataSource.login(username, password, "http://10.0.2.2:8080/api/login");
+        Result<String> result = dataSource.login(username, password, prefix+"api/login");
         if (result.getStatus().equals(200)) {
             User user = new User();
             user.setUserToken(result.getData());
@@ -53,11 +55,11 @@ public class UserRepository {
     }
 
     public Result<String> updatePassword(String oldPassword, String newPassword) {
-        return dataSource.updatePassword(user.getUserToken(), oldPassword, newPassword, "http://10.0.2.2:8080/api/update/password");
+        return dataSource.updatePassword(user.getUserToken(), oldPassword, newPassword, prefix+"api/update/password");
     }
 
     public Result<List<EntityBean>> syncFavorites() {
-        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/favorite/get");
+        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), prefix+"api/favorite/get");
         if (result.getData()!=null) {
             // 本地取并集
             user.getFavorites().removeAll(result.getData());
@@ -66,7 +68,7 @@ public class UserRepository {
             List<EntityBean> upload = new ArrayList<>(user.getFavorites());
             upload.removeAll(result.getData());
             for (EntityBean e : upload) {
-                dataSource.changeEntityList(e, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
+                dataSource.changeEntityList(e, user.getUserToken(), prefix+"api/favorite/add");
             }
         }
         result.setData(user.getFavorites());
@@ -75,16 +77,16 @@ public class UserRepository {
 
     public Result<String> addFavorite(EntityBean entityBean) {
         user.getFavorites().add(entityBean);
-        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), prefix+"api/favorite/add");
     }
 
     public Result<String> cancelFavorite(EntityBean entityBean) {
         user.getFavorites().remove(entityBean);
-        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/cancel");
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), prefix+"api/favorite/cancel");
     }
 
     public Result<List<EntityBean>> syncHistories() {
-        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/history/get");
+        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), prefix+"api/history/get");
         if (result.getData()!=null) {
             // 本地取并集
             user.getHistories().removeAll(result.getData());
@@ -93,7 +95,7 @@ public class UserRepository {
             List<EntityBean> upload = new ArrayList<>(user.getHistories());
             upload.removeAll(result.getData());
             for (EntityBean e : upload) {
-                dataSource.changeEntityList(e, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
+                dataSource.changeEntityList(e, user.getUserToken(), prefix+"api/history/add");
             }
         }
         result.setData(user.getFavorites());
@@ -102,7 +104,7 @@ public class UserRepository {
 
     public Result<String> addHistory(EntityBean entityBean) {
         user.getHistories().add(entityBean);
-        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), prefix+"api/history/add");
     }
 
     // private constructor : singleton access

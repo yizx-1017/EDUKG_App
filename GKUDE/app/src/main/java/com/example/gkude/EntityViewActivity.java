@@ -61,8 +61,6 @@ public class EntityViewActivity extends AppCompatActivity {
         }
         initObserver();
         initToolbar();
-        initView();
-        initRecyclerView();
     }
 
     private void initObserver() {
@@ -189,6 +187,11 @@ public class EntityViewActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
+        FloatingActionButton share = findViewById(R.id.fab_share);
+        FloatingActionButton fav = findViewById(R.id.fab_fav);
+        share.setVisibility(View.VISIBLE);
+        fav.setVisibility(View.VISIBLE);
 
         TextView mLabel = findViewById(R.id.entity_label);
         TextView mInfo = findViewById(R.id.entity_description);

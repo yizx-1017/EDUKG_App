@@ -85,7 +85,6 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
-        // TODO(zhiyuxie): add sort in manager
         Comparator comparator = null;
         if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
         else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));

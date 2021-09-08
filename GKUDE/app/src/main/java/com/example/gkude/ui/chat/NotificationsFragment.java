@@ -62,7 +62,7 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 String courseCN = adapterView.getItemAtPosition(position).toString();
-                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
                 switch (courseCN){
                     case "语文":
                         course = "chinese";
