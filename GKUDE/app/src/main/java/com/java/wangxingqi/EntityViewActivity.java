@@ -81,7 +81,7 @@ public class EntityViewActivity extends AppCompatActivity {
                 if (problems == null) {
                     problems = new ArrayList<>();
                 }
-                properties.removeIf(p->p.getObject().contains("http://"));
+                properties.removeIf(p->(p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
                 System.out.println("onNext!!!!! "+entityBean.getCourse());
 
                 relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
