@@ -3,6 +3,7 @@ package com.example.gkude;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gkude.adapter.EntityCollectionAdapter;
 import com.example.gkude.bean.EntityBean;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.ClassicsHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -27,6 +32,9 @@ public class EntitySearchedActivity extends AppCompatActivity implements
 
     private List<EntityBean> entityList = new LinkedList<>();
     private EntityCollectionAdapter mAdapter;
+    private RefreshLayout refreshLayout;
+    private Comparator comparator;
+    private Observer<List<EntityBean>> observer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +43,13 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         keyword = getIntent().getStringExtra("keyword");
         course = getIntent().getStringExtra("course");
         sort = getIntent().getStringExtra("sort");
+        comparator = null;
+        if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
+        else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
         initToolbar();
         initRecyclerView();
         initObserver();
+        initSwipeRefresh();
     }
 
     private void initToolbar() {
@@ -54,7 +66,6 @@ public class EntitySearchedActivity extends AppCompatActivity implements
     }
 
     private void initRecyclerView() {
-
         // Set layout manager
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -66,8 +77,21 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         recyclerView.setAdapter(mAdapter);
     }
 
+    private void initSwipeRefresh() {
+        refreshLayout = findViewById(R.id.swipe_refresh2);
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getApplicationContext()));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getApplicationContext()));
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                Log.e("sssss", "onRefresh: ");
+                Manager.searchEntity(course, keyword, comparator, observer);
+            }
+        });
+    }
+
     private void initObserver() {
-        Observer<List<EntityBean>> observer = new Observer<List<EntityBean>>() {
+        observer = new Observer<List<EntityBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
             }
@@ -85,9 +109,6 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
-        Comparator comparator = null;
-        if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
-        else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
         Manager.searchEntity(course, keyword, comparator, observer);
     }
 
