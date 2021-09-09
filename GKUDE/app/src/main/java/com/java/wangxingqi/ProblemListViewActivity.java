@@ -31,12 +31,19 @@ public class ProblemListViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.entity_list_view);
+        setContentView(R.layout.problem_list_view);
         userRepository = UserRepository.getInstance(new UserDataSource());
         problemList = userRepository.getUser().getWrongProblems();
         initToolbar();
         initRecyclerView();
         initSwipeRefresh(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        syncEntityList();
+        initRecyclerView();
     }
 
     private void initToolbar() {
@@ -66,6 +73,7 @@ public class ProblemListViewActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             Log.e("refresh swipe", "onRefresh");
             syncEntityList();
+            // initRecyclerView();
         });
     }
 

@@ -40,6 +40,7 @@
         <activity android:name="com.java.wangxingqi.ProblemViewActivity" android:exported="false"/>
         <activity android:name="com.java.wangxingqi.EntityListViewActivity" android:exported="false"/>
         <activity android:name="com.java.wangxingqi.ShareActivity" android:exported="false"/>
+        <activity android:name="com.java.wangxingqi.ProblemListViewActivity" android:exported="false"/>
 
         <meta-data
             android:name="DATABASE"

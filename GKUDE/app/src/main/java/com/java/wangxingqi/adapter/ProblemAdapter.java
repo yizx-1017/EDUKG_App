@@ -63,9 +63,15 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ProblemV
                 @Override
                 public void onClick(View view) {
                     // Go to the detailed page
-                    problem.save();
+                    ProblemBean privateProblem = problem;
+                    List<ProblemBean> list = ProblemBean.find(ProblemBean.class, "q_id = ?", privateProblem.getQID().toString());
+                    if (list.isEmpty()) {
+                        privateProblem.save();
+                    } else {
+                        privateProblem = list.get(0);
+                    }
                     Intent intent = new Intent(view.getContext(), ProblemViewActivity.class);
-                    intent.putExtra("problem_id", problem.getId());
+                    intent.putExtra("problem_id", privateProblem.getId());
                     view.getContext().startActivity(intent);
                 }
             });

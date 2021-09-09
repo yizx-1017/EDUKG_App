@@ -1,5 +1,7 @@
 package com.java.wangxingqi.server;
 
+import android.util.Log;
+
 import com.java.wangxingqi.bean.EntityBean;
 import com.java.wangxingqi.bean.ProblemBean;
 
@@ -137,7 +139,7 @@ public class UserRepository {
         if (result.getData()!=null) {
             // 先找本地缓存
             result.getData().replaceAll(problemBean -> {
-                List<ProblemBean> list = ProblemBean.find(ProblemBean.class, "qid = ?", problemBean.getQID().toString());
+                List<ProblemBean> list = ProblemBean.find(ProblemBean.class, "q_id = ?", problemBean.getQID().toString());
                 if (list.isEmpty()) {
                     return problemBean;
                 } else {
@@ -155,6 +157,7 @@ public class UserRepository {
             }
         }
         result.setData(user.getWrongProblems());
+        Log.i("User Repository", result.getData().toString());
         return result;
     }
 

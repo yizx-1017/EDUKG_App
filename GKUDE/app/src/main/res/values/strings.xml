@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">GKUDE</string>
-    <!-- Strings related to login -->
     <string name="prompt_email">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -17,8 +16,6 @@
     <string name="query_hint">请输入…</string>
     <string name="share_activity_title">分享到微博</string>
     <string name="share_activity_button">一键分享</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="type_question_here">输入问题</string>
     <string name="send_question">发送</string>
     <string name="dashboard_input_text">输入待识别文本</string>
