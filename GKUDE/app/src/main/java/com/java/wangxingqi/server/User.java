@@ -1,6 +1,7 @@
 package com.java.wangxingqi.server;
 
 import com.java.wangxingqi.bean.EntityBean;
+import com.java.wangxingqi.bean.ProblemBean;
 
 import java.util.List;
 
@@ -23,5 +24,6 @@ public class User {
 
     private List<EntityBean> favorites;
     private List<EntityBean> histories;
+    private List<ProblemBean> wrongProblems;
 
 }

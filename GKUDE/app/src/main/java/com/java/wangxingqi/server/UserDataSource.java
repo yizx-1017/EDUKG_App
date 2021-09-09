@@ -3,6 +3,7 @@ package com.java.wangxingqi.server;
 import com.java.wangxingqi.bean.EntityBean;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.java.wangxingqi.bean.ProblemBean;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -168,4 +169,70 @@ public class UserDataSource {
             return new Result<>(400, "bad request", null);
     }
 
+    public Result<List<ProblemBean>> getProblemList(String userToken, String url) {
+        Result<List<ProblemBean>> result = new Result<>();
+        Thread thread = new Thread(() -> {
+            Request request = new Request.Builder().url(url).addHeader("token", userToken).get().build();
+            try {
+                Response response = client.newCall(request).execute();
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<Result<List<ProblemBean>>>() {
+                }.getType();
+                Result<List<ProblemBean>> privateResult = gson.fromJson(json, type);
+                result.setStatus(privateResult.getStatus());
+                result.setMsg(privateResult.getMsg());
+                result.setData(privateResult.getData());
+            } catch (IOException e) {
+                result.setStatus(400);
+                e.printStackTrace();
+                System.out.println("The wrong message is>>>");
+                System.out.println(e.getMessage());
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.getStatus().equals(200))
+            return result;
+        else
+            return new Result<>(400, "bad request", null);
+    }
+
+    public Result<String> changeProblemList(ProblemBean problemBean, String userToken, String url) {
+        Result<String> result = new Result<>();
+        Thread thread = new Thread(() -> {
+            RequestBody formBody = new FormBody.Builder().add("qID", problemBean.getQID().toString())
+                    .add("qBody", problemBean.getQBody())
+                    .add("qAnswer", problemBean.getQAnswer()).build();
+            Request request = new Request.Builder().addHeader("token", userToken).url(url).post(formBody).build();
+            try {
+                Response response = client.newCall(request).execute();
+                String json = Objects.requireNonNull(response.body()).string();
+                Type type = new TypeToken<Result<String>>(){}.getType();
+                Result<String> privateResult = gson.fromJson(json, type);
+                result.setStatus(privateResult.getStatus());
+                result.setMsg(privateResult.getMsg());
+                result.setData(privateResult.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
+                result.setStatus(400);
+                e.printStackTrace();
+                System.out.println("The wrong message is>>>");
+                System.out.println(e.getMessage());
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.getStatus().equals(200)||result.getStatus().equals(202))
+            return result;
+        else
+            return new Result<>(400, "bad request", null);
+    }
 }

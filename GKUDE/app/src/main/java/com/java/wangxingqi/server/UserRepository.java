@@ -1,6 +1,7 @@
 package com.java.wangxingqi.server;
 
 import com.java.wangxingqi.bean.EntityBean;
+import com.java.wangxingqi.bean.ProblemBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ public class UserRepository {
     private static volatile UserRepository instance;
 
     private final UserDataSource dataSource;
+
+    private final String urlPrefix = "http://10.0.2.2:8080";
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
@@ -32,13 +35,14 @@ public class UserRepository {
 
     public Result<User> login(String username, String password) {
         // handle login
-        Result<String> result = dataSource.login(username, password, "http://10.0.2.2:8080/api/login");
+        Result<String> result = dataSource.login(username, password, urlPrefix + "/api/login");
         if (result.getStatus().equals(200)) {
             User user = new User();
             user.setUserToken(result.getData());
             user.setUsername(username);
             user.setFavorites(new ArrayList<>());
             user.setHistories(new ArrayList<>());
+            user.setWrongProblems(new ArrayList<>());
             setLoggedInUser(user);
         }
         return new Result<>(result.getStatus(), result.getMsg(), user);
@@ -53,11 +57,11 @@ public class UserRepository {
     }
 
     public Result<String> updatePassword(String oldPassword, String newPassword) {
-        return dataSource.updatePassword(user.getUserToken(), oldPassword, newPassword, "http://10.0.2.2:8080/api/update/password");
+        return dataSource.updatePassword(user.getUserToken(), oldPassword, newPassword, urlPrefix + "/api/update/password");
     }
 
     public Result<List<EntityBean>> syncFavorites() {
-        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/favorite/get");
+        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), urlPrefix + "/api/favorite/get");
         if (result.getData()!=null) {
             // 先找本地缓存
             result.getData().replaceAll(entityBean -> {
@@ -75,7 +79,7 @@ public class UserRepository {
             List<EntityBean> upload = new ArrayList<>(user.getFavorites());
             upload.removeAll(result.getData());
             for (EntityBean e : upload) {
-                dataSource.changeEntityList(e, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
+                dataSource.changeEntityList(e, user.getUserToken(), urlPrefix + "/api/favorite/add");
             }
         }
         result.setData(user.getFavorites());
@@ -84,16 +88,16 @@ public class UserRepository {
 
     public Result<String> addFavorite(EntityBean entityBean) {
         user.getFavorites().add(entityBean);
-        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/add");
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), urlPrefix + "/api/favorite/add");
     }
 
     public Result<String> cancelFavorite(EntityBean entityBean) {
         user.getFavorites().remove(entityBean);
-        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/favorite/cancel");
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), urlPrefix + "/api/favorite/cancel");
     }
 
     public Result<List<EntityBean>> syncHistories() {
-        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), "http://10.0.2.2:8080/api/history/get");
+        Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), urlPrefix + "/api/history/get");
         if (result.getData()!=null) {
             // 先找本地缓存
             result.getData().replaceAll(entityBean -> {
@@ -111,7 +115,7 @@ public class UserRepository {
             List<EntityBean> upload = new ArrayList<>(user.getHistories());
             upload.removeAll(result.getData());
             for (EntityBean e : upload) {
-                dataSource.changeEntityList(e, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
+                dataSource.changeEntityList(e, user.getUserToken(), urlPrefix + "/api/history/add");
             }
         }
         result.setData(user.getHistories());
@@ -120,7 +124,38 @@ public class UserRepository {
 
     public Result<String> addHistory(EntityBean entityBean) {
         user.getHistories().add(entityBean);
-        return dataSource.changeEntityList(entityBean, user.getUserToken(), "http://10.0.2.2:8080/api/history/add");
+        return dataSource.changeEntityList(entityBean, user.getUserToken(), urlPrefix + "/api/history/add");
+    }
+
+    public Result<String> addWrongProblem(ProblemBean problemBean) {
+        user.getWrongProblems().add(problemBean);
+        return dataSource.changeProblemList(problemBean, user.getUserToken(), urlPrefix + "/api/wrongProblem/add");
+    }
+
+    public Result<List<ProblemBean>> syncWrongProblems() {
+        Result<List<ProblemBean>> result = dataSource.getProblemList(user.getUserToken(), urlPrefix + "/api/wrongProblem/get");
+        if (result.getData()!=null) {
+            // 先找本地缓存
+            result.getData().replaceAll(problemBean -> {
+                List<ProblemBean> list = ProblemBean.find(ProblemBean.class, "qid = ?", problemBean.getQID().toString());
+                if (list.isEmpty()) {
+                    return problemBean;
+                } else {
+                    return list.get(0);
+                }
+            });
+            // 本地取并集
+            user.getWrongProblems().removeAll(result.getData());
+            user.getWrongProblems().addAll(result.getData());
+            // 上传差集
+            List<ProblemBean> upload = new ArrayList<>(user.getWrongProblems());
+            upload.removeAll(result.getData());
+            for (ProblemBean e : upload) {
+                dataSource.changeProblemList(e, user.getUserToken(), urlPrefix + "/api/wrongProblem/add");
+            }
+        }
+        result.setData(user.getWrongProblems());
+        return result;
     }
 
     // private constructor : singleton access

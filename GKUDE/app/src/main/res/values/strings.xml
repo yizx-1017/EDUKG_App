@@ -32,4 +32,8 @@
     <string name="icon">icon</string>
     <string name="submit">submit</string>
     <string name="cancelShare">取消分享</string>
+    <string name="myFavorite">我的收藏</string>
+    <string name="myHistory">历史记录</string>
+    <string name="wrongProblem">错题本</string>
+    <string name="logout">退出登录</string>
 </resources>
