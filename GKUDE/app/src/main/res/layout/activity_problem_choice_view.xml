@@ -28,14 +28,37 @@
             android:text="以下选项正确的是..."
             android:textColor="@android:color/primary_text_light"/>
 
-        <EditText
-            android:id="@+id/user_answer"
+        <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:hint="请输入答案"
-            android:selectAllOnFocus="true"/>
+            android:layout_marginEnd="24dp">
+
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="选项A" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="选项B" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="选项C" />
+
+            <RadioButton
+                android:id="@+id/radioButton4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="选项D" />
+        </RadioGroup>
 
         <Button
             android:id="@+id/submit_answer"

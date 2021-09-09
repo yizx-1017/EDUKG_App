@@ -6,7 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -85,26 +88,67 @@ public class ProblemViewActivity extends AppCompatActivity {
 
     private void initChoiceView() {
         TextView problem = findViewById(R.id.problem_text);
-        EditText user_answer = findViewById(R.id.user_answer);
-        Button sumit_answer = findViewById(R.id.submit_answer);
+        RadioButton radioButton1 = findViewById(R.id.radioButton1);
+        RadioButton radioButton2 = findViewById(R.id.radioButton2);
+        RadioButton radioButton3 = findViewById(R.id.radioButton3);
+        RadioButton radioButton4 = findViewById(R.id.radioButton4);
+        Button submit_answer = findViewById(R.id.submit_answer);
         TextView answer_title = findViewById(R.id.answer_title);
         TextView problem_answer = findViewById(R.id.problem_answer);
         answer_title.setVisibility(View.INVISIBLE);
         problem_answer.setVisibility(View.INVISIBLE);
-        // 处理字符串
-        int A = qBody.indexOf("A.");
-        int B = qBody.indexOf("B.");
-        int C = qBody.indexOf("C.");
-        int D = qBody.indexOf("D.");
-        String tmp = qBody.substring(0, A) + "\n" + qBody.substring(A,B) + "\n" + qBody.substring(B,C) + '\n' + qBody.substring(C,D) + "\n" + qBody.substring(D);
-        problem.setText(tmp);
+        try {
+            // 处理字符串
+            int A = qBody.indexOf("A.");
+            int B = qBody.indexOf("B.");
+            int C = qBody.indexOf("C.");
+            int D = qBody.indexOf("D.");
+            String tmp = qBody.substring(0, A) + "\n" + qBody.substring(A, B) + "\n" + qBody.substring(B, C) + '\n' + qBody.substring(C, D) + "\n" + qBody.substring(D);
+            problem.setText(qBody.substring(0, A));
+            radioButton1.setText(qBody.substring(A, B));
+            radioButton2.setText(qBody.substring(B, C));
+            radioButton3.setText(qBody.substring(C, D));
+            radioButton4.setText(qBody.substring(D));
+        } catch(Exception e) {
+            // if problem occurs, change to normal question view.
+            setContentView(R.layout.activity_problem_view);
+            initNormalView();
+        };
 
-        sumit_answer.setOnClickListener(view -> {
-            String content = user_answer.getText().toString();
-            System.out.println("user sumit answer:" + content);
+        submit_answer.setOnClickListener(view -> {
+            RadioGroup radioGroup = findViewById(R.id.radioGroup);
+            int user_answer = radioGroup.getCheckedRadioButtonId();
+            RadioButton user_selected = findViewById(user_answer);
+            RadioButton right_button = findViewById(R.id.radioButton1);
+            user_selected.setTextColor(getResources().getColor(R.color.wrong_choice));
+            if(qAnswer.equals("A")) {
+                right_button = findViewById(R.id.radioButton1);
+            }
+            else if(qAnswer.equals("B")) {
+                right_button = findViewById(R.id.radioButton2);
+            }
+            else if(qAnswer.equals("C")) {
+                right_button = findViewById(R.id.radioButton3);
+            }
+            else if(qAnswer.equals("D")) {
+                right_button = findViewById(R.id.radioButton4);
+            }
+            right_button.setTextColor(getResources().getColor(R.color.right_choice));
+            if(user_selected.getId() == right_button.getId()) {
+                // 答对了
+                Toast.makeText(ProblemViewActivity.this, "回答正确", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                // 答错了
+                Toast.makeText(ProblemViewActivity.this, "回答错误", Toast.LENGTH_SHORT).show();
+            }
             answer_title.setVisibility(View.VISIBLE);
             problem_answer.setVisibility(View.VISIBLE);
             problem_answer.setText(qAnswer);
+            findViewById(R.id.radioButton1).setEnabled(false);
+            findViewById(R.id.radioButton2).setEnabled(false);
+            findViewById(R.id.radioButton3).setEnabled(false);
+            findViewById(R.id.radioButton4).setEnabled(false);
         });
 
     }

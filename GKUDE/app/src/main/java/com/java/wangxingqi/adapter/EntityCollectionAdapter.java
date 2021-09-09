@@ -78,7 +78,7 @@ public class EntityCollectionAdapter extends RecyclerView.Adapter<EntityCollecti
             List<EntityBean> list = EntityBean.find(EntityBean.class, "uri = ?", entity.getUri());
             if(!list.isEmpty()){
                 System.out.println("isvisited.");
-                mLabel.setTextColor(itemView.getResources().getColor(R.color.clickedNews2));
+                mLabel.setTextColor(itemView.getResources().getColor(R.color.clickedEntity));
             }
 
             // Click listener

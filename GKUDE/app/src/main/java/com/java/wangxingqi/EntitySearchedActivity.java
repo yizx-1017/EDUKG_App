@@ -85,6 +85,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onRefresh(RefreshLayout refreshlayout) {
                 Log.e("sssss", "onRefresh: ");
                 Manager.searchEntity(course, keyword, comparator, observer);
+                refreshLayout.finishRefresh(true);
             }
         });
     }
