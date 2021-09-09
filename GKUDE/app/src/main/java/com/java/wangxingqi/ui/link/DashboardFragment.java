@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.java.wangxingqi.EntityViewActivity;
 import com.java.wangxingqi.Manager;
 import com.java.wangxingqi.R;
+import com.java.wangxingqi.bean.EntityBean;
 import com.java.wangxingqi.bean.RecognitionBean;
 
 import java.util.ArrayList;
@@ -39,11 +40,13 @@ import lombok.Setter;
 public class DashboardFragment extends Fragment {
     private static final String TAG = "DashboardFragment";
     private Observer<List<RecognitionBean>> observer = null;
+    private Observer<List<EntityBean>> entity_observer = null;
     private List<RecognizeString> recognizeStringList;
     private EditText editText;
     private TextView textView;
     private String course = "chinese";
     private String inputContent;
+    private String category = new String();
 
     @Nullable
     @Override
@@ -54,6 +57,7 @@ public class DashboardFragment extends Fragment {
         Button button = root.findViewById(R.id.dashboard_button);
         Spinner courseSpinner = root.findViewById(R.id.course_spinner);
         initObserver();
+        initEntityObserver();
         courseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -104,6 +108,34 @@ public class DashboardFragment extends Fragment {
         });
         return root;
     }
+    private void initEntityObserver() {
+        entity_observer = new Observer<List<EntityBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(List<EntityBean> entities) {
+                Log.i("RelationObserver", "onNext");
+                if (entities.isEmpty()) {
+                    Log.i("onNext","emptyList");
+                    category = null;
+                } else {
+                    Log.i("onNext","nonemptyList");
+                    category = entities.get(0).getCategory();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+
+    }
 
     private void initObserver() {
         observer = new Observer<List<RecognitionBean>>() {
@@ -139,19 +171,25 @@ public class DashboardFragment extends Fragment {
                 for (RecognizeString r: recognizeStringList) {
                     if (r.getIsEntity()) {
                         SpannableString recognizeSpannable = new SpannableString(r.getContent());
-                        ClickableSpan recognizeSpan = new ClickableSpan() {
-                            @Override
-                            public void onClick(@NonNull View view) {
-                                Log.e(TAG,"Item clicked!");
-                                Intent intent = new Intent(getActivity(), EntityViewActivity.class);
-                                intent.putExtra("entity_label", r.getContent());
-                                intent.putExtra("entity_course", course);
-                                intent.putExtra("entity_uri", r.getUri());
-                                startActivity(intent);
-                            }
-                        };
-                        recognizeSpannable.setSpan(recognizeSpan, 0, r.getContent().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                        textView.append(recognizeSpannable);
+                        Manager.searchEntity(course, r.getContent(), null, true, entity_observer);
+                        if (category == null) {
+                            textView.append(r.getContent());
+                        } else {
+                            ClickableSpan recognizeSpan = new ClickableSpan() {
+                                @Override
+                                public void onClick(@NonNull View view) {
+                                    Log.e(TAG,"Item clicked!");
+                                    Intent intent = new Intent(getActivity(), EntityViewActivity.class);
+                                    intent.putExtra("entity_label", r.getContent());
+                                    intent.putExtra("entity_course", course);
+                                    intent.putExtra("entity_category", category);
+                                    intent.putExtra("entity_uri", r.getUri());
+                                    startActivity(intent);
+                                }
+                            };
+                            recognizeSpannable.setSpan(recognizeSpan, 0, r.getContent().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                            textView.append(recognizeSpannable);
+                        }
                     } else {
                         textView.append(r.getContent());
                     }
