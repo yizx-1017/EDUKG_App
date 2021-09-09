@@ -1,6 +1,9 @@
 package com.java.wangxingqi;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -56,6 +59,7 @@ public class EntityViewActivity extends AppCompatActivity {
     }
 
     private void initObserver() {
+        // 添加历史记录
         Observer<EntityBean> observer = new Observer<EntityBean>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -79,8 +83,8 @@ public class EntityViewActivity extends AppCompatActivity {
                 if (problems == null) {
                     problems = new ArrayList<>();
                 }
-                properties.removeIf(p->(p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
-                System.out.println("onNext!!!!! "+entityBean.getCourse());
+                properties.removeIf(p -> (p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
+                System.out.println("onNext!!!!! " + entityBean.getCourse());
 
                 relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
                 property_adapter = new EntityPropertyAdapter(properties);
@@ -101,8 +105,12 @@ public class EntityViewActivity extends AppCompatActivity {
             }
         };
         System.out.println("in EntityViewActivity.java, observer, prepare to getEntityInfo");
-        if(entity_id != -1)
+        if(entity_id != -1) {
+            if (EntityBean.findById(EntityBean.class, entity_id) == null) {
+                EntityViewActivity.this.finish();
+            }
             Manager.getEntityInfo(EntityBean.findById(EntityBean.class, entity_id), observer);
+        }
         else {
             EntityBean tmp_bean = new EntityBean();
             tmp_bean.setUri(uri);

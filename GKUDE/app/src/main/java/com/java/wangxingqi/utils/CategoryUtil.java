@@ -11,7 +11,7 @@ public class CategoryUtil {
             case "英语":
                 return new Pair("english", "语");
             case "数学":
-                return new Pair("math", "数");
+                return new Pair("math", "微积分");
             case "物理":
                 return new Pair("physics", "力");
             case "化学":

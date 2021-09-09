@@ -113,7 +113,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.i(TAG,"Complete");
             }
         };
-        Manager.searchEntity(p.first, p.second, null,observer);
+        Manager.searchEntity(p.first, p.second, null,false, observer);
     }
 
     private void initSwipeRefresh(View rootView) {
@@ -126,7 +126,7 @@ public class EntityCollectionFragment extends Fragment implements EntityCollecti
                 Log.e(TAG, "onRefresh: ");
                 // This method performs the actual data-refresh operation.
                 // The method calls setRefreshing(false) when it's finished.
-                Manager.searchEntity(p.first, p.second, null,observer);
+                Manager.searchEntity(p.first, p.second, null, false, observer);
             }
         });
     }
