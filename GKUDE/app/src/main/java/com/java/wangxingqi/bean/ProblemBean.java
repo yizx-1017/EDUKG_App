@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.orm.SugarRecord;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,13 @@ public class ProblemBean extends SugarRecord implements Serializable {
                 ", \"qBody\": \"" + qBody + '\"' +
                 ", \"qAnswer\": \"" + qAnswer + '\"' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        ProblemBean problemBean = (ProblemBean) o;
+        return Objects.equals(qID, problemBean.qID);
     }
 }
