@@ -84,7 +84,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 Log.e("sssss", "onRefresh: ");
-                Manager.searchEntity(course, keyword, comparator, observer);
+                Manager.searchEntity(course, keyword, comparator, false, observer);
                 refreshLayout.finishRefresh(true);
             }
         });
@@ -109,7 +109,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
-        Manager.searchEntity(course, keyword, comparator, observer);
+        Manager.searchEntity(course, keyword, comparator, false, observer);
     }
 
     @Override
