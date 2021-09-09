@@ -17,7 +17,7 @@
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="654321"
+        android:label="TrivialEdu"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GKUDE"
@@ -25,8 +25,7 @@
 
         <activity
             android:name="com.java.wangxingqi.ui.login.LoginActivity"
-            android:exported="true"
-            android:label="123456">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
