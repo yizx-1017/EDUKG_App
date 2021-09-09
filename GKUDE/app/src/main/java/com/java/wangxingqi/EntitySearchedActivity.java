@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,6 +37,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
     private RefreshLayout refreshLayout;
     private Comparator comparator;
     private Observer<List<EntityBean>> observer;
+    private Spinner spinner_sorter, spinner_filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +49,60 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         comparator = null;
         if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
         else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
+        initSpinner();
         initToolbar();
         initRecyclerView();
         initObserver();
         initSwipeRefresh();
+    }
+
+    private void initSpinner() {
+        spinner_filter = findViewById(R.id.spin_filter);
+        spinner_sorter = findViewById(R.id.spin_sorter);
+        ArrayAdapter<CharSequence> spinnerFilterAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.course, R.layout.my_support_simple_spinner_dropdown_item);
+        spinner_filter.setAdapter(spinnerFilterAdapter);
+        switch(course){
+            case "chinese":
+                spinner_filter.setSelection(0, true);
+                break;
+            case "math":
+                spinner_filter.setSelection(1, true);
+                break;
+            case "english":
+                spinner_filter.setSelection(2, true);
+                break;
+            case "physics":
+                spinner_filter.setSelection(3, true);
+                break;
+            case "chemistry":
+                spinner_filter.setSelection(4, true);
+                break;
+            case "biology":
+                spinner_filter.setSelection(5, true);
+                break;
+            case "history":
+                spinner_filter.setSelection(6, true);
+                break;
+            case "politics":
+                spinner_filter.setSelection(7, true);
+                break;
+            case "geo":
+                spinner_filter.setSelection(8, true);
+                break;
+        }
+        ArrayAdapter<CharSequence> spinnerSorterAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.sorters, R.layout.my_support_simple_spinner_dropdown_item);
+        spinner_sorter.setAdapter(spinnerSorterAdapter);
+        switch(sort) {
+            case "normal":
+                spinner_sorter.setSelection(0, true);
+                break;
+            case "abc":
+                spinner_sorter.setSelection(1, true);
+                break;
+            case "length":
+                spinner_sorter.setSelection(2, true);
+                break;
+        }
     }
 
     private void initToolbar() {
@@ -61,7 +115,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
                 finish();
             }
         });
-        toolbar.setTitle("实体搜索结果");
+        toolbar.setTitle("搜索结果");
     }
 
     private void initRecyclerView() {
@@ -91,13 +145,15 @@ public class EntitySearchedActivity extends AppCompatActivity implements
     }
 
     private void initObserver() {
+        System.out.println("in initObserver");
         observer = new Observer<List<EntityBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
             }
 
             @Override
-            public void onNext(List<EntityBean> entities) {
+            public void onNext(List<EntityBean> entities)
+            {
                 mAdapter.setEntityList(entities);
             }
 
@@ -109,7 +165,77 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             public void onComplete() {
             }
         };
+        System.out.println("searchEntity!!!");
         Manager.searchEntity(course, keyword, comparator, observer);
+
+        spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String courseCN = adapterView.getItemAtPosition(position).toString();
+//                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
+                switch (courseCN){
+                    case "语文":
+                        course = "chinese";
+                        break;
+                    case "数学":
+                        course = "math";
+                        break;
+                    case "英语":
+                        course = "english";
+                        break;
+                    case "物理":
+                        course = "physics";
+                        break;
+                    case "化学":
+                        course = "chemistry";
+                        break;
+                    case "生物":
+                        course = "biology";
+                        break;
+                    case "历史":
+                        course = "history";
+                        break;
+                    case "政治":
+                        course = "politics";
+                        break;
+                    case "地理":
+                        course = "geo";
+                        break;
+                }
+                // TODO(zhiyuxie): 加上不重新搜索，只重新排序的优化
+                Manager.searchEntity(course, keyword, comparator, observer);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinner_sorter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String courseCN = adapterView.getItemAtPosition(position).toString();
+//                Toast.makeText(getContext(), "选择的排序是：" + courseCN, Toast.LENGTH_SHORT).show();
+                switch (courseCN){
+                    case "默认":
+                        sort = "normal";
+                        break;
+                    case "字母序":
+                        sort = "abc";
+                        break;
+                    case "长度":
+                        sort = "length";
+                        break;
+                }
+                comparator = null;
+                if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
+                else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
+                Manager.searchEntity(course, keyword, comparator, observer);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
