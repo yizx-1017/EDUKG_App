@@ -22,5 +22,5 @@
     android:singleLine="true"
     android:textColor="#FFFFFF"
     android:layout_width="match_parent"
-    android:layout_height="?attr/dropdownListPreferredItemHeight"
+    android:layout_height="?attr/actionBarSize"
     android:ellipsize="marquee"/>
