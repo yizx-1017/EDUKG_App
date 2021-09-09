@@ -225,9 +225,9 @@ public class Fetch {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 String json = Objects.requireNonNull(response.body()).string();
-                Type type = new TypeToken<EdukgResponse<List<ProblemBean>>>() {
+                Type type = new TypeToken<EdukgResponse<List<FetchedProblem>>>() {
                 }.getType();
-                EdukgResponse<List<ProblemBean>> edukgResponse = gson.fromJson(json, type);
+                EdukgResponse<List<FetchedProblem>> edukgResponse = gson.fromJson(json, type);
                 if (edukgResponse.getCode().equals("-1")) {
                     id = fetchId();
                     url = String.format("http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName?uriName=%s&id=%s", entityBean.getLabel(), id);
@@ -237,8 +237,16 @@ public class Fetch {
                     edukgResponse = gson.fromJson(json, type);
                     System.out.println(edukgResponse);
                 }
-                entityBean.setProblems(edukgResponse.getData());
-                entityBean.setProblemStore(gson.toJson(edukgResponse.getData()));
+                List<ProblemBean> list = new ArrayList<>();
+                for (FetchedProblem p: edukgResponse.getData()) {
+                    ProblemBean problemBean = new ProblemBean();
+                    problemBean.setQID(p.getId());
+                    problemBean.setQBody(p.getQBody());
+                    problemBean.setQAnswer(p.getQAnswer());
+                    list.add(problemBean);
+                }
+                entityBean.setProblems(list);
+                entityBean.setProblemStore(gson.toJson(list));
                 System.out.println("in fetch: entityBean set problems" + entityBean.getProblems());
                 return entityBean;
             }
@@ -300,4 +308,11 @@ class EdukgResponse<T> {
 @Data
 class LinkInstanceResponse {
     private List<RecognitionBean> results;
+}
+
+@Data
+class FetchedProblem {
+    private Integer id;
+    private String qAnswer;
+    private String qBody;
 }
