@@ -13,10 +13,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 //import com.bumptech.glide.Glide;
 import com.java.wangxingqi.adapter.EntityPropertyAdapter;
 import com.java.wangxingqi.adapter.EntityRelationAdapter;
+import com.java.wangxingqi.adapter.ImageAdapter;
 import com.java.wangxingqi.adapter.ProblemAdapter;
 import com.java.wangxingqi.bean.EntityBean;
 import com.java.wangxingqi.bean.ProblemBean;
@@ -85,6 +87,19 @@ public class EntityViewActivity extends AppCompatActivity {
                 }
                 properties.removeIf(p -> (p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
                 System.out.println("onNext!!!!! " + entityBean.getCourse());
+                List<String> imgList = new ArrayList<>();
+                for (PropertyBean propertyBean : properties) {
+                    if (propertyBean.getPredicateLabel().equals("图片") && !imgList.contains(propertyBean.getObject())) {
+                        imgList.add(propertyBean.getObject());
+                    }
+                }
+                ViewPager viewPager = findViewById(R.id.viewPager);
+                if (imgList.isEmpty()) {
+                    viewPager.setVisibility(View.GONE);
+                } else {
+                    ImageAdapter image_adapter = new ImageAdapter(getApplicationContext(), imgList);
+                    viewPager.setAdapter(image_adapter);
+                }
 
                 relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
                 property_adapter = new EntityPropertyAdapter(properties);
