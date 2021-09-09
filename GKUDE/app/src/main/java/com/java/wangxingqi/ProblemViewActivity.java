@@ -14,21 +14,25 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-//import com.bumptech.glide.Glide;
 import com.java.wangxingqi.bean.ProblemBean;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.java.wangxingqi.server.UserDataSource;
+import com.java.wangxingqi.server.UserRepository;
 
 import java.util.Objects;
 
 public class ProblemViewActivity extends AppCompatActivity {
     private Long problem_id;
+    private ProblemBean problemBean;
     private String qBody, qAnswer;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userRepository = UserRepository.getInstance(new UserDataSource());
         problem_id = getIntent().getLongExtra("problem_id", -1);
-        ProblemBean problemBean = ProblemBean.findById(ProblemBean.class, problem_id);
+        problemBean = ProblemBean.findById(ProblemBean.class, problem_id);
         qBody = problemBean.getQBody();
         qAnswer = problemBean.getQAnswer();
         System.out.println("in problem page: qbody" + qBody + "qAnswer:" + qAnswer);
@@ -140,6 +144,9 @@ public class ProblemViewActivity extends AppCompatActivity {
             }
             else {
                 // 答错了
+                if (!userRepository.getUser().getWrongProblems().contains(problemBean)) {
+                    userRepository.addWrongProblem(problemBean);
+                }
                 Toast.makeText(ProblemViewActivity.this, "回答错误", Toast.LENGTH_SHORT).show();
             }
             answer_title.setVisibility(View.VISIBLE);
