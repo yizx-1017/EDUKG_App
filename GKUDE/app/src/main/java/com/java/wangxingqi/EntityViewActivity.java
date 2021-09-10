@@ -217,7 +217,9 @@ public class EntityViewActivity extends AppCompatActivity {
         initView();
         initRecyclerView();
         // 添加历史记录
-        userRepository.addHistory(entityBean);
+        if (!userRepository.getUser().getHistories().contains(entityBean)) {
+            userRepository.addHistory(entityBean);
+        }
     }
 
 }
