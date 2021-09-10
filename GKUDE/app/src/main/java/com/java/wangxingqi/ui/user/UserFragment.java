@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.java.wangxingqi.EntityListViewActivity;
 import com.java.wangxingqi.ProblemListViewActivity;
+import com.java.wangxingqi.ProblemRecommendationActivity;
 import com.java.wangxingqi.R;
 import com.java.wangxingqi.server.Result;
 import com.java.wangxingqi.server.UserDataSource;
@@ -41,6 +42,7 @@ public class UserFragment extends Fragment{
         LinearLayout favorite = root.findViewById(R.id.favorite);
         LinearLayout history = root.findViewById(R.id.history);
         LinearLayout wrongProblems = root.findViewById(R.id.wrongProblem);
+        LinearLayout recommendationProblems = root.findViewById(R.id.recommendationProblem);
         Button quit = root.findViewById(R.id.btn_quit);
         update.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -82,6 +84,10 @@ public class UserFragment extends Fragment{
         });
         wrongProblems.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), ProblemListViewActivity.class);
+            startActivity(intent);
+        });
+        recommendationProblems.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), ProblemRecommendationActivity.class);
             startActivity(intent);
         });
         quit.setOnClickListener(view -> {
