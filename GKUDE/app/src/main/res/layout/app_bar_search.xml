@@ -19,13 +19,11 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <Spinner
-                android:layout_marginLeft="30dp"
                 android:id="@+id/spin_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/course"
                 android:gravity="center"
-                android:minHeight="48dp"
                 android:spinnerMode="dialog"
                 android:textAlignment="center" />
 
