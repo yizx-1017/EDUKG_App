@@ -122,11 +122,11 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
 
             if(forward){
                 Glide.with(mImg.getContext())
-                        .load(R.drawable.ic_arrow_circle_forward_24px)
+                        .load(R.drawable.arrow_right_circle)
                         .into(mImg);
             } else{
                 Glide.with(mImg.getContext())
-                        .load(R.drawable.ic_arrow_circle_backward_24px)
+                        .load(R.drawable.arrow_left_circle)
                         .into(mImg);
             }
 

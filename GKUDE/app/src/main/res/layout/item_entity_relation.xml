@@ -40,7 +40,7 @@
                     android:layout_height="23dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_arrow_circle_forward_24px"
+                    android:src="@drawable/arrow_right_circle"
                     />
 
                 <TextView

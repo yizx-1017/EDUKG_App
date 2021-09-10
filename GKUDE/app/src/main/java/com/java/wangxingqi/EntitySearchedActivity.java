@@ -159,74 +159,74 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         System.out.println("searchEntity!!!");
         Manager.searchEntity(course, keyword, comparator, true, observer);
 
-//        spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-//                String courseCN = adapterView.getItemAtPosition(position).toString();
-////                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
-//                switch (courseCN){
-//                    case "语文":
-//                        course = "chinese";
-//                        break;
-//                    case "数学":
-//                        course = "math";
-//                        break;
-//                    case "英语":
-//                        course = "english";
-//                        break;
-//                    case "物理":
-//                        course = "physics";
-//                        break;
-//                    case "化学":
-//                        course = "chemistry";
-//                        break;
-//                    case "生物":
-//                        course = "biology";
-//                        break;
-//                    case "历史":
-//                        course = "history";
-//                        break;
-//                    case "政治":
-//                        course = "politics";
-//                        break;
-//                    case "地理":
-//                        course = "geo";
-//                        break;
-//                }
-//                // TODO(zhiyuxie): 加上不重新搜索，只重新排序的优化
-//                Manager.searchEntity(course, keyword, comparator,true, observer);
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//        spinner_sorter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-//                String courseCN = adapterView.getItemAtPosition(position).toString();
-////                Toast.makeText(getContext(), "选择的排序是：" + courseCN, Toast.LENGTH_SHORT).show();
-//                switch (courseCN){
-//                    case "默认":
-//                        sort = "normal";
-//                        break;
-//                    case "字母序":
-//                        sort = "abc";
-//                        break;
-//                    case "长度":
-//                        sort = "length";
-//                        break;
-//                }
-//                comparator = null;
-//                if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
-//                else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
-//                Manager.searchEntity(course, keyword, comparator, true,observer);
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
+        spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String courseCN = adapterView.getItemAtPosition(position).toString();
+//                Toast.makeText(getContext(), "选择的学科是：" + courseCN, Toast.LENGTH_SHORT).show();
+                switch (courseCN){
+                    case "语文":
+                        course = "chinese";
+                        break;
+                    case "数学":
+                        course = "math";
+                        break;
+                    case "英语":
+                        course = "english";
+                        break;
+                    case "物理":
+                        course = "physics";
+                        break;
+                    case "化学":
+                        course = "chemistry";
+                        break;
+                    case "生物":
+                        course = "biology";
+                        break;
+                    case "历史":
+                        course = "history";
+                        break;
+                    case "政治":
+                        course = "politics";
+                        break;
+                    case "地理":
+                        course = "geo";
+                        break;
+                }
+                // TODO(zhiyuxie): 加上不重新搜索，只重新排序的优化
+                Manager.searchEntity(course, keyword, comparator,true, observer);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinner_sorter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String courseCN = adapterView.getItemAtPosition(position).toString();
+//                Toast.makeText(getContext(), "选择的排序是：" + courseCN, Toast.LENGTH_SHORT).show();
+                switch (courseCN){
+                    case "默认":
+                        sort = "normal";
+                        break;
+                    case "字母序":
+                        sort = "abc";
+                        break;
+                    case "长度":
+                        sort = "length";
+                        break;
+                }
+                comparator = null;
+                if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
+                else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
+                Manager.searchEntity(course, keyword, comparator, true,observer);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
