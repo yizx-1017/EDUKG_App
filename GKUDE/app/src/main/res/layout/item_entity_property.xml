@@ -4,16 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:theme="@style/MaterialTheme"
-    android:layout_marginTop="10dp">
+    android:theme="@style/MaterialTheme">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginVertical="10dp"
-        android:minHeight="50dp"
-        app:cardElevation="8dp">
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        app:cardElevation="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
