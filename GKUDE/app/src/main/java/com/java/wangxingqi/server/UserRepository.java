@@ -6,7 +6,13 @@ import com.java.wangxingqi.bean.EntityBean;
 import com.java.wangxingqi.bean.ProblemBean;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -42,9 +48,9 @@ public class UserRepository {
             User user = new User();
             user.setUserToken(result.getData());
             user.setUsername(username);
-            user.setFavorites(new ArrayList<>());
-            user.setHistories(new ArrayList<>());
-            user.setWrongProblems(new ArrayList<>());
+            user.setFavorites(syncFavorites().getData());
+            user.setHistories(syncHistories().getData());
+            user.setWrongProblems(syncWrongProblems().getData());
             setLoggedInUser(user);
         }
         return new Result<>(result.getStatus(), result.getMsg(), user);
@@ -64,7 +70,7 @@ public class UserRepository {
 
     public Result<List<EntityBean>> syncFavorites() {
         Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), urlPrefix + "/api/favorite/get");
-        if (result.getData()!=null) {
+        if (result.getData() != null) {
             // 先找本地缓存
             result.getData().replaceAll(entityBean -> {
                 List<EntityBean> list = EntityBean.find(EntityBean.class, "uri = ?", entityBean.getUri());
@@ -100,7 +106,7 @@ public class UserRepository {
 
     public Result<List<EntityBean>> syncHistories() {
         Result<List<EntityBean>> result = dataSource.getEntityList(user.getUserToken(), urlPrefix + "/api/history/get");
-        if (result.getData()!=null) {
+        if (result.getData() != null) {
             // 先找本地缓存
             result.getData().replaceAll(entityBean -> {
                 List<EntityBean> list = EntityBean.find(EntityBean.class, "uri = ?", entityBean.getUri());
@@ -136,7 +142,7 @@ public class UserRepository {
 
     public Result<List<ProblemBean>> syncWrongProblems() {
         Result<List<ProblemBean>> result = dataSource.getProblemList(user.getUserToken(), urlPrefix + "/api/wrongProblem/get");
-        if (result.getData()!=null) {
+        if (result.getData() != null) {
             // 先找本地缓存
             result.getData().replaceAll(problemBean -> {
                 List<ProblemBean> list = ProblemBean.find(ProblemBean.class, "q_id = ?", problemBean.getQID().toString());
@@ -159,6 +165,30 @@ public class UserRepository {
         result.setData(user.getWrongProblems());
         Log.i("User Repository", result.getData().toString());
         return result;
+    }
+
+    public List<ProblemBean> getProblemRecommendation(int num) {
+        Map<ProblemBean, Integer> problemBeans = new HashMap<>();
+        for (EntityBean entityBean : user.getFavorites()) {
+            List<ProblemBean> list = entityBean.getProblemsFromStore();
+            for (ProblemBean p : list) {
+                problemBeans.compute(p, (k, v) -> v == null ? 2 : v + 2); // 收藏有更高的权重
+            }
+        }
+        for (EntityBean entityBean : user.getHistories()) {
+            List<ProblemBean> list = entityBean.getProblemsFromStore();
+            for (ProblemBean p : list) {
+                problemBeans.compute(p, (k, v) -> v == null ? 1 : v + 1);
+            }
+        }
+        List<Map.Entry<ProblemBean, Integer>> entryList = new LinkedList<>(problemBeans.entrySet());
+        entryList.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        entryList = entryList.subList(0, num);
+        List<ProblemBean> problemList = new ArrayList<>();
+        for (Map.Entry<ProblemBean, Integer> m: entryList) {
+            problemList.add(m.getKey());
+        }
+        return problemList;
     }
 
     // private constructor : singleton access
