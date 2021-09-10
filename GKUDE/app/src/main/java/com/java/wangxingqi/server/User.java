@@ -4,6 +4,7 @@ import com.java.wangxingqi.bean.EntityBean;
 import com.java.wangxingqi.bean.ProblemBean;
 
 import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +26,6 @@ public class User {
     private List<EntityBean> favorites;
     private List<EntityBean> histories;
     private List<ProblemBean> wrongProblems;
+    private Map<String, Integer> historyNum;
 
 }

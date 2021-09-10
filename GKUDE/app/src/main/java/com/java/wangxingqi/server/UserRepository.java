@@ -48,9 +48,16 @@ public class UserRepository {
             User user = new User();
             user.setUserToken(result.getData());
             user.setUsername(username);
-            user.setFavorites(syncFavorites().getData());
-            user.setHistories(syncHistories().getData());
-            user.setWrongProblems(syncWrongProblems().getData());
+            user.setFavorites(new LinkedList<>());
+            user.setHistories(new LinkedList<>());
+            user.setWrongProblems(new LinkedList<>());
+            syncFavorites();
+            syncHistories();
+            syncWrongProblems();
+            user.setHistoryNum(new HashMap<>());
+            for (EntityBean e : user.getHistories()) {
+                user.getHistoryNum().compute(e.getCourse(), (k, v) -> v == null ? 1: v + 1);
+            }
             setLoggedInUser(user);
         }
         return new Result<>(result.getStatus(), result.getMsg(), user);
@@ -132,6 +139,7 @@ public class UserRepository {
 
     public Result<String> addHistory(EntityBean entityBean) {
         user.getHistories().add(entityBean);
+        user.getHistoryNum().compute(entityBean.getCourse(), (k, v) -> v == null? 1 : v + 1);
         return dataSource.changeEntityList(entityBean, user.getUserToken(), urlPrefix + "/api/history/add");
     }
 
