@@ -258,6 +258,7 @@ public class Fetch {
                     problemBean.setQID(p.getId());
                     problemBean.setQBody(p.getQBody());
                     problemBean.setQAnswer(p.getQAnswer());
+                    problemBean.setCourse(entityBean.getCourse());
                     list.add(problemBean);
                 }
                 entityBean.setProblems(list);

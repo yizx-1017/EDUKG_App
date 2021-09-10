@@ -27,5 +27,6 @@ public class User {
     private List<EntityBean> histories;
     private List<ProblemBean> wrongProblems;
     private Map<String, Integer> historyNum;
+    private Map<String, Integer> wrongProblemNum;
 
 }
