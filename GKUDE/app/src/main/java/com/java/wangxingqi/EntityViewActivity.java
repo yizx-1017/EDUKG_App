@@ -186,7 +186,6 @@ public class EntityViewActivity extends AppCompatActivity {
         if (problems == null) {
             problems = new ArrayList<>();
         }
-        properties.removeIf(p -> (p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
         System.out.println("onNext!!!!! " + entityBean.getCourse());
         List<String> imgList = new ArrayList<>();
         for (PropertyBean propertyBean : properties) {
@@ -194,6 +193,7 @@ public class EntityViewActivity extends AppCompatActivity {
                 imgList.add(propertyBean.getObject());
             }
         }
+        properties.removeIf(p -> (p.getObject().contains("http://")));
         ViewPager viewPager = findViewById(R.id.viewPager);
         TextView textView = findViewById(R.id.image_tag);
         if (imgList.isEmpty()) {
