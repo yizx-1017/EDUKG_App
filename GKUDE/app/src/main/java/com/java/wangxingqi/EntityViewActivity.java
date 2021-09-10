@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,55 +65,17 @@ public class EntityViewActivity extends AppCompatActivity {
         // 添加历史记录
         Observer<EntityBean> observer = new Observer<EntityBean>() {
             @Override
-            public void onSubscribe(Disposable d) {
+            public void onSubscribe(@NonNull Disposable d) {
             }
 
             @Override
-            public void onNext(EntityBean entityBean) {
+            public void onNext(@NonNull EntityBean entityBean) {
                 System.out.println("in. entityView observer onNext");
-                label = entityBean.getLabel();
-                category = entityBean.getCategory();
-                entity_id = entityBean.getId();
-                List<PropertyBean> properties = entityBean.getPropertiesFromStore();
-                List<RelationBean> relations = entityBean.getRelationsFromStore();
-                List<ProblemBean> problems = entityBean.getProblemsFromStore();
-                if (properties == null) {
-                    properties = new ArrayList<>();
-                }
-                if (relations == null) {
-                    relations = new ArrayList<>();
-                }
-                if (problems == null) {
-                    problems = new ArrayList<>();
-                }
-                properties.removeIf(p -> (p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
-                System.out.println("onNext!!!!! " + entityBean.getCourse());
-                List<String> imgList = new ArrayList<>();
-                for (PropertyBean propertyBean : properties) {
-                    if (propertyBean.getPredicateLabel().equals("图片") && !imgList.contains(propertyBean.getObject())) {
-                        imgList.add(propertyBean.getObject());
-                    }
-                }
-                ViewPager viewPager = findViewById(R.id.viewPager);
-                if (imgList.isEmpty()) {
-                    viewPager.setVisibility(View.GONE);
-                } else {
-                    ImageAdapter image_adapter = new ImageAdapter(getApplicationContext(), imgList);
-                    viewPager.setAdapter(image_adapter);
-                }
-
-                relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
-                property_adapter = new EntityPropertyAdapter(properties);
-                problem_adpater = new ProblemAdapter(problems);
-                System.out.println("onNext!" + entityBean.getProblems());
-                initView();
-                initRecyclerView();
-                // 添加历史记录
-                userRepository.addHistory(entityBean);
+                setUpEntityView(entityBean);
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(@NonNull Throwable e) {
             }
 
             @Override
@@ -121,10 +84,12 @@ public class EntityViewActivity extends AppCompatActivity {
         };
         System.out.println("in EntityViewActivity.java, observer, prepare to getEntityInfo");
         if(entity_id != -1) {
-            if (EntityBean.findById(EntityBean.class, entity_id) == null) {
-                EntityViewActivity.this.finish();
+            EntityBean entityBean = EntityBean.findById(EntityBean.class, entity_id);
+            if (entityBean == null) {
+                this.finish();
+            } else {
+                setUpEntityView(entityBean);
             }
-            Manager.getEntityInfo(EntityBean.findById(EntityBean.class, entity_id), observer);
         }
         else {
             EntityBean tmp_bean = new EntityBean();
@@ -141,50 +106,38 @@ public class EntityViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle("实体信息");
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EntityViewActivity.this.finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> EntityViewActivity.this.finish());
         FloatingActionButton share = findViewById(R.id.fab_share);
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EntityViewActivity.this, ShareActivity.class);
-                intent.putExtra("isEntity", true);
-                intent.putExtra("id", entity_id);
-                startActivity(intent);
-            }
+        share.setOnClickListener(view -> {
+            Intent intent = new Intent(EntityViewActivity.this, ShareActivity.class);
+            intent.putExtra("isEntity", true);
+            intent.putExtra("id", entity_id);
+            startActivity(intent);
         });
         FloatingActionButton fav = findViewById(R.id.fab_fav);
-        fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
-                if (!userRepository.getUser().getFavorites().contains(fav_bean)) {
-                    Log.i("fav button", "click to add favourite");
-                    Log.i("fav button", fav_bean.getCategory());
-                    Result<String> result = userRepository.addFavorite(fav_bean);
-                    fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-                    Log.i("fav button", result.getStatus().toString());
-                    if (result.getStatus().equals(200)){
-                        Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_LONG).show();
-                    } else {
-                        Log.i("fav button", result.getStatus().toString());
-                        Toast.makeText(getApplicationContext(), "收藏成功，同步失败", Toast.LENGTH_LONG).show();
-                    }
-
+        fav.setOnClickListener(view -> {
+            EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
+            if (!userRepository.getUser().getFavorites().contains(fav_bean)) {
+                Log.i("fav button", "click to add favourite");
+                Log.i("fav button", fav_bean.getCategory());
+                Result<String> result = userRepository.addFavorite(fav_bean);
+                fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+                Log.i("fav button", result.getStatus().toString());
+                if (result.getStatus().equals(200)){
+                    Toast.makeText(getApplicationContext(), "收藏成功", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.i("fav button", "click to cancel favourite");
-                    Result<String> result = userRepository.cancelFavorite(fav_bean);
-                    fav.setImageResource(android.R.drawable.star_big_off);
-                    if (result.getStatus().equals(200)) {
-                        Toast.makeText(getApplicationContext(), "取消收藏", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "取消收藏，同步失败", Toast.LENGTH_LONG).show();
-                    }
+                    Log.i("fav button", result.getStatus().toString());
+                    Toast.makeText(getApplicationContext(), "收藏成功，同步失败", Toast.LENGTH_LONG).show();
+                }
+
+            } else {
+                Log.i("fav button", "click to cancel favourite");
+                Result<String> result = userRepository.cancelFavorite(fav_bean);
+                fav.setImageResource(android.R.drawable.star_big_off);
+                if (result.getStatus().equals(200)) {
+                    Toast.makeText(getApplicationContext(), "取消收藏", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "取消收藏，同步失败", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -215,6 +168,48 @@ public class EntityViewActivity extends AppCompatActivity {
         mLabel.setText(label);
         mInfo.setText(category);
 
+    }
+
+    private void setUpEntityView(EntityBean entityBean) {
+        label = entityBean.getLabel();
+        category = entityBean.getCategory();
+        entity_id = entityBean.getId();
+        List<PropertyBean> properties = entityBean.getPropertiesFromStore();
+        List<RelationBean> relations = entityBean.getRelationsFromStore();
+        List<ProblemBean> problems = entityBean.getProblemsFromStore();
+        if (properties == null) {
+            properties = new ArrayList<>();
+        }
+        if (relations == null) {
+            relations = new ArrayList<>();
+        }
+        if (problems == null) {
+            problems = new ArrayList<>();
+        }
+        properties.removeIf(p -> (p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
+        System.out.println("onNext!!!!! " + entityBean.getCourse());
+        List<String> imgList = new ArrayList<>();
+        for (PropertyBean propertyBean : properties) {
+            if (propertyBean.getPredicateLabel().equals("图片") && !imgList.contains(propertyBean.getObject())) {
+                imgList.add(propertyBean.getObject());
+            }
+        }
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        if (imgList.isEmpty()) {
+            viewPager.setVisibility(View.GONE);
+        } else {
+            ImageAdapter image_adapter = new ImageAdapter(getApplicationContext(), imgList);
+            viewPager.setAdapter(image_adapter);
+        }
+
+        relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
+        property_adapter = new EntityPropertyAdapter(properties);
+        problem_adpater = new ProblemAdapter(problems);
+        System.out.println("onNext!" + entityBean.getProblems());
+        initView();
+        initRecyclerView();
+        // 添加历史记录
+        userRepository.addHistory(entityBean);
     }
 
 }

@@ -171,6 +171,7 @@ public class DashboardFragment extends Fragment {
                 for (RecognizeString r: recognizeStringList) {
                     if (r.getIsEntity()) {
                         SpannableString recognizeSpannable = new SpannableString(r.getContent());
+                        long entity_id = -1L;
                         List<EntityBean> beans = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + r.getUri()+ "'");
                         if (beans.isEmpty()){
                             Manager.searchEntity(course, r.getContent(), null, true, entity_observer);
@@ -178,7 +179,9 @@ public class DashboardFragment extends Fragment {
                         else {
                             System.out.println("have this relation entity in db");
                             category = beans.get(0).getCategory();
+                            entity_id = beans.get(0).getId();
                         }
+                        long finalEntity_id = entity_id;
                         ClickableSpan recognizeSpan = new ClickableSpan() {
                             @Override
                             public void onClick(@NonNull View view) {
@@ -187,6 +190,7 @@ public class DashboardFragment extends Fragment {
                                 } else {
                                     Log.e(TAG, "Item clicked!");
                                     Intent intent = new Intent(getActivity(), EntityViewActivity.class);
+                                    intent.putExtra("entity_id", finalEntity_id);
                                     intent.putExtra("entity_label", r.getContent());
                                     intent.putExtra("entity_course", course);
                                     intent.putExtra("entity_category", category);
