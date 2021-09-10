@@ -63,6 +63,7 @@ tools:context=".ui.login.LoginActivity">
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:drawableEnd="@drawable/password_right"
+                    android:inputType="textPassword"
                     android:fontFamily="@font/poppinsmedium" />
             </com.google.android.material.textfield.TextInputLayout>
             <RelativeLayout
