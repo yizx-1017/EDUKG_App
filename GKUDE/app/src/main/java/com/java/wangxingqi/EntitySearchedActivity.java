@@ -2,13 +2,13 @@ package com.java.wangxingqi;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.java.wangxingqi.adapter.EntityCollectionAdapter;
 import com.java.wangxingqi.bean.EntityBean;
 import java.util.Comparator;
@@ -35,7 +34,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
     private List<EntityBean> entityList = new LinkedList<>();
     private EntityCollectionAdapter mAdapter;
     private RefreshLayout refreshLayout;
-    private Comparator comparator;
+    private Comparator<? super EntityBean> comparator;
     private Observer<List<EntityBean>> observer;
     private Spinner spinner_sorter, spinner_filter;
 
@@ -109,12 +108,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         Toolbar toolbar = findViewById(R.id.entity_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
         toolbar.setTitle("搜索结果");
     }
 
@@ -134,13 +128,10 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         refreshLayout = findViewById(R.id.swipe_refresh2);
         refreshLayout.setRefreshHeader(new ClassicsHeader(getApplicationContext()));
         refreshLayout.setRefreshFooter(new ClassicsFooter(getApplicationContext()));
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                Log.e("sssss", "onRefresh: ");
-                Manager.searchEntity(course, keyword, comparator, false, observer);
-                refreshLayout.finishRefresh(true);
-            }
+        refreshLayout.setOnRefreshListener(refresh_layout -> {
+            Log.e("EntitySearched", "onRefresh: ");
+            Manager.searchEntity(course, keyword, comparator, false, observer);
+            refreshLayout.finishRefresh(true);
         });
     }
 
@@ -148,17 +139,17 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         System.out.println("in initObserver");
         observer = new Observer<List<EntityBean>>() {
             @Override
-            public void onSubscribe(Disposable d) {
+            public void onSubscribe(@NonNull Disposable d) {
             }
 
             @Override
-            public void onNext(List<EntityBean> entities)
+            public void onNext(@NonNull List<EntityBean> entities)
             {
                 mAdapter.setEntityList(entities);
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(@NonNull Throwable e) {
             }
 
             @Override

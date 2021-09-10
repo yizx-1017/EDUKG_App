@@ -113,7 +113,7 @@ public class NotificationsFragment extends Fragment {
     @NonNull
     private List<Message> getData() {
         List<Message> list = new ArrayList<>();
-        list.add(new Message("Hello! Welcome to knowledge Q&A!",Message.TYPE_RECEIVED));
+        list.add(new Message("您好，欢迎访问知识图谱问题解答",Message.TYPE_RECEIVED));
         return list;
     }
 

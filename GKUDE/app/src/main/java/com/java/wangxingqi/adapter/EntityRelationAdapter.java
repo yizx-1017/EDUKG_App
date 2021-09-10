@@ -37,7 +37,7 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
 
     private List<RelationBean> relations;
     private String course;
-    private String category = new String();
+    private String category = "";
 
     public EntityRelationAdapter(List<RelationBean> relations, String course){
         Log.i("EntityRelation category", course);
@@ -80,11 +80,11 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
         private void initObserver() {
             observer = new Observer<List<EntityBean>>() {
                 @Override
-                public void onSubscribe(Disposable d) {
+                public void onSubscribe(@NonNull Disposable d) {
                 }
 
                 @Override
-                public void onNext(List<EntityBean> entities) {
+                public void onNext(@NonNull List<EntityBean> entities) {
                     Log.i("RelationObserver", "onNext");
                     if (entities.isEmpty()) {
                         Log.i("onNext","emptyList");
@@ -96,7 +96,7 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                 }
 
                 @Override
-                public void onError(Throwable e) {
+                public void onError(@NonNull Throwable e) {
                 }
 
                 @Override
@@ -131,33 +131,31 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
             }
 
             // Click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("EntityRelation","onCLick");
-                    // Go to the detailed page
-
+            itemView.setOnClickListener(view -> {
+                Log.i("EntityRelation","onCLick");
+                // Go to the detailed page
+                long entity_id = -1L;
+                List<EntityBean> beans = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + relation.getEntityUri()+ "'");
+                if (beans.isEmpty()) {
                     Log.i("EntityRelationAdapter", "before searchEntity");
-
                     Manager.searchEntity(course, relation.getName(), null, true, observer);
                     Log.i("EntityRelationAdapter", "after searchEntity");
                     if (category == null) {
-                        List<EntityBean> beans = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + relation.getEntityUri()+ "'");
-                        if (beans.isEmpty()) {
-                            Toast.makeText(view.getContext(), "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
-                            return;
-                        } else {
-                            System.out.println("have this relation entity in db");
-                            category = beans.get(0).getCategory();
-                        }
+                        Toast.makeText(view.getContext(), "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                    Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
-                    intent.putExtra("entity_label", relation.getName());
-                    intent.putExtra("entity_course",course);
-                    intent.putExtra("entity_category", category);
-                    intent.putExtra("entity_uri", relation.getEntityUri());
-                    view.getContext().startActivity(intent);
+                } else {
+                    System.out.println("have this relation entity in db");
+                    entity_id = beans.get(0).getId();
+                    category = beans.get(0).getCategory();
                 }
+                Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
+                intent.putExtra("entity_id", entity_id);
+                intent.putExtra("entity_label", relation.getName());
+                intent.putExtra("entity_course",course);
+                intent.putExtra("entity_category", category);
+                intent.putExtra("entity_uri", relation.getEntityUri());
+                view.getContext().startActivity(intent);
             });
 
         }
