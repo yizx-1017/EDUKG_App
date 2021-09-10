@@ -72,8 +72,22 @@ public class ShareActivity extends Activity implements WbShareCallback {
             shareText += ("所属目录：" + entityBean.getCategory() + '\n');
         } else {
             ProblemBean problemBean = ProblemBean.findById(ProblemBean.class, id);
+            String qBody = problemBean.getQBody();
             shareText = "【基础教育知识图谱：试题分享】\n";
-            shareText += ("问题：" + problemBean.getQBody() + '\n');
+            try {
+                int A = qBody.indexOf("A.");
+                int B = qBody.indexOf("B.");
+                int C = qBody.indexOf("C.");
+                int D = qBody.indexOf("D.");
+                String tmp = qBody.substring(0, A) + "\n" + qBody.substring(A, B) + "\n" + qBody.substring(B, C) + '\n' + qBody.substring(C, D) + "\n" + qBody.substring(D);
+                if (A>=0&&B>=0&&C>=0&&D>=0) {
+                    shareText += ("问题：" + tmp + '\n');
+                } else {
+                    shareText += ("问题：" + problemBean.getQBody() + '\n');
+                }
+            } catch (Exception e) {
+                shareText += ("问题：" + problemBean.getQBody() + '\n');
+            }
             shareText += ("答案：" + problemBean.getQAnswer() + '\n');
         }
 
