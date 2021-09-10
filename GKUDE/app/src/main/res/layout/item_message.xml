@@ -6,38 +6,37 @@
 
     <LinearLayout
         android:id="@+id/left_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
-        android:background="@drawable/message_left"
         android:layout_marginEnd="50dp"
+        android:layout_marginVertical="3dp"
+        android:gravity="start"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
+            android:layout_marginStart="10dp"
             android:layout_gravity="center"
             android:contentDescription="@string/robot_avatar"
             android:src="@drawable/ic_user" />
 
         <TextView
             android:id="@+id/left_msg"
+            android:background="@drawable/card_rectangle_filled"
+            android:padding="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:gravity="center"
             android:layout_marginStart="10dp"
-            android:textColor="@color/black"
-            android:background="@drawable/message_left"/>
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/right_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
         android:gravity="end"
-        android:background="@drawable/message_right"
         android:layout_marginStart="50dp"
         android:orientation="horizontal">
 
@@ -45,16 +44,18 @@
             android:id="@+id/right_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="280dp"
             android:layout_gravity="end"
-            android:gravity="center"
-            android:layout_margin="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/card_rectangle_filled_green"
+            android:padding="15dp"
             android:textColor="@color/black" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="1dp"
             android:layout_gravity="center"
+            android:layout_marginEnd="10dp"
             android:contentDescription="@string/robot_avatar"
             android:src="@drawable/ic_user" />
 
