@@ -130,7 +130,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
         refreshLayout.setRefreshFooter(new ClassicsFooter(getApplicationContext()));
         refreshLayout.setOnRefreshListener(refresh_layout -> {
             Log.e("EntitySearched", "onRefresh: ");
-            Manager.searchEntity(course, keyword, comparator, false, observer);
+            Manager.searchEntity(course, keyword, comparator, true, observer);
             refreshLayout.finishRefresh(true);
         });
     }
@@ -157,7 +157,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
             }
         };
         System.out.println("searchEntity!!!");
-        Manager.searchEntity(course, keyword, comparator, false, observer);
+        Manager.searchEntity(course, keyword, comparator, true, observer);
 
         spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -194,7 +194,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
                         break;
                 }
                 // TODO(zhiyuxie): 加上不重新搜索，只重新排序的优化
-                Manager.searchEntity(course, keyword, comparator,false, observer);
+                Manager.searchEntity(course, keyword, comparator,true, observer);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -220,7 +220,7 @@ public class EntitySearchedActivity extends AppCompatActivity implements
                 comparator = null;
                 if(sort.equals("abc")) comparator = Comparator.comparing(EntityBean::getLabel);
                 else if(sort.equals("length")) comparator = Comparator.comparing(EntityBean::getLabel, Comparator.comparingInt(String::length));
-                Manager.searchEntity(course, keyword, comparator, false,observer);
+                Manager.searchEntity(course, keyword, comparator, true,observer);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {

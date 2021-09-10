@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="6dp">
+    android:layout_marginTop="2dp"
+    android:theme="@style/MaterialTheme"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        android:minHeight="40dp"
+        app:cardElevation="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -11,30 +23,18 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/card_rectangle_filled"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/entity_problem"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp">
-
-                <TextView
-                    android:id="@+id/entity_problem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="下列选项正确的是..."
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/primary_text_light"/>
-
-
-            </RelativeLayout>
+                android:text="下列选项正确的是..."
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="14sp" />
 
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 
 </RelativeLayout>

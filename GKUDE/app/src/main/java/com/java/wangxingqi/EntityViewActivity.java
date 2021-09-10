@@ -186,7 +186,6 @@ public class EntityViewActivity extends AppCompatActivity {
         if (problems == null) {
             problems = new ArrayList<>();
         }
-        properties.removeIf(p -> (p.getObject().contains("http://") && !p.getPredicateLabel().equals("图片")));
         System.out.println("onNext!!!!! " + entityBean.getCourse());
         List<String> imgList = new ArrayList<>();
         for (PropertyBean propertyBean : properties) {
@@ -194,17 +193,26 @@ public class EntityViewActivity extends AppCompatActivity {
                 imgList.add(propertyBean.getObject());
             }
         }
+        properties.removeIf(p -> (p.getObject().contains("http://")));
         ViewPager viewPager = findViewById(R.id.viewPager);
+        TextView textView = findViewById(R.id.image_tag);
         if (imgList.isEmpty()) {
             viewPager.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
         } else {
             ImageAdapter image_adapter = new ImageAdapter(getApplicationContext(), imgList);
             viewPager.setAdapter(image_adapter);
         }
 
         relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
+        if(relations.isEmpty())
+            findViewById(R.id.relation_tag).setVisibility(View.GONE);
         property_adapter = new EntityPropertyAdapter(properties);
+        if(properties.isEmpty())
+            findViewById(R.id.property_tag).setVisibility(View.GONE);
         problem_adpater = new ProblemAdapter(problems);
+        if(problems.isEmpty())
+            findViewById(R.id.problem_tag).setVisibility(View.GONE);
         System.out.println("onNext!" + entityBean.getProblems());
         initView();
         initRecyclerView();

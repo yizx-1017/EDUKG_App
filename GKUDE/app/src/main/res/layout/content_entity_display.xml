@@ -32,10 +32,13 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/property_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="18dp"
                         android:text="属性" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -50,10 +53,13 @@
 
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/image_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="18dp"
                     android:text="图片" />
 
                 <androidx.viewpager.widget.ViewPager
@@ -70,10 +76,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/relation_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="18dp"
                         android:text="关系"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -92,10 +101,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/problem_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="18dp"
                         android:text="题目"/>
 
                     <androidx.recyclerview.widget.RecyclerView

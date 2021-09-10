@@ -140,6 +140,7 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                     Log.i("EntityRelationAdapter", "before searchEntity");
                     Manager.searchEntity(course, relation.getName(), null, true, observer);
                     Log.i("EntityRelationAdapter", "after searchEntity");
+                    try { Thread.sleep(2000); } catch (InterruptedException e) { return; }
                     if (category == null) {
                         Toast.makeText(view.getContext(), "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
                         return;
