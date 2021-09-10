@@ -51,14 +51,11 @@ public class UserRepository {
             user.setFavorites(new LinkedList<>());
             user.setHistories(new LinkedList<>());
             user.setWrongProblems(new LinkedList<>());
+            setLoggedInUser(user);
             syncFavorites();
             syncHistories();
             syncWrongProblems();
-            user.setHistoryNum(new HashMap<>());
-            for (EntityBean e : user.getHistories()) {
-                user.getHistoryNum().compute(e.getCourse(), (k, v) -> v == null ? 1: v + 1);
-            }
-            setLoggedInUser(user);
+            syncHistoryNum();
         }
         return new Result<>(result.getStatus(), result.getMsg(), user);
     }
@@ -133,6 +130,7 @@ public class UserRepository {
                 dataSource.changeEntityList(e, user.getUserToken(), urlPrefix + "/api/history/add");
             }
         }
+        syncHistoryNum();
         result.setData(user.getHistories());
         return result;
     }
@@ -197,6 +195,21 @@ public class UserRepository {
             problemList.add(m.getKey());
         }
         return problemList;
+    }
+
+    public void syncHistoryNum() {
+        Thread thread = new Thread(() ->{
+            user.setHistoryNum(new HashMap<>());
+            for (EntityBean e : user.getHistories()) {
+                user.getHistoryNum().compute(e.getCourse(), (k, v) -> v == null ? 1: v + 1);
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // private constructor : singleton access
