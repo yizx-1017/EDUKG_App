@@ -46,7 +46,7 @@ public class DashboardFragment extends Fragment {
     private TextView textView;
     private String course = "chinese";
     private String inputContent;
-    private String category = new String();
+    private String category = "";
 
     @Nullable
     @Override
@@ -111,11 +111,11 @@ public class DashboardFragment extends Fragment {
     private void initEntityObserver() {
         entity_observer = new Observer<List<EntityBean>>() {
             @Override
-            public void onSubscribe(Disposable d) {
+            public void onSubscribe(@NonNull Disposable d) {
             }
 
             @Override
-            public void onNext(List<EntityBean> entities) {
+            public void onNext(@NonNull List<EntityBean> entities) {
                 Log.i("RelationObserver", "onNext");
                 if (entities.isEmpty()) {
                     Log.i("onNext","emptyList");
@@ -127,7 +127,7 @@ public class DashboardFragment extends Fragment {
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(@NonNull Throwable e) {
             }
 
             @Override
@@ -171,14 +171,21 @@ public class DashboardFragment extends Fragment {
                 for (RecognizeString r: recognizeStringList) {
                     if (r.getIsEntity()) {
                         SpannableString recognizeSpannable = new SpannableString(r.getContent());
-                        Manager.searchEntity(course, r.getContent(), null, true, entity_observer);
-                        if (category == null) {
-                            textView.append(r.getContent());
-                        } else {
-                            ClickableSpan recognizeSpan = new ClickableSpan() {
-                                @Override
-                                public void onClick(@NonNull View view) {
-                                    Log.e(TAG,"Item clicked!");
+                        List<EntityBean> beans = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + r.getUri()+ "'");
+                        if (beans.isEmpty()){
+                            Manager.searchEntity(course, r.getContent(), null, true, entity_observer);
+                        }
+                        else {
+                            System.out.println("have this relation entity in db");
+                            category = beans.get(0).getCategory();
+                        }
+                        ClickableSpan recognizeSpan = new ClickableSpan() {
+                            @Override
+                            public void onClick(@NonNull View view) {
+                                if (category == null) {
+                                    Toast.makeText(view.getContext(), "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.e(TAG, "Item clicked!");
                                     Intent intent = new Intent(getActivity(), EntityViewActivity.class);
                                     intent.putExtra("entity_label", r.getContent());
                                     intent.putExtra("entity_course", course);
@@ -186,10 +193,10 @@ public class DashboardFragment extends Fragment {
                                     intent.putExtra("entity_uri", r.getUri());
                                     startActivity(intent);
                                 }
-                            };
-                            recognizeSpannable.setSpan(recognizeSpan, 0, r.getContent().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                            textView.append(recognizeSpannable);
-                        }
+                            }
+                        };
+                        recognizeSpannable.setSpan(recognizeSpan, 0, r.getContent().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                        textView.append(recognizeSpannable);
                     } else {
                         textView.append(r.getContent());
                     }

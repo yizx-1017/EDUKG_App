@@ -77,6 +77,9 @@ public class Fetch {
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
+                    if (edukgResponse.getCode().equals("-1")) {
+                        return new ArrayList<>();
+                    }
                 }
                 List<EntityBean> list = edukgResponse.getData();
                 for (int i = 0; i < list.size(); i++) {
@@ -111,6 +114,9 @@ public class Fetch {
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
+                    if (edukgResponse.getCode().equals("-1")) {
+                        return null;
+                    }
                 }
                 entityBean.setRelations(edukgResponse.getData().getRelations());
                 entityBean.setProperties(edukgResponse.getData().getProperties());
@@ -164,6 +170,9 @@ public class Fetch {
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
+                    if (edukgResponse.getCode().equals("-1")) {
+                        return new ArrayList<>();
+                    }
                 }
                 return edukgResponse.getData();
             }
@@ -201,6 +210,9 @@ public class Fetch {
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
+                    if (edukgResponse.getCode().equals("-1")) {
+                        return new ArrayList<>();
+                    }
                 }
                 return edukgResponse.getData().getResults();
             }
@@ -236,6 +248,9 @@ public class Fetch {
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
                     System.out.println(edukgResponse);
+                    if (edukgResponse.getCode().equals("-1")) {
+                        return null;
+                    }
                 }
                 List<ProblemBean> list = new ArrayList<>();
                 for (FetchedProblem p: edukgResponse.getData()) {
@@ -284,15 +299,18 @@ public class Fetch {
                     response = client.newCall(request).execute();
                     json = Objects.requireNonNull(response.body()).string();
                     edukgResponse = gson.fromJson(json, type);
+                    if (edukgResponse.getCode().equals("-1")) {
+                        return new ArrayList<>();
+                    }
                 }
                 return edukgResponse.getData();
             }
-            return null;
+            return new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("The wrong message is>>>");
             System.out.println(e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
     }
 }
