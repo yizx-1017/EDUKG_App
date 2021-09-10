@@ -130,7 +130,7 @@ public class NotificationsFragment extends Fragment {
                 if (answerList.isEmpty()||answerList.get(0).getValue().equals("")) {
                     content = "抱歉！您问的问题知识图谱无法解答呢，换个问题/学科试试吧";
                 } else {
-                    content = answerList.get(0).getValue();
+                    content = "为您解答如下：\n" + answerList.get(0).getValue();
                 }
                 messageList.add(new Message(content,Message.TYPE_RECEIVED));
                 messageAdapter.notifyItemInserted(messageList.size()-1);
