@@ -220,6 +220,7 @@ public class UserDataSource {
         Thread thread = new Thread(() -> {
             RequestBody formBody = new FormBody.Builder().add("qID", problemBean.getQID().toString())
                     .add("qBody", problemBean.getQBody())
+                    .add("course", problemBean.getCourse())
                     .add("qAnswer", problemBean.getQAnswer()).build();
             Request request = new Request.Builder().addHeader("token", userToken).url(url).post(formBody).build();
             try {
@@ -256,4 +257,5 @@ class FetchedProblem {
     private Integer qid;
     private String qanswer;
     private String qbody;
+    private String course;
 }

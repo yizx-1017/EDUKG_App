@@ -18,6 +18,7 @@ public class ProblemBean extends SugarRecord implements Serializable {
     private Integer qID;
     private String qBody;
     private String qAnswer;
+    private String course;
 
     @NonNull
     @Override

@@ -56,6 +56,7 @@ public class UserRepository {
             syncHistories();
             syncWrongProblems();
             syncHistoryNum();
+            syncWrongProblemNum();
         }
         return new Result<>(result.getStatus(), result.getMsg(), user);
     }
@@ -143,6 +144,7 @@ public class UserRepository {
 
     public Result<String> addWrongProblem(ProblemBean problemBean) {
         user.getWrongProblems().add(problemBean);
+        user.getWrongProblemNum().compute(problemBean.getCourse(), (k, v) -> v == null ? 1 : v + 1);
         return dataSource.changeProblemList(problemBean, user.getUserToken(), urlPrefix + "/api/wrongProblem/add");
     }
 
@@ -168,6 +170,7 @@ public class UserRepository {
                 dataSource.changeProblemList(e, user.getUserToken(), urlPrefix + "/api/wrongProblem/add");
             }
         }
+        syncWrongProblemNum();
         result.setData(user.getWrongProblems());
         Log.i("User Repository", result.getData().toString());
         return result;
@@ -202,6 +205,21 @@ public class UserRepository {
             user.setHistoryNum(new HashMap<>());
             for (EntityBean e : user.getHistories()) {
                 user.getHistoryNum().compute(e.getCourse(), (k, v) -> v == null ? 1: v + 1);
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void syncWrongProblemNum() {
+        Thread thread = new Thread(() ->{
+            user.setWrongProblemNum(new HashMap<>());
+            for (ProblemBean p : user.getWrongProblems()) {
+                user.getWrongProblemNum().compute(p.getCourse(), (k, v) -> v == null ? 1: v + 1);
             }
         });
         thread.start();
