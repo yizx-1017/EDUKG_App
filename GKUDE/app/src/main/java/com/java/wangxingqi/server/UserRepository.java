@@ -201,6 +201,9 @@ public class UserRepository {
         }
         List<Map.Entry<ProblemBean, Integer>> entryList = new LinkedList<>(problemBeans.entrySet());
         entryList.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        if (num > entryList.size()) {
+            num = entryList.size();
+        }
         entryList = entryList.subList(0, num);
         List<ProblemBean> problemList = new ArrayList<>();
         for (Map.Entry<ProblemBean, Integer> m: entryList) {
