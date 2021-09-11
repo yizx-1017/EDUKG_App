@@ -146,11 +146,15 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                         Toast.makeText(mycontext, "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
                     }
                     else {
+                        String category = Manager.searchEntityCategory(course, relation.getName());
+                        if (category == null) {
+                           category = "";
+                        }
                         Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
                         intent.putExtra("entity_id", entity_id);
                         intent.putExtra("entity_label", relation.getName());
                         intent.putExtra("entity_course",course);
-                        intent.putExtra("entity_category", "");
+                        intent.putExtra("entity_category", category);
                         intent.putExtra("entity_uri", relation.getEntityUri());
                         view.getContext().startActivity(intent);
                     }

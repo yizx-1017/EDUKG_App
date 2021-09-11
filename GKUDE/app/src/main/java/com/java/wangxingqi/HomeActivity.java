@@ -3,6 +3,7 @@ package com.java.wangxingqi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -62,5 +63,17 @@ public class HomeActivity extends AppCompatActivity {
         homePagerAdapter.setDelCategory(data.getStringArrayListExtra("delCategory"));
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(homePagerAdapter);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -6,13 +6,10 @@ import com.java.wangxingqi.bean.EntityBean;
 import com.java.wangxingqi.bean.ProblemBean;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -24,7 +21,7 @@ public class UserRepository {
 
     private final UserDataSource dataSource;
 
-    private final String urlPrefix = "http://183.172.195.178:8080";
+    private final String urlPrefix = "http://183.172.220.170:8080";
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
