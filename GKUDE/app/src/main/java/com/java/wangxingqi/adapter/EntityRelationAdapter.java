@@ -109,6 +109,7 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
 
         public void bind(final RelationBean relation) {
             initObserver();
+            Manager.searchEntity(course, relation.getName(), null, true, observer);
             boolean forward = true;
             String entity_name = relation.getObjectName();
             if(entity_name == null) {
@@ -137,9 +138,6 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                 long entity_id = -1L;
                 List<EntityBean> beans = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + relation.getEntityUri()+ "'");
                 if (beans.isEmpty()) {
-                    Log.i("EntityRelationAdapter", "before searchEntity");
-                    Manager.searchEntity(course, relation.getName(), null, true, observer);
-                    Log.i("EntityRelationAdapter", "after searchEntity");
                     try { Thread.sleep(2000); } catch (InterruptedException e) { return; }
                     if (category == null) {
                         Toast.makeText(view.getContext(), "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
