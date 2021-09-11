@@ -54,6 +54,7 @@ public class UserDataSource {
                 result.setMsg(private_result.getData());
                 result.setStatus(private_result.getStatus());
             } catch (Exception e) {
+                result.setStatus(400);
                 e.printStackTrace();
                 System.out.println("The wrong message is>>>");
                 System.out.println(e.getMessage());

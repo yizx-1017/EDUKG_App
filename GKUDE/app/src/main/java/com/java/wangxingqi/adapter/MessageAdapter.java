@@ -3,7 +3,7 @@ package com.java.wangxingqi.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,10 +21,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        LinearLayout leftLayout;
+        RelativeLayout leftLayout;
         TextView left_msg;
 
-        LinearLayout rightLayout;
+        RelativeLayout rightLayout;
         TextView right_msg;
 
         public ViewHolder(View view){
