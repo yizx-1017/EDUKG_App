@@ -41,6 +41,7 @@
         <activity android:name="com.java.wangxingqi.ShareActivity" android:exported="false"/>
         <activity android:name="com.java.wangxingqi.ProblemListViewActivity" android:exported="false"/>
         <activity android:name="com.java.wangxingqi.ProblemRecommendationActivity" android:exported="false"/>
+        <activity android:name="com.java.wangxingqi.StatsAnalyzeActivity" android:exported="false"/>
 
         <meta-data
             android:name="DATABASE"
