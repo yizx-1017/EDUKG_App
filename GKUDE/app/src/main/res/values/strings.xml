@@ -31,7 +31,7 @@
     <string name="cancelShare">取消分享</string>
     <string name="myFavorite">我的收藏</string>
     <string name="myHistory">历史记录</string>
-    <string name="wrongProblem">错题本</string>
+    <string name="wrongProblem">错题记录</string>
     <string name="recommendationProblem">试题推荐</string>
     <string name="statisticData">统计分析</string>
     <string name="logout">退出登录</string>
