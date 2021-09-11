@@ -86,13 +86,16 @@ public class UserRepository {
                 }
             });
             // 本地取并集
-            result.getData().removeAll(user.getFavorites());
-            user.getFavorites().addAll(result.getData());
+            for (EntityBean e : result.getData()) {
+                if (!user.getFavorites().contains(e)) {
+                    user.getFavorites().add(e);
+                }
+            }
             // 上传差集
-            List<EntityBean> upload = new ArrayList<>(user.getFavorites());
-            upload.removeAll(result.getData());
-            for (EntityBean e : upload) {
-                dataSource.changeEntityList(e, user.getUserToken(), urlPrefix + "/api/favorite/add");
+            for (EntityBean e : user.getFavorites()) {
+                if (!result.getData().contains(e)) {
+                    dataSource.changeEntityList(e, user.getUserToken(), urlPrefix + "/api/favorite/add");
+                }
             }
         }
         result.setData(user.getFavorites());
@@ -122,13 +125,16 @@ public class UserRepository {
                 }
             });
             // 本地取并集
-            result.getData().removeAll(user.getHistories());
-            user.getHistories().addAll(result.getData());
+            for (EntityBean e : result.getData()) {
+                if (!user.getHistories().contains(e)) {
+                    user.getHistories().add(e);
+                }
+            }
             // 上传差集
-            List<EntityBean> upload = new ArrayList<>(user.getHistories());
-            upload.removeAll(result.getData());
-            for (EntityBean e : upload) {
-                dataSource.changeEntityList(e, user.getUserToken(), urlPrefix + "/api/history/add");
+            for (EntityBean e : user.getHistories()) {
+                if (!result.getData().contains(e)) {
+                    dataSource.changeEntityList(e, user.getUserToken(), urlPrefix + "/api/history/add");
+                }
             }
         }
         syncHistoryNum();
@@ -161,13 +167,16 @@ public class UserRepository {
                 }
             });
             // 本地取并集
-            result.getData().removeAll(user.getWrongProblems());
-            user.getWrongProblems().addAll(result.getData());
+            for (ProblemBean e : result.getData()) {
+                if (!user.getWrongProblems().contains(e)) {
+                    user.getWrongProblems().add(e);
+                }
+            }
             // 上传差集
-            List<ProblemBean> upload = new ArrayList<>(user.getWrongProblems());
-            upload.removeAll(result.getData());
-            for (ProblemBean e : upload) {
-                dataSource.changeProblemList(e, user.getUserToken(), urlPrefix + "/api/wrongProblem/add");
+            for (ProblemBean e : user.getWrongProblems()) {
+                if (!result.getData().contains(e)) {
+                    dataSource.changeProblemList(e, user.getUserToken(), urlPrefix + "/api/wrongProblem/add");
+                }
             }
         }
         syncWrongProblemNum();
