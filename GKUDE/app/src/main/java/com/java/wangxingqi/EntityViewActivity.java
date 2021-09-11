@@ -208,7 +208,7 @@ public class EntityViewActivity extends AppCompatActivity {
             viewPager.setAdapter(image_adapter);
         }
 
-        relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse());
+        relation_adapter = new EntityRelationAdapter(relations, entityBean.getCourse(), getApplicationContext());
         if(relations.isEmpty())
             findViewById(R.id.relation_tag).setVisibility(View.GONE);
         property_adapter = new EntityPropertyAdapter(properties);

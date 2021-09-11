@@ -63,6 +63,7 @@ public class ProblemRecommendationActivity extends AppCompatActivity {
 
     private void initInput() {
         TextInputLayout problemNumText = findViewById(R.id.problem_number);
+
         Button click = findViewById(R.id.shuffle_button);
         click.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +72,8 @@ public class ProblemRecommendationActivity extends AppCompatActivity {
                 if (!problemValue.isEmpty()) {
                     problemList = userRepository.getProblemRecommendation(Integer.parseInt(problemValue));
                     setRecyclerView();
+                } else {
+                    Toast.makeText(ProblemRecommendationActivity.this, "暂时没有题库哦，多做做题再来看", Toast.LENGTH_SHORT).show();
                 }
             }
         });

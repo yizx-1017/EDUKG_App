@@ -38,11 +38,13 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
     private List<RelationBean> relations;
     private String course;
     private String category;
+    private Context mycontext;
 
-    public EntityRelationAdapter(List<RelationBean> relations, String course){
+    public EntityRelationAdapter(List<RelationBean> relations, String course, Context context){
         Log.i("EntityRelation category", course);
         this.relations = relations;
         this.course = course;
+        this.mycontext = context;
     }
 
 
@@ -61,7 +63,7 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
 
     @Override
     public int getItemCount() {
-        return Math.min(20, relations.size());
+        return relations.size();
     }
 
 
@@ -138,23 +140,33 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
                 long entity_id = -1L;
                 List<EntityBean> beans = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + relation.getEntityUri()+ "'");
                 if (beans.isEmpty()) {
-                    try { Thread.sleep(2000); } catch (InterruptedException e) { return; }
-                    if (category == null) {
-                        Toast.makeText(view.getContext(), "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
-                        return;
+                    ConnectivityManager connectivityManager = (ConnectivityManager) mycontext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+                    if (info == null || !info.isAvailable()) {
+                        Toast.makeText(mycontext, "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
                     }
-                } else {
+                    else {
+                        Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
+                        intent.putExtra("entity_id", entity_id);
+                        intent.putExtra("entity_label", relation.getName());
+                        intent.putExtra("entity_course",course);
+                        intent.putExtra("entity_category", "");
+                        intent.putExtra("entity_uri", relation.getEntityUri());
+                        view.getContext().startActivity(intent);
+                    }
+                }
+                else {
                     System.out.println("have this relation entity in db");
                     entity_id = beans.get(0).getId();
                     category = beans.get(0).getCategory();
+                    Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
+                    intent.putExtra("entity_id", entity_id);
+                    intent.putExtra("entity_label", relation.getName());
+                    intent.putExtra("entity_course",course);
+                    intent.putExtra("entity_category", category);
+                    intent.putExtra("entity_uri", relation.getEntityUri());
+                    view.getContext().startActivity(intent);
                 }
-                Intent intent = new Intent(view.getContext(), EntityViewActivity.class);
-                intent.putExtra("entity_id", entity_id);
-                intent.putExtra("entity_label", relation.getName());
-                intent.putExtra("entity_course",course);
-                intent.putExtra("entity_category", category);
-                intent.putExtra("entity_uri", relation.getEntityUri());
-                view.getContext().startActivity(intent);
             });
 
         }
