@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,9 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 public class EntityListViewActivity extends AppCompatActivity implements EntityCollectionAdapter.OnEntitySelectedListener {
 
     private final String TAG = "EntityListView";
@@ -34,6 +38,8 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
     private Boolean isFavorite;
     private UserRepository userRepository;
     private RefreshLayout refreshLayout;
+    private Observer<List<EntityBean>> observer;
+    private String testCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +54,29 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
             entityList = userRepository.getUser().getHistories();
         }
         initToolbar(isFavorite);
+        initObserver();
         initRecyclerView();
         initSwipeRefresh(this);
     }
 
     @Override
     public void onEntitySelected(EntityBean entity) {
+        long entity_id = -1L;
+        Log.i(TAG, entity.getLabel());
+        System.out.println(entity.getId());
+        if (entity.getId() == null) {
+            Log.i(TAG, "before searchEntity");
+            Manager.searchEntity(entity.getCourse(), entity.getLabel(), null, true, observer);
+            Log.i(TAG, "after searchEntity");
+            if (testCategory == null) {
+                Toast.makeText(this, "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                testCategory = null;
+            }
+        } else {
+            entity_id = entity.getId();
+        }
         // Go to the detailed page
         List<EntityBean> list = EntityBean.find(EntityBean.class, "uri = ?", entity.getUri());
         if(!list.isEmpty()){
@@ -124,6 +147,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
             public void onRefresh(RefreshLayout refreshlayout) {
                 Log.e("refresh swipe", "onRefresh");
                 syncEntityList();
+                initRecyclerView();
             }
         });
     }
@@ -155,5 +179,33 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
                 refreshLayout.finishRefresh(false);
             }
         }
+    }
+    private void initObserver() {
+        observer = new Observer<List<EntityBean>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+            }
+
+            @Override
+            public void onNext(@NonNull List<EntityBean> entities) {
+                Log.i("RelationObserver", "onNext");
+                if (entities.isEmpty()) {
+                    Log.i("onNext","emptyList");
+                    testCategory = null;
+                } else {
+                    Log.i("onNext","nonemptyList");
+                    testCategory = entities.get(0).getCategory();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+
     }
 }

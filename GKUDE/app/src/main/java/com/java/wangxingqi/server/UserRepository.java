@@ -24,7 +24,7 @@ public class UserRepository {
 
     private final UserDataSource dataSource;
 
-    private final String urlPrefix = "http://172.20.10.4:8080";
+    private final String urlPrefix = "http://10.0.2.2:8080";
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore

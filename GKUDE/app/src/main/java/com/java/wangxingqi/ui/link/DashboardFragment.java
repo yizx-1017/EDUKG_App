@@ -46,7 +46,7 @@ public class DashboardFragment extends Fragment {
     private TextView textView;
     private String course = "chinese";
     private String inputContent;
-    private String category = "";
+    private String category;
 
     @Nullable
     @Override

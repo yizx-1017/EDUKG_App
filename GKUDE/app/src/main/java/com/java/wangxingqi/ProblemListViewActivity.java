@@ -73,7 +73,7 @@ public class ProblemListViewActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             Log.e("refresh swipe", "onRefresh");
             syncEntityList();
-            // initRecyclerView();
+            initRecyclerView();
         });
     }
 
