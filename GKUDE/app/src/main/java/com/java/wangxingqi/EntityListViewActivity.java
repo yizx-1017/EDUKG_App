@@ -1,6 +1,9 @@
 package com.java.wangxingqi;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -52,13 +55,32 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
     @Override
     public void onEntitySelected(EntityBean entity) {
         // Go to the detailed page
-        Intent intent = new Intent(this, EntityViewActivity.class);
-        intent.putExtra("entity_id", entity.getId());
-        intent.putExtra("entity_label", entity.getLabel());
-        intent.putExtra("entity_course", entity.getCourse());
-        intent.putExtra("entity_category", entity.getCategory());
-        intent.putExtra("entity_uri", entity.getUri());
-        startActivity(intent);
+        List<EntityBean> list = EntityBean.find(EntityBean.class, "uri = ?", entity.getUri());
+        if(!list.isEmpty()){
+            Intent intent = new Intent(this, EntityViewActivity.class);
+            intent.putExtra("entity_id", entity.getId());
+            intent.putExtra("entity_label", entity.getLabel());
+            intent.putExtra("entity_course", entity.getCourse());
+            intent.putExtra("entity_category", entity.getCategory());
+            intent.putExtra("entity_uri", entity.getUri());
+            startActivity(intent);
+        }
+        else {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+            if (info == null || !info.isAvailable()) {
+                Toast.makeText(getApplicationContext(), "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Intent intent = new Intent(this, EntityViewActivity.class);
+                intent.putExtra("entity_id", entity.getId());
+                intent.putExtra("entity_label", entity.getLabel());
+                intent.putExtra("entity_course", entity.getCourse());
+                intent.putExtra("entity_category", entity.getCategory());
+                intent.putExtra("entity_uri", entity.getUri());
+                startActivity(intent);
+            }
+        }
     }
 
     @Override
