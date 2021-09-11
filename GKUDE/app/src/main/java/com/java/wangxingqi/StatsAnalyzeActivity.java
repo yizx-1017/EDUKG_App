@@ -13,6 +13,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.StackedValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.java.wangxingqi.server.UserDataSource;
@@ -25,13 +26,14 @@ import java.util.Objects;
 
 public class StatsAnalyzeActivity extends AppCompatActivity {
     private UserRepository userRepository;
+    private PieChart entityPieChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
         userRepository = UserRepository.getInstance(new UserDataSource());
-        PieChart entityPieChart = findViewById(R.id.piechart1);
+        entityPieChart = findViewById(R.id.piechart1);
         PieChart problemPieChart = findViewById(R.id.piechart2);
         initToolbar();
         initData(entityPieChart, userRepository.getUser().getHistoryNum());
@@ -67,9 +69,45 @@ public class StatsAnalyzeActivity extends AppCompatActivity {
         pieDataSet.setValueTextSize(16);
 
         PieData pieData = new PieData(pieDataSet);
+        if (pieChart == entityPieChart) {
+            pieData.setValueFormatter(new MyValueFormatter());
+        } else {
+            pieData.setValueFormatter(new MyValueFormatter2());
+        }
+
         pieChart.getDescription().setEnabled(false);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setData(pieData);
         pieChart.animate();
+    }
+}
+
+class MyValueFormatter extends ValueFormatter {
+
+    private DecimalFormat mFormat;
+
+    public MyValueFormatter() {
+        mFormat = new DecimalFormat("###,###,##0"); // use one decimal
+    }
+
+    @Override
+    public String getFormattedValue(float value) {
+        // write your logic here
+        return mFormat.format(value)+"个"; // e.g. append a dollar-sign
+    }
+}
+
+class MyValueFormatter2 extends ValueFormatter {
+
+    private DecimalFormat mFormat;
+
+    public MyValueFormatter2() {
+        mFormat = new DecimalFormat("###,###,##0"); // use one decimal
+    }
+
+    @Override
+    public String getFormattedValue(float value) {
+        // write your logic here
+        return mFormat.format(value)+"题"; // e.g. append a dollar-sign
     }
 }

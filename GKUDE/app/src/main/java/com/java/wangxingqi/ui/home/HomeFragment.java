@@ -57,11 +57,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("click the category button");
+                viewPager.removeAllViews();
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 intent.putExtra("category", new ArrayList<>(Objects.requireNonNull(tabViewModel.getCategory().getValue())));
                 intent.putExtra("delCategory",  new ArrayList<>(Objects.requireNonNull(tabViewModel.getDelCategory().getValue())));
                 Log.e("HomeFragment", String.valueOf(HomeActivity.CATEGORY));
                 startActivityForResult(intent, HomeActivity.CATEGORY);
+                viewPager.setCurrentItem(0);
             }
         });
         //init Search Bar

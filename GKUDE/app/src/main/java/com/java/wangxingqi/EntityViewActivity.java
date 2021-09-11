@@ -115,6 +115,10 @@ public class EntityViewActivity extends AppCompatActivity {
             startActivity(intent);
         });
         FloatingActionButton fav = findViewById(R.id.fab_fav);
+        EntityBean bean = EntityBean.findById(EntityBean.class, entity_id);
+        if (userRepository.getUser().getFavorites().contains(bean)) {
+            fav.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+        }
         fav.setOnClickListener(view -> {
             EntityBean fav_bean = EntityBean.findById(EntityBean.class, entity_id);
             if (!userRepository.getUser().getFavorites().contains(fav_bean)) {
