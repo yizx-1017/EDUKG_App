@@ -25,7 +25,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Fetch {
-    private final OkHttpClient client = new OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build();
+    private final OkHttpClient client = new OkHttpClient();
     private final Gson gson = new Gson();
     private static String id = null;
 
