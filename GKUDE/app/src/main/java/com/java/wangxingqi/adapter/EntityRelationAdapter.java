@@ -37,7 +37,7 @@ public class EntityRelationAdapter extends RecyclerView.Adapter<EntityRelationAd
 
     private List<RelationBean> relations;
     private String course;
-    private String category = "";
+    private String category;
 
     public EntityRelationAdapter(List<RelationBean> relations, String course){
         Log.i("EntityRelation category", course);

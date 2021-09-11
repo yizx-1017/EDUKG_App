@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import lombok.Data;
 import okhttp3.FormBody;
@@ -24,7 +25,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Fetch {
-    private final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build();
     private final Gson gson = new Gson();
     private static String id = null;
 

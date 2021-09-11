@@ -53,6 +53,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
     public void onEntitySelected(EntityBean entity) {
         // Go to the detailed page
         Intent intent = new Intent(this, EntityViewActivity.class);
+        Log.i(TAG, entity.getLabel());
         intent.putExtra("entity_id", entity.getId());
         intent.putExtra("entity_label", entity.getLabel());
         intent.putExtra("entity_course", entity.getCourse());
@@ -102,6 +103,7 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
             public void onRefresh(RefreshLayout refreshlayout) {
                 Log.e("refresh swipe", "onRefresh");
                 syncEntityList();
+                initRecyclerView();
             }
         });
     }
