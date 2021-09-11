@@ -6,14 +6,18 @@ import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager.widget.ViewPager;
 
 //import com.example.gkude.databinding.ActivityHomeBinding;
+import com.java.wangxingqi.adapter.HomePagerAdapter;
 import com.java.wangxingqi.ui.home.TabViewModel;
 
 import java.util.List;
@@ -53,5 +57,10 @@ public class HomeActivity extends AppCompatActivity {
         for (String s: cat){
             Log.e("HomeActivity", s);
         }
+        HomePagerAdapter homePagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
+        homePagerAdapter.setCategory(data.getStringArrayListExtra("category"));
+        homePagerAdapter.setDelCategory(data.getStringArrayListExtra("delCategory"));
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(homePagerAdapter);
     }
 }

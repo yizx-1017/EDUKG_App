@@ -40,11 +40,13 @@ public class HomeFragment extends Fragment {
     private HomePagerAdapter homePagerAdapter;
     private Spinner spinner_filter, spinner_sorter;
     private String course, sort;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     private void initView(View view){
         // init Tab view
-        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-        ViewPager viewPager = view.findViewById(R.id.view_pager);
+        tabLayout = view.findViewById(R.id.tab_layout);
+        viewPager = view.findViewById(R.id.view_pager);
 
         // bind: fragment -> viewPager -> tabLayout
         homePagerAdapter = new HomePagerAdapter(getParentFragmentManager());
@@ -57,13 +59,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("click the category button");
-                viewPager.removeAllViews();
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
+//                viewPager.setCurrentItem(0);
                 intent.putExtra("category", new ArrayList<>(Objects.requireNonNull(tabViewModel.getCategory().getValue())));
                 intent.putExtra("delCategory",  new ArrayList<>(Objects.requireNonNull(tabViewModel.getDelCategory().getValue())));
                 Log.e("HomeFragment", String.valueOf(HomeActivity.CATEGORY));
                 startActivityForResult(intent, HomeActivity.CATEGORY);
-                viewPager.setCurrentItem(0);
             }
         });
         //init Search Bar
