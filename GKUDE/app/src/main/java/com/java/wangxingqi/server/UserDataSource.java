@@ -192,6 +192,7 @@ public class UserDataSource {
                     problemBean.setQID(p.getQid());
                     problemBean.setQAnswer(p.getQanswer());
                     problemBean.setQBody(p.getQbody());
+                    problemBean.setCourse(p.getCourse());
                     problemBeans.add(problemBean);
                 }
                 result.setStatus(privateResult.getStatus());
