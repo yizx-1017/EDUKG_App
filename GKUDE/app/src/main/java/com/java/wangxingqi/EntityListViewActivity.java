@@ -24,6 +24,8 @@ import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -134,7 +136,9 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
         // Set adapter for recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new EntityCollectionAdapter(entityList, this);
+        List<EntityBean> tmp = new ArrayList<>(entityList);
+        Collections.reverse(tmp);
+        mAdapter = new EntityCollectionAdapter(tmp, this);
         recyclerView.setAdapter(mAdapter);
     }
     private void initSwipeRefresh(EntityListViewActivity rootView) {

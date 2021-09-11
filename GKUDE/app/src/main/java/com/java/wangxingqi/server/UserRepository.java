@@ -86,7 +86,7 @@ public class UserRepository {
                 }
             });
             // 本地取并集
-            user.getFavorites().removeAll(result.getData());
+            result.getData().removeAll(user.getFavorites());
             user.getFavorites().addAll(result.getData());
             // 上传差集
             List<EntityBean> upload = new ArrayList<>(user.getFavorites());
@@ -122,7 +122,7 @@ public class UserRepository {
                 }
             });
             // 本地取并集
-            user.getHistories().removeAll(result.getData());
+            result.getData().removeAll(user.getHistories());
             user.getHistories().addAll(result.getData());
             // 上传差集
             List<EntityBean> upload = new ArrayList<>(user.getHistories());
@@ -161,7 +161,7 @@ public class UserRepository {
                 }
             });
             // 本地取并集
-            user.getWrongProblems().removeAll(result.getData());
+            result.getData().removeAll(user.getWrongProblems());
             user.getWrongProblems().addAll(result.getData());
             // 上传差集
             List<ProblemBean> upload = new ArrayList<>(user.getWrongProblems());

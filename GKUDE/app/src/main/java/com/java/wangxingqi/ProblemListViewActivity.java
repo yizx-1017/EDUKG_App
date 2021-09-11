@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.java.wangxingqi.adapter.ProblemAdapter;
+import com.java.wangxingqi.bean.EntityBean;
 import com.java.wangxingqi.bean.ProblemBean;
 import com.java.wangxingqi.server.Result;
 import com.java.wangxingqi.server.UserDataSource;
@@ -18,6 +19,8 @@ import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +65,9 @@ public class ProblemListViewActivity extends AppCompatActivity {
         // Set adapter for recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ProblemAdapter(problemList);
+        List<ProblemBean> tmp = new ArrayList<>(problemList);
+        Collections.reverse(tmp);
+        mAdapter = new ProblemAdapter(tmp);
         recyclerView.setAdapter(mAdapter);
     }
     private void initSwipeRefresh(ProblemListViewActivity rootView) {
