@@ -87,6 +87,17 @@ public class ProblemViewActivity extends AppCompatActivity {
             answer_title.setVisibility(View.VISIBLE);
             problem_answer.setVisibility(View.VISIBLE);
             problem_answer.setText(qAnswer);
+            if(qAnswer.equals(content)) {
+                // 答对了
+                Toast.makeText(ProblemViewActivity.this, "回答正确", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                // 答错了
+                if (!userRepository.getUser().getWrongProblems().contains(problemBean)) {
+                    userRepository.addWrongProblem(problemBean);
+                }
+                Toast.makeText(ProblemViewActivity.this, "回答错误", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
