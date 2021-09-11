@@ -189,12 +189,18 @@ public class UserRepository {
         Map<ProblemBean, Integer> problemBeans = new HashMap<>();
         for (EntityBean entityBean : user.getFavorites()) {
             List<ProblemBean> list = entityBean.getProblemsFromStore();
+            if (list == null) {
+                list = new ArrayList<>();
+            }
             for (ProblemBean p : list) {
                 problemBeans.compute(p, (k, v) -> v == null ? 2 : v + 2); // 收藏有更高的权重
             }
         }
         for (EntityBean entityBean : user.getHistories()) {
             List<ProblemBean> list = entityBean.getProblemsFromStore();
+            if (list == null) {
+                list = new ArrayList<>();
+            }
             for (ProblemBean p : list) {
                 problemBeans.compute(p, (k, v) -> v == null ? 1 : v + 1);
             }
