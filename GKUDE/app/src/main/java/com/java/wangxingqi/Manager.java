@@ -11,6 +11,7 @@ import com.java.wangxingqi.bean.ResultBean;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -47,6 +48,24 @@ public class Manager {
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
+    }
+
+    public static String searchEntityCategory(@NonNull String course, @NonNull String searchKey) {
+        AtomicReference<String> category = new AtomicReference<>();
+        category.set(null);
+        Thread thread = new Thread(() -> {
+            List<EntityBean> list = fetch.fetchInstanceList(course, searchKey);
+            if (!list.isEmpty()) {
+                category.set(list.get(0).getCategory());
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return category.get();
     }
 
     public static void getEntityInfo(@NonNull EntityBean entityBean, Observer<EntityBean> observer) {
