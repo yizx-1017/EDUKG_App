@@ -59,12 +59,12 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
     @Override
     public void onEntitySelected(EntityBean entity) {
         long entity_id = -1L;
-        List<EntityBean> beans = EntityBean.findWithQuery(EntityBean.class, "SELECT * FROM ENTITY_BEAN WHERE uri = " + "'" + entity.getUri()+ "'");
-        if (beans.isEmpty()) {
+        Log.i(TAG, entity.getLabel());
+        System.out.println(entity.getId());
+        if (entity.getId() == null) {
             Log.i(TAG, "before searchEntity");
             Manager.searchEntity(entity.getCourse(), entity.getLabel(), null, true, observer);
             Log.i(TAG, "after searchEntity");
-            try { Thread.sleep(2000); } catch (InterruptedException e) { return; }
             if (testCategory == null) {
                 Toast.makeText(this, "处于断网状态，该实体未被缓存，无法获取", Toast.LENGTH_SHORT).show();
                 return;
@@ -72,12 +72,10 @@ public class EntityListViewActivity extends AppCompatActivity implements EntityC
                 testCategory = null;
             }
         } else {
-            entity_id = beans.get(0).getId();
+            entity_id = entity.getId();
         }
         // Go to the detailed page
         Intent intent = new Intent(this, EntityViewActivity.class);
-        Log.i(TAG, entity.getLabel());
-        System.out.println(entity.getId());
         intent.putExtra("entity_id", entity_id);
         intent.putExtra("entity_label", entity.getLabel());
         intent.putExtra("entity_course", entity.getCourse());
