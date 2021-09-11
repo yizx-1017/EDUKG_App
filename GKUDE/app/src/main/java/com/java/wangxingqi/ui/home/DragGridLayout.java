@@ -86,6 +86,7 @@ public class DragGridLayout extends GridLayout {
             });
         }
         tv.setOnClickListener(onClickListener);
+        System.out.println(items.toString());
     }
 
     private OnDragListener onDragListener = new OnDragListener() {
@@ -104,17 +105,19 @@ public class DragGridLayout extends GridLayout {
                         removeView(dragView);
                         addView(dragView, exchangeIndex);
                     }
+                    System.out.println(items.toString());
                     break;
                 // 弹起
                 case DragEvent.ACTION_DRAG_ENDED:
                     dragView.setEnabled(true);
                     int index = indexOfChild(dragView);
+                    System.out.println(items.toString());
                     items.remove(((TextView)dragView).getText().toString());
                     items.add(index, ((TextView)dragView).getText().toString());
                     onDragItemClickListener.onDrag(items);
+                    System.out.println(items.toString());
                     break;
             }
-
             return true;
         }
     };

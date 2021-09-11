@@ -70,27 +70,43 @@ public class CategoryActivity extends AppCompatActivity {
                 mDelCategory.add(tv.getText().toString().replace("+", ""));
                 gridLayout1.removeView(tv);
                 gridLayout2.addGridItem(tv.getText().toString());
+                gridLayout2.items = mDelCategory;
             }
 
             @Override
             public void onDrag(List<String> s) {
                 mCategory = s;
-                mDelCategory = gridLayout2.items;
+                String[] courses = new String[]{"语文", "英语", "数学", "物理", "化学", "生物", "历史", "地理","政治"};
+                List<String> del = new ArrayList<>();
+                for (String str : courses){
+                    if (!s.contains(str)) {
+                        del.add(str);
+                    }
+                }
+                mDelCategory = del;
+                if (mCategory.size() + mDelCategory.size() != 9) {
+                    Log.e("CategoryActivity", "sum not correct!!");
+                }
             }
         });
 
         gridLayout2.setOnDragItemClickListener(new DragGridLayout.OnDragItemClickListener() {
             @Override
             public void onDragItemClick(TextView tv) {
+                System.out.println(mCategory.toString());
+                System.out.println(mDelCategory.toString());
+                System.out.println(tv.getText());
                 mDelCategory.remove(tv.getText().toString().replace("+", ""));
                 mCategory.add(tv.getText().toString().replace("+", ""));
+                System.out.println(mCategory.toString());
+                System.out.println(mDelCategory.toString());
                 gridLayout2.removeView(tv);
                 gridLayout1.addGridItem(tv.getText().toString());
+                gridLayout1.items = mCategory;
             }
 
             @Override
             public void onDrag(List<String> s) {
-
             }
         });
     }
