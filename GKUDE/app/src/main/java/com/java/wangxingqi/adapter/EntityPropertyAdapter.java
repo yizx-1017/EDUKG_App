@@ -37,7 +37,7 @@ public class EntityPropertyAdapter extends RecyclerView.Adapter<EntityPropertyAd
 
     @Override
     public int getItemCount() {
-        return properties.size();
+        return Math.min(100, properties.size());
     }
 
 

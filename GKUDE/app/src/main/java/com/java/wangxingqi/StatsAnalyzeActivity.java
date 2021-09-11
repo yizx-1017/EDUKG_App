@@ -27,6 +27,7 @@ import java.util.Objects;
 public class StatsAnalyzeActivity extends AppCompatActivity {
     private UserRepository userRepository;
     private PieChart entityPieChart;
+    private PieChart problemPieChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class StatsAnalyzeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
         userRepository = UserRepository.getInstance(new UserDataSource());
         entityPieChart = findViewById(R.id.piechart1);
-        PieChart problemPieChart = findViewById(R.id.piechart2);
+        problemPieChart = findViewById(R.id.piechart2);
         initToolbar();
         initData(entityPieChart, userRepository.getUser().getHistoryNum());
         initData(problemPieChart, userRepository.getUser().getWrongProblemNum());
@@ -52,7 +53,7 @@ public class StatsAnalyzeActivity extends AppCompatActivity {
     private void initData(PieChart pieChart, Map<String, Integer> mp) {
         ArrayList<PieEntry> entities = new ArrayList<>();
         String[] coursesCN = new String[]{"语文", "英语", "数学", "物理", "化学", "生物", "历史", "地理","政治"};
-        String[] coursesEN = new String[]{"chinese", "english", "math", "physics", "chemistry", "biology", "history", "politics", "geo"};
+        String[] coursesEN = new String[]{"chinese", "english", "math", "physics", "chemistry", "biology", "history", "geo", "politics"};
         int[] colors = {
                 Color.rgb(135,206,250), Color.rgb(137,215,185), Color.rgb(252,206,190),
                 Color.rgb(255,241,221), Color.rgb(221,214,202), Color.rgb(244,109,144),
@@ -62,6 +63,11 @@ public class StatsAnalyzeActivity extends AppCompatActivity {
             if (!mp.getOrDefault(coursesEN[i], 0).equals(0)) {
                 entities.add(new PieEntry(mp.getOrDefault(coursesEN[i], 0), coursesCN[i]));
             }
+        }
+
+        for (Map.Entry<String, Integer> entry : mp.entrySet()) {
+
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         }
         PieDataSet pieDataSet = new PieDataSet(entities, "");
         pieDataSet.setColors(colors);

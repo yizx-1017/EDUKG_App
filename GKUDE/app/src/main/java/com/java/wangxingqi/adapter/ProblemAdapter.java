@@ -39,7 +39,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ProblemV
 
     @Override
     public int getItemCount() {
-        return problems.size();
+        return Math.min(100, problems.size());
     }
 
 

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.View;
@@ -63,7 +65,7 @@ public class ProblemRecommendationActivity extends AppCompatActivity {
 
     private void initInput() {
         TextInputLayout problemNumText = findViewById(R.id.problem_number);
-
+        setRegion(problemNumText.getEditText());
         Button click = findViewById(R.id.shuffle_button);
         click.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,8 +74,69 @@ public class ProblemRecommendationActivity extends AppCompatActivity {
                 if (!problemValue.isEmpty()) {
                     problemList = userRepository.getProblemRecommendation(Integer.parseInt(problemValue));
                     setRecyclerView();
+                    if (problemList.isEmpty()) {
+                        Toast.makeText(ProblemRecommendationActivity.this, "暂时没有题库哦，多做做题再来看", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(ProblemRecommendationActivity.this, "暂时没有题库哦，多做做题再来看", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProblemRecommendationActivity.this, "不能输入为空哈", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private int MIN_MARK = 0;
+    private int MAX_MARK = 100;
+    //private void setRegion(EditText et)
+    private void setRegion( final EditText et)
+    {
+        et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (start > 1)
+                {
+                    if (MIN_MARK != -1 && MAX_MARK != -1)
+                    {
+                        int num = Integer.parseInt(s.toString());
+                        if (num > MAX_MARK)
+                        {
+                            s = String.valueOf(MAX_MARK);
+                            et.setText(s);
+                        }
+                        else if(num < MIN_MARK)
+                            s = String.valueOf(MIN_MARK);
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                if (s != null && !s.equals(""))
+                {
+                    if (MIN_MARK != -1 && MAX_MARK != -1)
+                    {
+                        int markVal = 0;
+                        try
+                        {
+                            markVal = Integer.parseInt(s.toString());
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            markVal = 0;
+                        }
+                        if (markVal > MAX_MARK)
+                        {
+                            Toast.makeText(getBaseContext(), "做题不能贪多啊，最多一百道", Toast.LENGTH_SHORT).show();
+                            et.setText(String.valueOf(MAX_MARK));
+                        }
+                        return;
+                    }
                 }
             }
         });
