@@ -53,6 +53,7 @@ tools:context=".ui.login.LoginActivity">
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:drawableEnd="@drawable/username_right"
+                        android:maxLength="30"
                         android:fontFamily="@font/poppinsmedium"
                         android:windowSoftInputMode="stateVisible|adjustResize" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -71,6 +72,7 @@ tools:context=".ui.login.LoginActivity">
                         android:background="@color/white"
                         android:drawableEnd="@drawable/password_right"
                         android:fontFamily="@font/poppinsmedium"
+                        android:maxLength="30"
                         android:inputType="textPassword"
                         android:windowSoftInputMode="stateVisible|adjustResize" />
                 </com.google.android.material.textfield.TextInputLayout>
